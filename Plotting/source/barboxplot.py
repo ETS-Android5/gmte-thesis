@@ -29,7 +29,7 @@ with open(path) as csvfile:
     lines = csv.reader(csvfile, quoting=csv.QUOTE_NONNUMERIC)
     for line in lines:
         data.append(line)
-labels = ["Vibrational", "Color Wheel", "Directional", "Application"]
+labels = ["Vibrotactile", "Color Wheel", "Directional", "Application"]
 
 # create subplots to arrange bar and box plots
 fig, axes = plt.subplots(ncols=2, figsize=(15, 5))
