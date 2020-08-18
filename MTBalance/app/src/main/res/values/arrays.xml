@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Feedback methods -->
+    <string-array name="feedback_method_entries">
+        <item>App</item>
+        <item>Vibrotactile</item>
+        <item>Directional</item>
+        <item>Positional</item>
+    </string-array>
+
+    <!-- Threshold leniency level -->
+    <string-array name="threshold_leniency_entries">
+        <item>Low</item>
+        <item>Medium</item>
+        <item>High</item>
+    </string-array>
+
+</resources>

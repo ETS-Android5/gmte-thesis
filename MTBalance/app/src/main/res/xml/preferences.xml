@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <PreferenceCategory app:title="Feedback">
+
+        <ListPreference
+            app:defaultValue="App"
+            app:entries="@array/feedback_method_entries"
+            app:entryValues="@array/feedback_method_entries"
+            app:key="preferred_feedback"
+            app:title="Preferred feedback method"
+            app:useSimpleSummaryProvider="true" />
+
+    </PreferenceCategory>
+
+    <PreferenceCategory app:title="Threshold">
+
+        <ListPreference
+            app:defaultValue="Medium"
+            app:entries="@array/threshold_leniency_entries"
+            app:entryValues="@array/threshold_leniency_entries"
+            app:key="threshold_leniency"
+            app:title="Threshold leniency"
+            app:useSimpleSummaryProvider="true" />
+
+    </PreferenceCategory>
+
+    <PreferenceCategory app:title="Dimensions">
+
+        <EditTextPreference
+            app:key="hip_dimension"
+            app:title="Hip dimension"
+            app:useSimpleSummaryProvider="true" />
+
+        <EditTextPreference
+            app:key="upper_leg_dimension"
+            app:title="Upper leg dimension"
+            app:useSimpleSummaryProvider="true" />
+
+        <EditTextPreference
+            app:key="lower_leg_dimension"
+            app:title="Lower leg dimension"
+            app:useSimpleSummaryProvider="true" />
+
+        <EditTextPreference
+            app:key="offset_dimension"
+            app:title="Offset dimension"
+            app:useSimpleSummaryProvider="true" />
+
+    </PreferenceCategory>
+
+</PreferenceScreen>
