@@ -1,5 +1,7 @@
 <resources>
     <string name="app_name">MTBalance</string>
     <string name="settings_title">Settings</string>
+    <string name="measuring_button">Measuring Button</string>
+    <string name="calibrate_button">Calibrate Button</string>
 
 </resources>

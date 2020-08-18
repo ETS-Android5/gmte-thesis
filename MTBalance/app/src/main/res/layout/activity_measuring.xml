@@ -1,9 +1,38 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/colorFragment"
+    android:gravity="center"
+    android:orientation="vertical"
     tools:context=".MeasuringActivity">
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+    <Chronometer
+        android:id="@+id/chronometer"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@color/colorText"
+        android:textSize="64sp" />
+
+    <ImageButton
+        android:id="@+id/measuring_button"
+        android:layout_width="128dp"
+        android:layout_height="64dp"
+        android:layout_marginTop="32dp"
+        android:background="@color/colorAccent"
+        android:contentDescription="@string/measuring_button"
+        android:scaleType="fitCenter"
+        android:src="@drawable/ic_play" />
+
+    <ImageButton
+        android:id="@+id/calibration_button"
+        android:layout_width="128dp"
+        android:layout_height="64dp"
+        android:layout_marginTop="32dp"
+        android:background="@color/colorAccent"
+        android:contentDescription="@string/calibrate_button"
+        android:scaleType="fitCenter"
+        android:src="@drawable/ic_adjust" />
+
+</LinearLayout>

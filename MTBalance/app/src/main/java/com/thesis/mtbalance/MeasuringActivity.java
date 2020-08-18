@@ -1,12 +1,11 @@
 package com.thesis.mtbalance;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.bluetooth.BluetoothDevice;
-import android.bluetooth.BluetoothGatt;
 import android.bluetooth.le.ScanSettings;
 import android.os.Bundle;
 import android.widget.Toast;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.xsens.dot.android.sdk.XsensDotSdk;
 import com.xsens.dot.android.sdk.events.XsensDotData;
@@ -33,6 +32,11 @@ public class MeasuringActivity extends AppCompatActivity
     private HashMap<String, String> mAddressTagMap = new HashMap<>();
     private HashMap<String, float[]> mTagQuatMap = new HashMap<>();
 
+    /**
+     * Called on activity creation.
+     *
+     * @param savedInstanceState - state holding saved info from onPause callback.
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -68,7 +72,7 @@ public class MeasuringActivity extends AppCompatActivity
         if (mAddressTagMap.containsKey(address))
             return;
 
-        // Add the current address to the address-tag hashmap, dependinc on MAC-address
+        // Add the current address to the address-tag hashmap, depending on MAC-address
         switch (address) {
             case "D4:CA:6E:F1:7D:D9":   // Bike
                 mAddressTagMap.put(address, "Bike DOT");
