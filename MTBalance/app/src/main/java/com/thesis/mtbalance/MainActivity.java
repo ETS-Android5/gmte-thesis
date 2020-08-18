@@ -6,10 +6,21 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.preference.PreferenceManager;
+import androidx.viewpager.widget.ViewPager;
+
+import com.google.android.material.tabs.TabLayout;
+
+import java.util.Objects;
 
 public class MainActivity extends AppCompatActivity {
+
+    /* Variables */
+    private TabLayout mTabLayout;
+    private ViewPager mViewPager;
+    private ViewPagerAdapter mVPAdapter;
 
     /**
      * Called on activity creation.
@@ -23,6 +34,33 @@ public class MainActivity extends AppCompatActivity {
 
         // Set the default preferences on first startup
         PreferenceManager.setDefaultValues(this, R.xml.preferences, false);
+
+        // Set the tablayout
+        setTabLayout();
+    }
+
+    /**
+     * Sets the tablayout in the main activity.
+     */
+    private void setTabLayout() {
+        // Find the elements needed for setup
+        mTabLayout = findViewById(R.id.tablayout_main);
+        mViewPager = findViewById(R.id.viewpager_main);
+        mVPAdapter = new ViewPagerAdapter(getSupportFragmentManager());
+
+        // Add the desired fragments, without title to show icon
+        mVPAdapter.addFragment(new RidesFragment(), "");
+        mVPAdapter.addFragment(new InfoFragment(), "");
+
+        // Setup the adapter and viewpager
+        mViewPager.setAdapter(mVPAdapter);
+        mTabLayout.setupWithViewPager(mViewPager);
+
+        // Add the icons and remove elevation from the actionbar
+        Objects.requireNonNull(mTabLayout.getTabAt(0)).setIcon(R.drawable.ic_chart);
+        Objects.requireNonNull(mTabLayout.getTabAt(1)).setIcon(R.drawable.ic_help);
+        ActionBar actionBar = getSupportActionBar();
+        Objects.requireNonNull(actionBar).setElevation(0);
     }
 
     /**
