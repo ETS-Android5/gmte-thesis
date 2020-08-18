@@ -3,17 +3,25 @@ package com.thesis.mtbalance;
 import android.bluetooth.BluetoothDevice;
 import android.bluetooth.le.ScanSettings;
 import android.os.Bundle;
+import android.os.SystemClock;
+import android.view.View;
+import android.widget.Chronometer;
+import android.widget.ImageButton;
+import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.google.android.material.snackbar.Snackbar;
 import com.xsens.dot.android.sdk.XsensDotSdk;
 import com.xsens.dot.android.sdk.events.XsensDotData;
 import com.xsens.dot.android.sdk.interfaces.XsensDotDeviceCb;
 import com.xsens.dot.android.sdk.interfaces.XsensDotScannerCb;
+import com.xsens.dot.android.sdk.models.XsPayload;
 import com.xsens.dot.android.sdk.models.XsensDotDevice;
 import com.xsens.dot.android.sdk.utils.XsensDotScanner;
 
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -23,6 +31,16 @@ public class MeasuringActivity extends AppCompatActivity
     /* Variables */
     // Finals
     private final int ALL_DOTS = 3;
+
+    // Booleans
+    private boolean mMeasuring = false;
+
+    // Views
+    private LinearLayout mMeasuringLayout;
+    private Chronometer mChronometer;
+
+    // Instants
+    Instant mStartTime;
 
     // Xsens
     private XsensDotScanner mDotScanner;
@@ -53,6 +71,10 @@ public class MeasuringActivity extends AppCompatActivity
         // Set global SDK options
         XsensDotSdk.setDebugEnabled(true);  // Todo: remove debugger when application is finished.
         XsensDotSdk.setReconnectEnabled(true);
+
+        // Initialize views
+        mMeasuringLayout = findViewById(R.id.measuring_layout);
+        mChronometer = findViewById(R.id.chronometer);
 
         // Initialize scanner object and start scan
         mDotScanner = new XsensDotScanner(getApplicationContext(), this);
@@ -100,9 +122,81 @@ public class MeasuringActivity extends AppCompatActivity
         // Stop the scan if all the DOTs are initialized
         if (mDotList.size() == ALL_DOTS) {
             mDotScanner.stopScan();
-            Toast.makeText(getApplicationContext(), "Connected all DOTs!",
-                    Toast.LENGTH_SHORT).show();
+
+            // Notify user
+            Snackbar.make(mMeasuringLayout, "Connected all DOTs.",
+                    Snackbar.LENGTH_LONG).show();
         }
+    }
+
+    /**
+     * Toggles the measuring state of the DOTs.
+     *
+     * @param view - the button calling the function.
+     */
+    public void toggleMeasuring(View view) {
+        // Return if not all the DOTs are initialized.
+        if (mDotList.size() != ALL_DOTS)
+            return;
+
+        // If not measuring, start measuring
+        if (!mMeasuring) {
+            // Set measuring to true and change the icon of the view
+            mMeasuring = true;
+            ((ImageButton) view).setImageResource(R.drawable.ic_stop);
+
+            // Initialize every dot with the quaternion measurement mode
+            for (XsensDotDevice dot : mDotList) {
+                dot.setMeasurementMode(XsPayload.PAYLOAD_TYPE_ORIENTATION_QUATERNION);
+                dot.startMeasuring();
+            }
+
+            // Start the clock and the chronometer
+            mStartTime = Instant.now();
+            mChronometer.setBase(SystemClock.elapsedRealtime());
+            mChronometer.start();
+
+            // Notify user
+            Snackbar.make(mMeasuringLayout, "Started measuring.",
+                    Snackbar.LENGTH_LONG).show();
+        }
+
+        // If measuring, stop measuring
+        else {
+            // Set measuring to false and change the icon of the view
+            mMeasuring = false;
+            ((ImageButton) view).setImageResource(R.drawable.ic_play);
+
+            // Stop the measuring for every DOT
+            for (XsensDotDevice dot : mDotList)
+                dot.stopMeasuring();
+
+            // Stop the clock and the chronometer
+            Instant endTime = Instant.now();
+            mChronometer.stop();
+
+            // Todo: get completionTime, save DVs to rides.txt and measurement data to startTime.txt
+            // Todo: notify user
+        }
+    }
+
+    /**
+     * Starts the calibration of the DOTs.
+     *
+     * @param view - the button calling the function.
+     */
+    public void startCalibration(View view) {
+        // Return if not all the DOTs are initialized or not currently measuring.
+        if (mDotList.size() != ALL_DOTS || !mMeasuring)
+            return;
+
+        // Calibrate all DOTs
+        for (XsensDotDevice dot : mDotList)
+            dot.resetHeading();
+
+        // Notify user
+        Snackbar.make(mMeasuringLayout, "Calibrated DOTs.",
+                Snackbar.LENGTH_LONG).show();
     }
 
     // region Unused
