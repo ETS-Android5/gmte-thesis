@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
@@ -91,5 +92,14 @@ public class MainActivity extends AppCompatActivity {
             default:
                 return super.onOptionsItemSelected(item);
         }
+    }
+
+    /**
+     * Starts the measurement activity.
+     * @param view - the clicked fab.
+     */
+    public void startRide(View view) {
+        Intent intent = new Intent(this, MeasuringActivity.class);
+        startActivity(intent);
     }
 }
