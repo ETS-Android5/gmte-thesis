@@ -32,8 +32,8 @@
             android:layout_gravity="bottom|end"
             android:layout_margin="24dp"
             android:background="@color/colorAccent"
-            android:src="@drawable/ic_bike"
-            android:onClick="startRide" />
+            android:onClick="startRide"
+            android:src="@drawable/ic_bike" />
 
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
