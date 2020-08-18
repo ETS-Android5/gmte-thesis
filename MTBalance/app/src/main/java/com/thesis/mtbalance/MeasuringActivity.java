@@ -2,15 +2,16 @@ package com.thesis.mtbalance;
 
 import android.bluetooth.BluetoothDevice;
 import android.bluetooth.le.ScanSettings;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.SystemClock;
 import android.view.View;
 import android.widget.Chronometer;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
-import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.preference.PreferenceManager;
 
 import com.google.android.material.snackbar.Snackbar;
 import com.xsens.dot.android.sdk.XsensDotSdk;
@@ -24,13 +25,17 @@ import com.xsens.dot.android.sdk.utils.XsensDotScanner;
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Objects;
 
 public class MeasuringActivity extends AppCompatActivity
         implements XsensDotDeviceCb, XsensDotScannerCb {
 
-    /* Variables */
+    // region Variables
     // Finals
     private final int ALL_DOTS = 3;
+
+    // Floats
+    private float mAnkleLength, mKneeLength;
 
     // Booleans
     private boolean mMeasuring = false;
@@ -42,6 +47,9 @@ public class MeasuringActivity extends AppCompatActivity
     // Instants
     Instant mStartTime;
 
+    // Helpers
+    private VecHelper mVecHelper;
+
     // Xsens
     private XsensDotScanner mDotScanner;
     private ArrayList<XsensDotDevice> mDotList = new ArrayList<>();
@@ -49,6 +57,7 @@ public class MeasuringActivity extends AppCompatActivity
     // Hashmaps
     private HashMap<String, String> mAddressTagMap = new HashMap<>();
     private HashMap<String, float[]> mTagQuatMap = new HashMap<>();
+    // endregion
 
     /**
      * Called on activity creation.
@@ -60,8 +69,26 @@ public class MeasuringActivity extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_measuring);
 
+        // Initialize helper
+        mVecHelper = new VecHelper(this);
+
+        // Get the shared preferences
+        retrieveSharedPreferences();
+
         // Initialize the SDK
         initXsensSdk();
+    }
+
+    /**
+     * Retrieves the used shared preferences.
+     */
+    private void retrieveSharedPreferences() {
+        // Create a shared preferences object and get the leg lengths
+        SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(this);
+        mAnkleLength = Float.parseFloat(Objects.requireNonNull(sharedPref.getString
+                (SettingsActivity.KEY_LOWER_LEG_DIMENSION, "0")));
+        mKneeLength = Float.parseFloat(Objects.requireNonNull(sharedPref.getString
+                (SettingsActivity.KEY_UPPER_LEG_DIMENSION, "0")));
     }
 
     /**
@@ -199,6 +226,42 @@ public class MeasuringActivity extends AppCompatActivity
                 Snackbar.LENGTH_LONG).show();
     }
 
+    /**
+     * Callback function which is triggered when values in a DOT change.
+     *
+     * @param address      - the MAC address of the DOT.
+     * @param xsensDotData - the data object tied to the DOT.
+     */
+    @Override
+    public void onXsensDotDataChanged(String address, XsensDotData xsensDotData) {
+        // Get the current tag and map the current quaternion to it
+        String currTag = mAddressTagMap.get(address);
+        mTagQuatMap.put(currTag, xsensDotData.getQuat());
+
+        // If the current tag is the Bike DOT, calculate the balance
+        if (currTag != null && currTag.equals("Bike DOT"))
+            calculateBalance();
+    }
+
+    /**
+     * Calculates the balance given the current quaternion values.
+     */
+    private void calculateBalance() {
+        // Calculate the bike vector and mirror it to get the optimal balance direction
+        float[] bikeVector = mVecHelper.quatRotation
+                (Objects.requireNonNull(mTagQuatMap.get("Bike DOT")), 100f);
+        bikeVector = mVecHelper.mirrorVector(bikeVector, false, 0f);
+
+        // Calculate the ankle vector and knee vector
+        float[] ankleVector = mVecHelper.quatRotation
+                (Objects.requireNonNull(mTagQuatMap.get("Ankle DOT")), mAnkleLength);
+        float[] kneeVector = mVecHelper.quatRotation
+                (Objects.requireNonNull(mTagQuatMap.get("Knee DOT")), mKneeLength);
+
+        // Calculate the position of the current balance (end effector)
+        float[] endEffector = mVecHelper.getEndEffector(ankleVector, kneeVector);
+    }
+
     // region Unused
     @Override
     public void onXsensDotConnectionChanged(String s, int i) {
@@ -222,11 +285,6 @@ public class MeasuringActivity extends AppCompatActivity
 
     @Override
     public void onXsensDotBatteryChanged(String s, int i, int i1) {
-
-    }
-
-    @Override
-    public void onXsensDotDataChanged(String s, XsensDotData xsensDotData) {
 
     }
 
