@@ -272,6 +272,12 @@ public class MeasuringActivity extends AppCompatActivity
 
         // Calculate the position of the current balance (end effector)
         float[] endEffector = mVecHelper.getEndEffector(ankleVector, kneeVector);
+
+        // Get the intersection between current and optimal balance
+        float[] intersection = mVecHelper.getIntersection(bikeVector, endEffector);
+
+        // Get the distance between the intersection and end effector
+        float distance = mVecHelper.getDistance(endEffector, intersection);
     }
 
     // region Unused
