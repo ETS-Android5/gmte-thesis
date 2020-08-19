@@ -22,6 +22,7 @@ import com.xsens.dot.android.sdk.models.XsPayload;
 import com.xsens.dot.android.sdk.models.XsensDotDevice;
 import com.xsens.dot.android.sdk.utils.XsensDotScanner;
 
+import java.time.Duration;
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -35,19 +36,26 @@ public class MeasuringActivity extends AppCompatActivity
     private final int ALL_DOTS = 3;
 
     // Numericals
+    private int mIteration = 0;
     private int mFeedbackMethod;
     private float mThresholdLeniency;
     private float mAnkleLength, mKneeLength;
 
+    // DVs
+    private float mBalancePerformance, mCompletionTime;
+    private float mBalanceDeviation = 0f;
+    private float mResponseTime = 0f;
+
     // Booleans
     private boolean mMeasuring = false;
+    private boolean mBalanced = true;
 
     // Views
     private LinearLayout mMeasuringLayout;
     private Chronometer mChronometer;
 
     // Instants
-    Instant mStartTime;
+    Instant mStartTime, mStartBalanceTime, mEndBalanceTime;
 
     // Helpers
     private VecHelper mVecHelper;
@@ -183,6 +191,12 @@ public class MeasuringActivity extends AppCompatActivity
             mMeasuring = true;
             ((ImageButton) view).setImageResource(R.drawable.ic_stop);
 
+            // Start the clocks and the chronometer
+            mStartTime = Instant.now();
+            mStartBalanceTime = Instant.now();
+            mChronometer.setBase(SystemClock.elapsedRealtime());
+            mChronometer.start();
+
             // Initialize every dot with the quaternion measurement mode
             // Start measuring and calibrate the sensors
             for (XsensDotDevice dot : mDotList) {
@@ -190,11 +204,6 @@ public class MeasuringActivity extends AppCompatActivity
                 dot.startMeasuring();
                 dot.resetHeading();
             }
-
-            // Start the clock and the chronometer
-            mStartTime = Instant.now();
-            mChronometer.setBase(SystemClock.elapsedRealtime());
-            mChronometer.start();
 
             // Notify user
             Snackbar.make(mMeasuringLayout, "Started measuring.",
@@ -207,15 +216,18 @@ public class MeasuringActivity extends AppCompatActivity
             mMeasuring = false;
             ((ImageButton) view).setImageResource(R.drawable.ic_play);
 
-            // Stop the measuring for every DOT
-            for (XsensDotDevice dot : mDotList)
-                dot.stopMeasuring();
-
             // Stop the clock and the chronometer
             Instant endTime = Instant.now();
             mChronometer.stop();
 
-            // Todo: get completionTime, save DVs to rides.txt and measurement data to startTime.txt
+            // Stop the measuring for every DOT
+            for (XsensDotDevice dot : mDotList)
+                dot.stopMeasuring();
+
+            // Calculate the completion time
+            mCompletionTime = Duration.between(mStartTime, endTime).toMillis();
+
+            // Todo: save DVs to rides.txt and measurement data to startTime.txt
             // Todo: notify user
         }
     }
@@ -277,8 +289,53 @@ public class MeasuringActivity extends AppCompatActivity
         // Get the intersection between current and optimal balance
         float[] intersection = mVecHelper.getIntersection(bikeVector, endEffector);
 
+        // Get the flattened balance difference between the current and optimal balance
+        float[] balanceDifference = mVecHelper.getBalanceDifference(endEffector, intersection);
+
         // Get the distance between the intersection and end effector
         float distance = mVecHelper.getDistance(endEffector, intersection);
+
+        // Update the average balance deviation
+        float currDeviation = (distance - mThresholdLeniency > 0) ?
+                distance - mThresholdLeniency : 0f;
+        mBalanceDeviation = getCMA(mBalanceDeviation, currDeviation);
+
+        // Execute if the previous state was unbalanced and the user is currently balanced
+        if (!mBalanced && distance <= mThresholdLeniency) {
+            // Set the balance flag to true, and start the balance time
+            mBalanced = true;
+            mStartBalanceTime = Instant.now();
+
+            // Calculate the current response time and update the average response time
+            float currResponseTime = Duration.between
+                    (mEndBalanceTime, mStartBalanceTime).toMillis();
+            mResponseTime = getCMA(mResponseTime, currResponseTime);
+        }
+
+        // Execute if the previous state was balanced and the user is currently unbalanced
+        if (mBalanced && distance > mThresholdLeniency) {
+            // Set the balance flag to false, and start the end balance time
+            mBalanced = false;
+            mEndBalanceTime = Instant.now();
+
+            // Calculate the current balance time and update the total balance time.
+            float currBalanceTime = Duration.between
+                    (mStartBalanceTime, mEndBalanceTime).toMillis();
+            mBalancePerformance += currBalanceTime;
+        }
+    }
+
+    /**
+     * Calculates the cumulative moving average.
+     *
+     * @param currAverage - the current average.
+     * @param val         - the new value to add to the average.
+     * @return an updated moving average.
+     */
+    private float getCMA(float currAverage, float val) {
+        // Calculates the cumulative moving average - https://en.wikipedia.org/wiki/Moving_average
+        float numerator = mIteration * currAverage + val;
+        return numerator / (mIteration + 1);
     }
 
     // region Unused

@@ -125,6 +125,19 @@ public class VecHelper {
     }
 
     /**
+     * Get the balance difference between two points.
+     *
+     * @param q1 - the offset point.
+     * @param q2 - the origin point.
+     * @return A 2-dimensional balance difference with q2 as origin.
+     */
+    public float[] getBalanceDifference(float[] q1, float[] q2) {
+        // Subtract the vectors and flatten the result
+        float[] result = sub(q1, q2);
+        return new float[]{result[0], result[1]};
+    }
+
+    /**
      * Get the distance between two points.
      *
      * @param q1 - the first point.
