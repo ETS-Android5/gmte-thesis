@@ -235,9 +235,11 @@ public class MeasuringActivity extends AppCompatActivity
             mEndTime = Instant.now();
             mChronometer.stop();
 
-            // Stop the measuring for every DOT
-            for (XsensDotDevice dot : mDotList)
+            // Stop the measuring for every DOT and disconnect it
+            for (XsensDotDevice dot : mDotList) {
                 dot.stopMeasuring();
+                dot.disconnect();
+            }
 
             // Finalize the DVs and format to a string, then save it to the rides file
             String dataDVS = finalizeDVS();
@@ -282,7 +284,7 @@ public class MeasuringActivity extends AppCompatActivity
     private String finalizeDVS() {
         // Get the dateTime using a formatter
         DateTimeFormatter formatter =
-                DateTimeFormatter.ofLocalizedDate(FormatStyle.FULL)
+                DateTimeFormatter.ofLocalizedDate(FormatStyle.LONG)
                         .withLocale(Locale.getDefault())
                         .withZone(ZoneId.systemDefault());
         String dateTime = formatter.format(mStartTime);
@@ -294,9 +296,8 @@ public class MeasuringActivity extends AppCompatActivity
         mBalancePerformance = mBalancePerformance / completionTime * 100f;
         completionTime = completionTime * 0.001f;
 
-        // Todo: compiler said string.valueOf could be left out, test if that is the case
         // Build the data string according to the javadoc
-        return String.format("%s,%s,%s,%s,%s,%s,%s,%s",
+        return String.format("%s,%s,%s,%s,%s,%s,%s,%s\n",
                 mStartTime.toString(), mParticipantNumber,
                 mFeedbackMethod, dateTime,
                 mBalancePerformance, mBalanceDeviation,
@@ -448,7 +449,6 @@ public class MeasuringActivity extends AppCompatActivity
         Instant now = Instant.now();
         long elapsedTime = Duration.between(mStartTime, now).toMillis();
 
-        // Todo: compiler said string.valueOf could be left out, test if that is the case
         // Add the current elapsedTime and balanceDifference to the list
         float elapsedTimeSeconds = elapsedTime * 0.001f;
         mBalanceData.add(String.format("%s,%s,%s", elapsedTimeSeconds,
