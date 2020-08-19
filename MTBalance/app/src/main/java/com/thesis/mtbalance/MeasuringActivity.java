@@ -37,6 +37,7 @@ public class MeasuringActivity extends AppCompatActivity
 
     // Numericals
     private int mIteration = 0;
+    private int mParticipantNumber;
     private int mFeedbackMethod;
     private float mThresholdLeniency;
     private float mAnkleLength, mKneeLength;
@@ -59,6 +60,7 @@ public class MeasuringActivity extends AppCompatActivity
 
     // Helpers
     private VecHelper mVecHelper;
+    private FileHelper mFileHelper;
 
     // Xsens
     private XsensDotScanner mDotScanner;
@@ -82,6 +84,7 @@ public class MeasuringActivity extends AppCompatActivity
 
         // Initialize helpers
         mVecHelper = new VecHelper(this);
+        mFileHelper = new FileHelper();
 
         // Get the shared preferences
         retrieveSharedPreferences();
@@ -97,7 +100,9 @@ public class MeasuringActivity extends AppCompatActivity
         // Create a shared preferences object
         SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(this);
 
-        // Get the preferred feedback method
+        // Get the participant number and preferred feedback method
+        mParticipantNumber = Integer.parseInt(Objects.requireNonNull(sharedPref.getString
+                (SettingsActivity.KEY_PARTICIPANT_NUMBER, "0")));
         mFeedbackMethod = Integer.parseInt(Objects.requireNonNull(sharedPref.getString
                 (SettingsActivity.KEY_PREFERRED_FEEDBACK, "0")));
 
@@ -228,6 +233,10 @@ public class MeasuringActivity extends AppCompatActivity
             // Calculate the completion time
             mCompletionTime = Duration.between(mStartTime, endTime).toMillis();
 
+            // Turn the balance performance into a percentage and completion time to seconds
+            mBalancePerformance = mBalancePerformance / mCompletionTime * 100f;
+            mCompletionTime = mCompletionTime * 0.001f;
+
             // Todo: save DVs to rides.txt and measurement data to mStartTime.txt
             // Todo: for DVS: name = rides.txt
             // Todo: values = mParticipantNumber, mStartTime, mFeedbackMethod, mBalPerformance, mBalDeviation, mRespTime, mCompTime
@@ -308,6 +317,9 @@ public class MeasuringActivity extends AppCompatActivity
 
         // Update the balance data for the post-hoc application
         updateBalanceData(balanceDifference);
+
+        // Update the iteration
+        mIteration++;
     }
 
     /**
@@ -366,11 +378,12 @@ public class MeasuringActivity extends AppCompatActivity
      * @param balanceDifference - the difference in balance, calibrated to origin and in 2d.
      */
     private void updateFeedback(float distance, float[] balanceDifference) {
-        // Todo: implement method
+        // Todo: implement method - use mFeedbackMethod
     }
 
     /**
      * Updates the balance data for the post-hoc application.
+     *
      * @param balanceDifference - the difference in balance, calibrated to origin and in 2d.
      */
     private void updateBalanceData(float[] balanceDifference) {
