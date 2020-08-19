@@ -2,8 +2,10 @@ package com.thesis.mtbalance;
 
 import android.bluetooth.BluetoothDevice;
 import android.bluetooth.le.ScanSettings;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.os.Handler;
 import android.os.SystemClock;
 import android.view.View;
 import android.widget.Chronometer;
@@ -24,8 +26,12 @@ import com.xsens.dot.android.sdk.utils.XsensDotScanner;
 
 import java.time.Duration;
 import java.time.Instant;
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
+import java.time.format.FormatStyle;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.Objects;
 
 public class MeasuringActivity extends AppCompatActivity
@@ -35,15 +41,15 @@ public class MeasuringActivity extends AppCompatActivity
     // Finals
     private final int ALL_DOTS = 3;
 
-    // Numericals
+    // Numericals / Strings
+    private String mParticipantNumber;
     private int mIteration = 0;
-    private int mParticipantNumber;
     private int mFeedbackMethod;
     private float mThresholdLeniency;
     private float mAnkleLength, mKneeLength;
 
     // DVs
-    private float mBalancePerformance, mCompletionTime;
+    private float mBalancePerformance;
     private float mBalanceDeviation = 0f;
     private float mResponseTime = 0f;
 
@@ -56,7 +62,8 @@ public class MeasuringActivity extends AppCompatActivity
     private Chronometer mChronometer;
 
     // Instants
-    Instant mStartTime, mStartBalanceTime, mEndBalanceTime;
+    private Instant mStartTime, mEndTime;
+    private Instant mStartBalanceTime, mEndBalanceTime;
 
     // Helpers
     private VecHelper mVecHelper;
@@ -101,8 +108,7 @@ public class MeasuringActivity extends AppCompatActivity
         SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(this);
 
         // Get the participant number and preferred feedback method
-        mParticipantNumber = Integer.parseInt(Objects.requireNonNull(sharedPref.getString
-                (SettingsActivity.KEY_PARTICIPANT_NUMBER, "0")));
+        mParticipantNumber = sharedPref.getString(SettingsActivity.KEY_PARTICIPANT_NUMBER, "0");
         mFeedbackMethod = Integer.parseInt(Objects.requireNonNull(sharedPref.getString
                 (SettingsActivity.KEY_PREFERRED_FEEDBACK, "0")));
 
@@ -203,6 +209,9 @@ public class MeasuringActivity extends AppCompatActivity
             mChronometer.setBase(SystemClock.elapsedRealtime());
             mChronometer.start();
 
+            // Add an initial point to the measurement data
+            mBalanceData.add("0,0,0");
+
             // Initialize every dot with the quaternion measurement mode
             // Start measuring and calibrate the sensors
             for (XsensDotDevice dot : mDotList) {
@@ -223,27 +232,75 @@ public class MeasuringActivity extends AppCompatActivity
             ((ImageButton) view).setImageResource(R.drawable.ic_play);
 
             // Stop the clock and the chronometer
-            Instant endTime = Instant.now();
+            mEndTime = Instant.now();
             mChronometer.stop();
 
             // Stop the measuring for every DOT
             for (XsensDotDevice dot : mDotList)
                 dot.stopMeasuring();
 
-            // Calculate the completion time
-            mCompletionTime = Duration.between(mStartTime, endTime).toMillis();
+            // Finalize the DVs and format to a string, then save it to the rides file
+            String dataDVS = finalizeDVS();
+            mFileHelper.appendToFile("rides", dataDVS, this);
 
-            // Turn the balance performance into a percentage and completion time to seconds
-            mBalancePerformance = mBalancePerformance / mCompletionTime * 100f;
-            mCompletionTime = mCompletionTime * 0.001f;
+            // Save balance data to an unique file for post-hoc application
+            mFileHelper.saveArrayData(mStartTime.toString(), mBalanceData, this);
 
-            // Todo: save DVs to rides.txt and measurement data to mStartTime.txt
-            // Todo: for DVS: name = rides.txt
-            // Todo: values = mParticipantNumber, mStartTime, mFeedbackMethod, mBalPerformance, mBalDeviation, mRespTime, mCompTime
-            // Todo: for measurement data: name = mStartTime.txt
-            // Todo: values = mSteptime, mBalDifferenceX, mBalDifferenceY
-            // Todo: notify user
+            // Notify user
+            Snackbar.make(mMeasuringLayout, "Stopped measuring and saved data.",
+                    Snackbar.LENGTH_LONG).show();
+
+            // Return to MainActivity after waiting for 3 seconds
+            new Handler().postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+                    startActivity(intent);
+
+                    // Destroy the activity to prevent data leakage
+                    finish();
+                }
+            }, 3000);
         }
+    }
+
+    /**
+     * Finalizes the dependent variables and turns the data into a string format.
+     *
+     * @return The string format denoting the following variables, in this order:
+     * - General Variables
+     * 1. Start time;
+     * 2. Participant number;
+     * 3. Feedback method;
+     * 4. DateTime;
+     * - DVS
+     * 5. Balance performance;
+     * 6. Balance deviation;
+     * 7. Response time;
+     * 8. Completion time.
+     */
+    private String finalizeDVS() {
+        // Get the dateTime using a formatter
+        DateTimeFormatter formatter =
+                DateTimeFormatter.ofLocalizedDate(FormatStyle.FULL)
+                        .withLocale(Locale.getDefault())
+                        .withZone(ZoneId.systemDefault());
+        String dateTime = formatter.format(mStartTime);
+
+        // Calculate the completion time
+        float completionTime = Duration.between(mStartTime, mEndTime).toMillis();
+
+        // Turn the balance performance into a percentage and completion time to seconds
+        mBalancePerformance = mBalancePerformance / completionTime * 100f;
+        completionTime = completionTime * 0.001f;
+
+        // Todo: compiler said string.valueOf could be left out, test if that is the case
+        // Build the data string according to the javadoc
+        return String.format("%s,%s,%s,%s,%s,%s,%s,%s",
+                mStartTime.toString(), mParticipantNumber,
+                mFeedbackMethod, dateTime,
+                mBalancePerformance, mBalanceDeviation,
+                mResponseTime, completionTime);
     }
 
     /**
@@ -391,10 +448,11 @@ public class MeasuringActivity extends AppCompatActivity
         Instant now = Instant.now();
         long elapsedTime = Duration.between(mStartTime, now).toMillis();
 
+        // Todo: compiler said string.valueOf could be left out, test if that is the case
         // Add the current elapsedTime and balanceDifference to the list
         float elapsedTimeSeconds = elapsedTime * 0.001f;
-        mBalanceData.add(String.format("%s,%s,%s", String.valueOf(elapsedTimeSeconds),
-                String.valueOf(balanceDifference[0]), String.valueOf(balanceDifference[1])));
+        mBalanceData.add(String.format("%s,%s,%s", elapsedTimeSeconds,
+                balanceDifference[0], balanceDifference[1]));
     }
 
     // region Unused
