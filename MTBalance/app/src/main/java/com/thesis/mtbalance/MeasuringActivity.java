@@ -34,7 +34,9 @@ public class MeasuringActivity extends AppCompatActivity
     // Finals
     private final int ALL_DOTS = 3;
 
-    // Floats
+    // Numericals
+    private int mFeedbackMethod;
+    private float mThresholdLeniency;
     private float mAnkleLength, mKneeLength;
 
     // Booleans
@@ -83,12 +85,22 @@ public class MeasuringActivity extends AppCompatActivity
      * Retrieves the used shared preferences.
      */
     private void retrieveSharedPreferences() {
-        // Create a shared preferences object and get the leg lengths
+        // Create a shared preferences object
         SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(this);
+
+        // Get the preferred feedback method
+        mFeedbackMethod = Integer.parseInt(Objects.requireNonNull(sharedPref.getString
+                (SettingsActivity.KEY_PREFERRED_FEEDBACK, "0")));
+
+        // Get the preferred threshold leniency
+        mThresholdLeniency = Float.parseFloat(Objects.requireNonNull(sharedPref.getString
+                (SettingsActivity.KEY_THRESHOLD_LENIENCY, "50")));
+
+        // Get the leg lengths
         mAnkleLength = Float.parseFloat(Objects.requireNonNull(sharedPref.getString
-                (SettingsActivity.KEY_LOWER_LEG_DIMENSION, "0")));
+                (SettingsActivity.KEY_LOWER_LEG_LENGTH, "0")));
         mKneeLength = Float.parseFloat(Objects.requireNonNull(sharedPref.getString
-                (SettingsActivity.KEY_UPPER_LEG_DIMENSION, "0")));
+                (SettingsActivity.KEY_UPPER_LEG_LENGTH, "0")));
     }
 
     /**
