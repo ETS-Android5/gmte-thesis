@@ -101,4 +101,85 @@ public class VecHelper {
 
         return endEffector;
     }
+
+    /**
+     * Get the closest intersection point between a line and a point.
+     *
+     * @param p2 - point denoting end of line segment.
+     * @param q  - separate point to draw intersection point from.
+     * @return the closest intersection point on line (p1, p2).
+     */
+    public float[] getIntersection(float[] p2, float[] q) {
+        // The start of the line segment is always the origin
+        float[] p1 = {0f, 0f, 0f};
+
+        // Get the inner product space (u) and the line between the segment and point
+        float[] u = sub(p2, p1);
+        float[] pq = sub(q, p1);
+
+        // Get the point on the line nearest q to get the component on the line
+        float[] w = sub(pq, mul(u, dot(pq, u) / norm(u)));
+
+        // Sub w from q to get the actual point on the line
+        return sub(q, w);
+    }
+
+    /**
+     * Get the distance between two points.
+     *
+     * @param q1 - the first point.
+     * @param q2 - the second point.
+     * @return the distance with float precision.
+     */
+    public float getDistance(float[] q1, float[] q2) {
+        // Use the Pythagorean theorem to get the distance between two points
+        float[] d = sub(q1, q2);
+        return (float) Math.sqrt(d[0] * d[0] + d[1] * d[1] + d[2] * d[2]);
+    }
+
+    // region Elemental
+
+    /**
+     * Subtracts vector q from vector p.
+     *
+     * @param p - first vector.
+     * @param q - second vector.
+     * @return subtracted vector.
+     */
+    private float[] sub(float[] p, float[] q) {
+        return new float[]{p[0] - q[0], p[1] - q[1], p[2] - q[2]};
+    }
+
+    /**
+     * Multiplies a vector with a scalar.
+     *
+     * @param p - the vector.
+     * @param s - the scalar.
+     * @return a vector multiplied by a scalar.
+     */
+    private float[] mul(float[] p, float s) {
+        return new float[]{p[0] * s, p[1] * s, p[2] * s};
+    }
+
+    /**
+     * Returns the dot product of two vectors.
+     *
+     * @param p - the first vector.
+     * @param q - the second vector.
+     * @return the dot product of the two vectors.
+     */
+    private float dot(float[] p, float[] q) {
+        return p[0] * q[0] + p[1] * q[1] + p[2] * q[2];
+    }
+
+    /**
+     * Returns the norm of a vector (also known as its squared length).
+     *
+     * @param p - the vector.
+     * @return the norm of the vector.
+     */
+    private float norm(float[] p) {
+        return p[0] * p[0] + p[1] * p[1] + p[2] * p[2];
+    }
+    // endregion
 }
