@@ -13,6 +13,7 @@ import androidx.preference.PreferenceFragmentCompat;
 public class SettingsActivity extends AppCompatActivity {
 
     /* Keys */
+    public static final String KEY_PARTICIPANT_NUMBER = "participant_number";
     public static final String KEY_PREFERRED_FEEDBACK = "preferred_feedback";
     public static final String KEY_THRESHOLD_LENIENCY = "threshold_leniency";
     public static final String KEY_LOWER_LEG_LENGTH = "lower_leg_length";
@@ -48,10 +49,13 @@ public class SettingsActivity extends AppCompatActivity {
             setPreferencesFromResource(R.xml.preferences, rootKey);
 
             // Set the keyboard for dimension settings to numerical only
-            setNumericalKeyboard(KEY_HIP_DIMENSION);
-            setNumericalKeyboard(KEY_UPPER_LEG_LENGTH);
+            setNumericalKeyboard(KEY_PARTICIPANT_NUMBER);
+
             setNumericalKeyboard(KEY_LOWER_LEG_LENGTH);
+            setNumericalKeyboard(KEY_UPPER_LEG_LENGTH);
+
             setNumericalKeyboard(KEY_OFFSET_DIMENSION);
+            setNumericalKeyboard(KEY_HIP_DIMENSION);
         }
 
         /**
