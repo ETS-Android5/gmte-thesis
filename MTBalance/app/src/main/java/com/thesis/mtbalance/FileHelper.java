@@ -2,10 +2,12 @@ package com.thesis.mtbalance;
 
 import android.content.Context;
 
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.ArrayList;
@@ -34,6 +36,67 @@ public class FileHelper {
             result[i] = Float.parseFloat(inputArray[i]);
 
         return result;
+    }
+
+    /**
+     * Appends a line of data to a file in the files directory.
+     * Creates a file when the filename does not yes exist.
+     *
+     * @param fileName - the name of the file.
+     * @param data     - the data to append.
+     * @param context  - the application context.
+     */
+    public void appendToFile(String fileName, String data, Context context) {
+        try {
+            // Get the directory of the file
+            File fileDir = new File(context.getExternalFilesDir
+                    (null) + "/" + fileName + ".txt");
+
+            // Open a new output stream and append the data
+            FileOutputStream fos = new FileOutputStream(fileDir, true);
+            fos.write(data.getBytes());
+            fos.flush();
+            fos.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * Loads a file into an arrayList from the files directory.
+     *
+     * @param fileName - the filename to load.
+     * @param context  - the application context.
+     * @return An arrayList build from the strings present in the file.
+     */
+    public ArrayList<String> loadFromFile(String fileName, Context context) {
+        // Initialize a new arrayList
+        ArrayList<String> data = null;
+
+        try {
+            // Get the directory of the file
+            File fileDir = new File(context.getExternalFilesDir
+                    (null) + "/" + fileName + ".txt");
+
+            // Open a new input stream and readers
+            FileInputStream fis = new FileInputStream(fileDir);
+            InputStreamReader isr = new InputStreamReader(fis);
+            BufferedReader br = new BufferedReader(isr);
+
+            // While there are lines of data, append to the arrayList
+            String line;
+            while ((line = br.readLine()) != null)
+                data.add(line);
+
+            // Close the input stream and readers
+            br.close();
+            isr.close();
+            fis.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        return data;
     }
 
     /**
