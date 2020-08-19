@@ -64,9 +64,10 @@ public class MeasuringActivity extends AppCompatActivity
     private XsensDotScanner mDotScanner;
     private ArrayList<XsensDotDevice> mDotList = new ArrayList<>();
 
-    // Hashmaps
+    // Containers
     private HashMap<String, String> mAddressTagMap = new HashMap<>();
     private HashMap<String, float[]> mTagQuatMap = new HashMap<>();
+    private ArrayList<String> mBalanceData = new ArrayList<>();
     // endregion
 
     /**
@@ -228,6 +229,10 @@ public class MeasuringActivity extends AppCompatActivity
             mCompletionTime = Duration.between(mStartTime, endTime).toMillis();
 
             // Todo: save DVs to rides.txt and measurement data to startTime.txt
+            // Todo: for DVS: name = rides.txt
+            // Todo: values = mParticipantNumber, mStartTime, mFeedbackMethod, mBalPerformance, mBalDeviation, mRespTime, mCompTime
+            // Todo: for measurement data: name = mStartTime.txt
+            // Todo: values = mSteptime, mBalDifferenceX, mBalDifferenceY
             // Todo: notify user
         }
     }
@@ -289,9 +294,6 @@ public class MeasuringActivity extends AppCompatActivity
         // Get the intersection between current and optimal balance
         float[] intersection = mVecHelper.getIntersection(bikeVector, endEffector);
 
-        // Get the flattened balance difference between the current and optimal balance
-        float[] balanceDifference = mVecHelper.getBalanceDifference(endEffector, intersection);
-
         // Get the distance between the intersection and end effector
         float distance = mVecHelper.getDistance(endEffector, intersection);
 
@@ -323,6 +325,18 @@ public class MeasuringActivity extends AppCompatActivity
                     (mStartBalanceTime, mEndBalanceTime).toMillis();
             mBalancePerformance += currBalanceTime;
         }
+
+        // Get the flattened balance difference between the current and optimal balance
+        float[] balanceDifference = mVecHelper.getBalanceDifference(endEffector, intersection);
+
+        // Get the current time and update the stepTime
+        Instant now = Instant.now();
+        long elapsedTime = Duration.between(mStartTime, now).toMillis();
+
+        // Add the current elapsedTime and balanceDifference to the list
+        float elapsedTimeSeconds = elapsedTime * 0.001f;
+        mBalanceData.add(String.format("%s,%s,%s", String.valueOf(elapsedTimeSeconds),
+                String.valueOf(balanceDifference[0]), String.valueOf(balanceDifference[1])));
     }
 
     /**
