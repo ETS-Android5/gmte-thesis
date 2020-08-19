@@ -71,7 +71,7 @@ public class MeasuringActivity extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_measuring);
 
-        // Initialize helper
+        // Initialize helpers
         mVecHelper = new VecHelper(this);
 
         // Get the shared preferences
@@ -152,7 +152,6 @@ public class MeasuringActivity extends AppCompatActivity
         mTagQuatMap.put(mAddressTagMap.get(address), new float[]{1f, 0f, 0f, 0f});
 
         // Create a new DOT object and add it to the list of DOT objects
-        // Todo: check if 'this' is fine instead of MeasuringActivity.this
         XsensDotDevice dot = new XsensDotDevice(getApplicationContext(),
                 bluetoothDevice, this);
         dot.connect();
@@ -185,9 +184,11 @@ public class MeasuringActivity extends AppCompatActivity
             ((ImageButton) view).setImageResource(R.drawable.ic_stop);
 
             // Initialize every dot with the quaternion measurement mode
+            // Start measuring and calibrate the sensors
             for (XsensDotDevice dot : mDotList) {
                 dot.setMeasurementMode(XsPayload.PAYLOAD_TYPE_ORIENTATION_QUATERNION);
                 dot.startMeasuring();
+                dot.resetHeading();
             }
 
             // Start the clock and the chronometer
@@ -283,67 +284,54 @@ public class MeasuringActivity extends AppCompatActivity
     // region Unused
     @Override
     public void onXsensDotConnectionChanged(String s, int i) {
-
     }
 
     @Override
     public void onXsensDotServicesDiscovered(String s, int i) {
-
     }
 
     @Override
     public void onXsensDotFirmwareVersionRead(String s, String s1) {
-
     }
 
     @Override
     public void onXsensDotTagChanged(String s, String s1) {
-
     }
 
     @Override
     public void onXsensDotBatteryChanged(String s, int i, int i1) {
-
     }
 
     @Override
     public void onXsensDotCalibrationResult(String s, int i, int i1, int i2) {
-
     }
 
     @Override
     public void onXsensDotOtaChecked(String s, boolean b, String s1, String s2) {
-
     }
 
     @Override
     public void onXsensDotOtaRollback(String s, boolean b, String s1, String s2) {
-
     }
 
     @Override
     public void onXsensDotOtaFileMismatch(String s) {
-
     }
 
     @Override
     public void onXsensDotOtaDownloaded(String s, int i) {
-
     }
 
     @Override
     public void onXsensDotOtaUpdated(String s, int i, int i1, int i2, int i3, int i4) {
-
     }
 
     @Override
     public void onXsensDotNewFirmwareVersion(String s, boolean b, String s1, String s2) {
-
     }
 
     @Override
     public void onXsensDotOtaDischarge(String s) {
-
     }
     // endregion
 }
