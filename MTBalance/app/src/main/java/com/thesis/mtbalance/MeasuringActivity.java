@@ -228,7 +228,7 @@ public class MeasuringActivity extends AppCompatActivity
             // Calculate the completion time
             mCompletionTime = Duration.between(mStartTime, endTime).toMillis();
 
-            // Todo: save DVs to rides.txt and measurement data to startTime.txt
+            // Todo: save DVs to rides.txt and measurement data to mStartTime.txt
             // Todo: for DVS: name = rides.txt
             // Todo: values = mParticipantNumber, mStartTime, mFeedbackMethod, mBalPerformance, mBalDeviation, mRespTime, mCompTime
             // Todo: for measurement data: name = mStartTime.txt
@@ -294,9 +294,28 @@ public class MeasuringActivity extends AppCompatActivity
         // Get the intersection between current and optimal balance
         float[] intersection = mVecHelper.getIntersection(bikeVector, endEffector);
 
+        // Get the flattened balance difference between the current and optimal balance
+        float[] balanceDifference = mVecHelper.getBalanceDifference(endEffector, intersection);
+
         // Get the distance between the intersection and end effector
         float distance = mVecHelper.getDistance(endEffector, intersection);
 
+        // Update the DVs
+        updateDVS(distance);
+
+        // Update the real-time feedback
+        updateFeedback(distance, balanceDifference);
+
+        // Update the balance data for the post-hoc application
+        updateBalanceData(balanceDifference);
+    }
+
+    /**
+     * Updates the dependent variables.
+     *
+     * @param distance - the current distance from the current to the optimal balance point.
+     */
+    private void updateDVS(float distance) {
         // Update the average balance deviation
         float currDeviation = (distance - mThresholdLeniency > 0) ?
                 distance - mThresholdLeniency : 0f;
@@ -325,18 +344,6 @@ public class MeasuringActivity extends AppCompatActivity
                     (mStartBalanceTime, mEndBalanceTime).toMillis();
             mBalancePerformance += currBalanceTime;
         }
-
-        // Get the flattened balance difference between the current and optimal balance
-        float[] balanceDifference = mVecHelper.getBalanceDifference(endEffector, intersection);
-
-        // Get the current time and update the stepTime
-        Instant now = Instant.now();
-        long elapsedTime = Duration.between(mStartTime, now).toMillis();
-
-        // Add the current elapsedTime and balanceDifference to the list
-        float elapsedTimeSeconds = elapsedTime * 0.001f;
-        mBalanceData.add(String.format("%s,%s,%s", String.valueOf(elapsedTimeSeconds),
-                String.valueOf(balanceDifference[0]), String.valueOf(balanceDifference[1])));
     }
 
     /**
@@ -350,6 +357,31 @@ public class MeasuringActivity extends AppCompatActivity
         // Calculates the cumulative moving average - https://en.wikipedia.org/wiki/Moving_average
         float numerator = mIteration * currAverage + val;
         return numerator / (mIteration + 1);
+    }
+
+    /**
+     * Updates the real-time feedback given the current distance and balance difference.
+     *
+     * @param distance          - the current distance from the current to the optimal balance point.
+     * @param balanceDifference - the difference in balance, calibrated to origin and in 2d.
+     */
+    private void updateFeedback(float distance, float[] balanceDifference) {
+        // Todo: implement method
+    }
+
+    /**
+     * Updates the balance data for the post-hoc application.
+     * @param balanceDifference - the difference in balance, calibrated to origin and in 2d.
+     */
+    private void updateBalanceData(float[] balanceDifference) {
+        // Get the current time and update the stepTime
+        Instant now = Instant.now();
+        long elapsedTime = Duration.between(mStartTime, now).toMillis();
+
+        // Add the current elapsedTime and balanceDifference to the list
+        float elapsedTimeSeconds = elapsedTime * 0.001f;
+        mBalanceData.add(String.format("%s,%s,%s", String.valueOf(elapsedTimeSeconds),
+                String.valueOf(balanceDifference[0]), String.valueOf(balanceDifference[1])));
     }
 
     // region Unused
