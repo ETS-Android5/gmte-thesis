@@ -46,6 +46,7 @@ public class RidesFragment extends Fragment {
 
         // Setup the recyclerview
         mRecyclerView = mView.findViewById(R.id.recyclerview_rides);
+        mRecyclerView.setHasFixedSize(true);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
 
         // Setup the adapter and link it to the recyclerview
