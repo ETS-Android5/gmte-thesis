@@ -2,7 +2,7 @@
 <resources>
     <!-- Feedback methods. -->
     <string-array name="feedback_method_entries">
-        <item>App</item>
+        <item>Application</item>
         <item>Vibrotactile</item>
         <item>Directional</item>
         <item>Positional</item>

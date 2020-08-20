@@ -1,5 +1,6 @@
 package com.thesis.mtbalance;
 
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -8,6 +9,7 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.preference.PreferenceManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -16,6 +18,7 @@ import java.util.ArrayList;
 public class RidesFragment extends Fragment {
 
     /* Variables */
+    private FileHelper fileHelper;
     private View mView;
 
     private RecyclerView mRecyclerView;
@@ -56,82 +59,56 @@ public class RidesFragment extends Fragment {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        // Todo: fill mRidesData with correct data here!
-        mRidesData.add(new RidesItem
-                ("11:56 min", "19 August 2020 - 16:20",
-                        "Directional", "68.15 %",
-                        "69.11 cm", "11.34 ms"));
-        mRidesData.add(new RidesItem
-                ("11:56 min", "19 August 2020 - 16:20",
-                        "Directional", "68.15 %",
-                        "69.11 cm", "11.34 ms"));
-        mRidesData.add(new RidesItem
-                ("11:56 min", "19 August 2020 - 16:20",
-                        "Directional", "68.15 %",
-                        "69.11 cm", "11.34 ms"));
-        mRidesData.add(new RidesItem
-                ("11:56 min", "19 August 2020 - 16:20",
-                        "Directional", "68.15 %",
-                        "69.11 cm", "11.34 ms"));
-        mRidesData.add(new RidesItem
-                ("11:56 min", "19 August 2020 - 16:20",
-                        "Directional", "68.15 %",
-                        "69.11 cm", "11.34 ms"));
-        mRidesData.add(new RidesItem
-                ("11:56 min", "19 August 2020 - 16:20",
-                        "Directional", "68.15 %",
-                        "69.11 cm", "11.34 ms"));
-        mRidesData.add(new RidesItem
-                ("11:56 min", "19 August 2020 - 16:20",
-                        "Directional", "68.15 %",
-                        "69.11 cm", "11.34 ms"));
-        mRidesData.add(new RidesItem
-                ("11:56 min", "19 August 2020 - 16:20",
-                        "Directional", "68.15 %",
-                        "69.11 cm", "11.34 ms"));
-        mRidesData.add(new RidesItem
-                ("11:56 min", "19 August 2020 - 16:20",
-                        "Directional", "68.15 %",
-                        "69.11 cm", "11.34 ms"));
-        mRidesData.add(new RidesItem
-                ("11:56 min", "19 August 2020 - 16:20",
-                        "Directional", "68.15 %",
-                        "69.11 cm", "11.34 ms"));
-        mRidesData.add(new RidesItem
-                ("11:56 min", "19 August 2020 - 16:20",
-                        "Directional", "68.15 %",
-                        "69.11 cm", "11.34 ms"));
-        mRidesData.add(new RidesItem
-                ("11:56 min", "19 August 2020 - 16:20",
-                        "Directional", "68.15 %",
-                        "69.11 cm", "11.34 ms"));
-        mRidesData.add(new RidesItem
-                ("11:56 min", "19 August 2020 - 16:20",
-                        "Directional", "68.15 %",
-                        "69.11 cm", "11.34 ms"));
-        mRidesData.add(new RidesItem
-                ("11:56 min", "19 August 2020 - 16:20",
-                        "Directional", "68.15 %",
-                        "69.11 cm", "11.34 ms"));
-        mRidesData.add(new RidesItem
-                ("11:56 min", "19 August 2020 - 16:20",
-                        "Directional", "68.15 %",
-                        "69.11 cm", "11.34 ms"));
-        mRidesData.add(new RidesItem
-                ("11:56 min", "19 August 2020 - 16:20",
-                        "Directional", "68.15 %",
-                        "69.11 cm", "11.34 ms"));
-        mRidesData.add(new RidesItem
-                ("11:56 min", "19 August 2020 - 16:20",
-                        "Directional", "68.15 %",
-                        "69.11 cm", "11.34 ms"));
-        mRidesData.add(new RidesItem
-                ("11:56 min", "19 August 2020 - 16:20",
-                        "Directional", "68.15 %",
-                        "69.11 cm", "11.34 ms"));
-        mRidesData.add(new RidesItem
-                ("11:56 min", "19 August 2020 - 16:20",
-                        "Directional", "68.15 %",
-                        "69.11 cm", "11.34 ms"));
+        // Get the data from the file as an arrayList of strings
+        fileHelper = new FileHelper();
+        ArrayList<String> rideStringData = fileHelper.loadFromFile
+                ("rides", requireContext());
+
+        // Check if there is data in the first place
+        if (rideStringData.size() == 0) {
+            // Todo: set a textview in the activity to show there are no items
+            return;
+        }
+
+        // Create a shared preferences object and get the current participant number
+        SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences
+                (requireContext());
+        String participantNumber = sharedPref.getString
+                (SettingsActivity.KEY_PARTICIPANT_NUMBER, "0");
+
+        // Loop over all the rides in the string data and split the values
+        for (String ride : rideStringData) {
+            String[] rideArray = ride.split(",");
+
+            // Discard the ride data if the participant does not match the settings participant.
+            if (!rideArray[1].equals(participantNumber))
+                continue;
+
+            // Add the rideArray as a rides item
+            addRidesItem(rideArray);
+        }
+    }
+
+    /**
+     * Adds the dataArray as a rides item to the list.
+     *
+     * @param dataArray - the data to parse as a rides item.
+     */
+    private void addRidesItem(String[] dataArray) {
+        // Get the name for the feedback method out of the string array
+        String feedbackMethod = getResources().getStringArray
+                (R.array.feedback_method_entries)[Integer.parseInt(dataArray[2])];
+
+        // Datetime is already correct
+        String dateTime = dataArray[3];
+
+        // Get a string array from the DVs with their respective unit denotations
+        String[] rideDVS = fileHelper.stringArrayToMeasurements
+                (new String[]{dataArray[4], dataArray[5], dataArray[6], dataArray[7]},
+                        new String[]{"%", "cm", "ms", "sec"});
+
+        // Add the data to the list of ride items
+        mRidesData.add(new RidesItem(rideDVS[3], dateTime, feedbackMethod,
+                rideDVS[0], rideDVS[1], rideDVS[2]));
     }
 }

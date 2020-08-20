@@ -12,7 +12,7 @@
             app:entries="@array/feedback_method_entries"
             app:entryValues="@array/feedback_method_values"
             app:key="preferred_feedback"
-            app:title="Preferred feedback method"
+            app:title="Feedback method"
             app:useSimpleSummaryProvider="true" />
 
     </PreferenceCategory>

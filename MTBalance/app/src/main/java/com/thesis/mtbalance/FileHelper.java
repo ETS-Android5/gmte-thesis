@@ -10,6 +10,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 
 /**
@@ -36,6 +37,28 @@ public class FileHelper {
             result[i] = Float.parseFloat(inputArray[i]);
 
         return result;
+    }
+
+    /**
+     * Turns an array of strings into an array of strings with measurement units.
+     *
+     * @param input - the strings to be converted.
+     * @param units - the measurements units for each string respectively.
+     * @return a string array with attached measurement units.
+     */
+    public String[] stringArrayToMeasurements(String[] input, String[] units) {
+        // Set a decimal format for the inputs to truncate on significance
+        DecimalFormat df = new DecimalFormat("#00.00");
+
+        // Get the size, and parse the input with the formatter, adding the measurement unit
+        int size = input.length;
+        String[] output = new String[size];
+        for (int i = 0; i < size; i++) {
+            float currFloat = Float.parseFloat(input[i]);
+            output[i] = df.format(currFloat) + " " + units[i];
+        }
+
+        return output;
     }
 
     /**
