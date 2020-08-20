@@ -49,7 +49,7 @@ public class MeasuringActivity extends AppCompatActivity
     private float mAnkleLength, mKneeLength;
 
     // DVs
-    private float mBalancePerformance;
+    private float mBalancePerformance = 0f;
     private float mBalanceDeviation = 0f;
     private float mResponseTime = 0f;
 
