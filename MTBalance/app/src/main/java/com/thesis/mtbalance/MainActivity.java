@@ -88,9 +88,6 @@ public class MainActivity extends AppCompatActivity {
             case R.id.settings: // Start settings activity
                 Intent intent = new Intent(this, SettingsActivity.class);
                 startActivity(intent);
-
-                // Destroy the activity to prevent data leakage
-                finish();
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
