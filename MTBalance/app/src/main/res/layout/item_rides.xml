@@ -3,7 +3,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    app:cardBackgroundColor="#DF0F58"
+    android:layout_marginTop="8dp"
+    app:cardBackgroundColor="@color/colorPrimary"
     app:cardCornerRadius="16dp">
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -20,7 +21,8 @@
             android:contentDescription="@string/comptime_icon"
             android:src="@drawable/ic_clock"
             app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"
+            app:tint="@color/colorText" />
 
         <TextView
             android:id="@+id/comptime_textview"
@@ -29,6 +31,7 @@
             android:layout_marginStart="4dp"
             android:layout_marginTop="2dp"
             android:text="05:23 min"
+            android:textColor="@color/colorText"
             android:textSize="14sp"
             android:textStyle="bold"
             app:layout_constraintLeft_toRightOf="@+id/comptime_icon"
@@ -41,6 +44,7 @@
             android:layout_marginTop="2dp"
             android:layout_marginEnd="8dp"
             android:text="20 August 2020 - 08:41"
+            android:textColor="@color/colorText"
             android:textSize="14sp"
             android:textStyle="bold"
             app:layout_constraintRight_toRightOf="parent"
@@ -57,7 +61,8 @@
             android:contentDescription="@string/feedback_icon"
             android:src="@drawable/ic_feedback"
             app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"
+            app:tint="@color/colorText" />
 
         <TextView
             android:id="@+id/feedback_textview"
@@ -66,6 +71,7 @@
             android:layout_marginStart="4dp"
             android:layout_marginTop="36dp"
             android:text="Vibrotactile"
+            android:textColor="@color/colorText"
             android:textSize="12sp"
             android:textStyle="bold"
             app:layout_constraintLeft_toRightOf="@+id/feedback_icon"
@@ -81,7 +87,8 @@
             android:contentDescription="@string/balperf_icon"
             android:src="@drawable/ic_adjust"
             app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"
+            app:tint="@color/colorText" />
 
         <TextView
             android:id="@+id/balperf_textview"
@@ -90,6 +97,7 @@
             android:layout_marginStart="4dp"
             android:layout_marginTop="36dp"
             android:text="86.23 %"
+            android:textColor="@color/colorText"
             android:textSize="12sp"
             android:textStyle="bold"
             app:layout_constraintLeft_toRightOf="@+id/balperf_icon"
@@ -105,7 +113,8 @@
             android:contentDescription="@string/baldev_icon"
             android:src="@drawable/ic_deviation"
             app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"
+            app:tint="@color/colorText" />
 
         <TextView
             android:id="@+id/baldev_textview"
@@ -114,6 +123,7 @@
             android:layout_marginTop="36dp"
             android:layout_marginEnd="4dp"
             android:text="23.56 cm"
+            android:textColor="@color/colorText"
             android:textSize="12sp"
             android:textStyle="bold"
             app:layout_constraintRight_toLeftOf="@+id/baldev_icon"
@@ -129,7 +139,8 @@
             android:contentDescription="@string/resptime_icon"
             android:src="@drawable/ic_timer"
             app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"
+            app:tint="@color/colorText" />
 
         <TextView
             android:id="@+id/resptime_textview"
@@ -138,6 +149,7 @@
             android:layout_marginTop="36dp"
             android:layout_marginEnd="4dp"
             android:text="21.56 ms"
+            android:textColor="@color/colorText"
             android:textSize="12sp"
             android:textStyle="bold"
             app:layout_constraintRight_toLeftOf="@+id/resptime_icon"
