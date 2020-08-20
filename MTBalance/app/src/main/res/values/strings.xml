@@ -1,7 +1,17 @@
 <resources>
     <string name="app_name">MTBalance</string>
     <string name="settings_title">Settings</string>
+
+    <!-- MeasurementActivity. -->
     <string name="measuring_button">Measuring Button</string>
     <string name="calibrate_button">Calibrate Button</string>
+    <string name="comptime_icon">Comptime Icon</string>
+    <string name="feedback_icon">Feedback Icon</string>
+    <string name="balperf_icon">Balperf Icon</string>
+    <string name="baldev_icon">Baldev Icon</string>
+    <string name="resptime_icon">Resptime Icon</string>
+
+    <!-- Rides item. -->
+
 
 </resources>
