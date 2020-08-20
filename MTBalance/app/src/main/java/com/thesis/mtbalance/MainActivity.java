@@ -88,6 +88,9 @@ public class MainActivity extends AppCompatActivity {
             case R.id.settings: // Start settings activity
                 Intent intent = new Intent(this, SettingsActivity.class);
                 startActivity(intent);
+
+                // Destroy the activity to prevent data leakage
+                finish();
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
@@ -96,10 +99,14 @@ public class MainActivity extends AppCompatActivity {
 
     /**
      * Starts the measurement activity.
+     *
      * @param view - the clicked fab.
      */
     public void startRide(View view) {
         Intent intent = new Intent(this, MeasuringActivity.class);
         startActivity(intent);
+
+        // Destroy the activity to prevent data leakage
+        finish();
     }
 }
