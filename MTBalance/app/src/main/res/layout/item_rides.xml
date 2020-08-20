@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    app:cardBackgroundColor="#DF0F58"
+    app:cardCornerRadius="16dp">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_margin="8dp">
+
+        <!-- Time related views. -->
+        <ImageView
+            android:id="@+id/comptime_icon"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:layout_marginStart="16dp"
+            android:contentDescription="Comptime Icon"
+            android:src="@drawable/ic_clock"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/comptime_textview"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="4dp"
+            android:layout_marginTop="2dp"
+            android:text="05:23 min"
+            android:textSize="14sp"
+            android:textStyle="bold"
+            app:layout_constraintLeft_toRightOf="@+id/comptime_icon"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/datetime_textview"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="2dp"
+            android:layout_marginEnd="16dp"
+            android:text="20 August 2020 - 08:41"
+            android:textSize="14sp"
+            android:textStyle="bold"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <!-- Average related views. -->
+        <ImageView
+            android:id="@+id/resptime_icon"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:layout_marginStart="32dp"
+            android:layout_marginTop="32dp"
+            android:contentDescription="Resptime Icon"
+            android:src="@drawable/ic_timer"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/resptime_textview"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="4dp"
+            android:layout_marginTop="36dp"
+            android:text="21.34 ms"
+            android:textSize="12sp"
+            android:textStyle="bold"
+            app:layout_constraintLeft_toRightOf="@+id/resptime_icon"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <ImageView
+            android:id="@+id/baldev_icon"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:layout_marginStart="32dp"
+            android:layout_marginTop="64dp"
+            android:contentDescription="Baldev Icon"
+            android:src="@drawable/ic_deviation"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/baldev_textview"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="4dp"
+            android:layout_marginTop="68dp"
+            android:text="34.23 cm"
+            android:textSize="12sp"
+            android:textStyle="bold"
+            app:layout_constraintLeft_toRightOf="@+id/baldev_icon"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <!-- Feedback related views. -->
+        <ImageView
+            android:id="@+id/feedback_icon"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:layout_marginTop="32dp"
+            android:layout_marginEnd="32dp"
+            android:contentDescription="Feedback Icon"
+            android:src="@drawable/ic_feedback"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/feedback_textview"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="36dp"
+            android:layout_marginEnd="4dp"
+            android:text="App"
+            android:textSize="12sp"
+            android:textStyle="bold"
+            app:layout_constraintRight_toLeftOf="@+id/feedback_icon"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <ImageView
+            android:id="@+id/balperf_icon"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:layout_marginTop="64dp"
+            android:layout_marginEnd="32dp"
+            android:contentDescription="Balperf Icon"
+            android:src="@drawable/ic_adjust"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/balperf_textview"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="68dp"
+            android:layout_marginEnd="4dp"
+            android:text="% 86.34"
+            android:textSize="12sp"
+            android:textStyle="bold"
+            app:layout_constraintRight_toLeftOf="@+id/balperf_icon"
+            app:layout_constraintTop_toTopOf="parent" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</androidx.cardview.widget.CardView>
