@@ -71,7 +71,7 @@ public class FileHelper {
      */
     public ArrayList<String> loadFromFile(String fileName, Context context) {
         // Initialize a new arrayList
-        ArrayList<String> data = null;
+        ArrayList<String> data = new ArrayList<>();
 
         try {
             // Get the directory of the file
@@ -132,7 +132,7 @@ public class FileHelper {
      */
     public ArrayList<String> loadArrayData(String fileName, Context context) {
         // Initialize a new arrayList
-        ArrayList<String> data = null;
+        ArrayList<String> data = new ArrayList<>();
 
         try {
             // Get the directory of the file
