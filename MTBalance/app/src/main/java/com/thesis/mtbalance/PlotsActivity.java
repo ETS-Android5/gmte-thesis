@@ -7,19 +7,29 @@ import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.viewpager.widget.ViewPager;
 
+import com.anychart.chart.common.dataentry.DataEntry;
+import com.anychart.chart.common.dataentry.ValueDataEntry;
 import com.google.android.material.tabs.TabLayout;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Objects;
 
 public class PlotsActivity extends AppCompatActivity {
 
-    // Public key used by fragments to get access to the plots data
-    public static final String BUNDLE_KEY =
-            "com.thesis.mtbalance.plotsactivity.bundle.KEY";
+    // Public keys used by fragments to get access to the plots data
+    public static final String BUNDLE_KEY_BOTHDIR =
+            "com.thesis.mtbalance.plotsactivity.bundle.KEY.BOTHDIR";
+    public static final String BUNDLE_KEY_XDIR =
+            "com.thesis.mtbalance.plotsactivity.bundle.KEY.XDIR";
+    public static final String BUNDLE_KEY_YDIR =
+            "com.thesis.mtbalance.plotsactivity.bundle.KEY.YDIR";
 
     /* Variables */
-    private ArrayList<String> mPlotData;
+    // ArrayLists of data entry objects for the plots
+    private ArrayList<DataEntry> mBothDirData = new ArrayList<>();
+    private ArrayList<DataEntry> mXDirData = new ArrayList<>();
+    private ArrayList<DataEntry> mYDirData = new ArrayList<>();
 
     private TabLayout mTabLayout;
     private ViewPager mViewPager;
@@ -50,10 +60,19 @@ public class PlotsActivity extends AppCompatActivity {
         Intent intent = getIntent();
         String fileDir = intent.getStringExtra(RecyclerViewAdapter.EXTRA_FILEDIR);
 
-        // Retrieve the plot data from the file directory
-        mPlotData = new FileHelper().loadArrayData(fileDir, this);
+        // Create a new fileHelper object
+        FileHelper fileHelper = new FileHelper();
 
-        // todo: make mPlotdata arraylist of floats instead and do processing beforehand
+        // Retrieve the plot data from the file directory
+        ArrayList<String> rideData = fileHelper.loadArrayData(fileDir, this);
+
+        // Loop over all the strings in the rideData and turn them into data entry elements
+        for (String ride : rideData) {
+            float[] data = fileHelper.stringToFloatArray(ride);
+            mBothDirData.add(new ValueDataEntry(data[1], data[2]));     // X and Y
+            mXDirData.add(new ValueDataEntry(data[0], data[1]));        // Time and X
+            mYDirData.add(new ValueDataEntry(data[0], data[2]));        // Time and Y
+        }
     }
 
     /**
@@ -67,21 +86,23 @@ public class PlotsActivity extends AppCompatActivity {
 
         // Create a bundle holding the plot data
         Bundle bundle = new Bundle();
-        bundle.putStringArrayList(BUNDLE_KEY, mPlotData);
+        bundle.putSerializable(BUNDLE_KEY_BOTHDIR, mBothDirData);
+        bundle.putSerializable(BUNDLE_KEY_XDIR, mXDirData);
+        bundle.putSerializable(BUNDLE_KEY_YDIR, mYDirData);
 
         // Create the fragments and add the bundle data
         BothDirFragment bothDirFragment = new BothDirFragment();
-        YDirFragment yDirFragment = new YDirFragment();
         XDirFragment xDirFragment = new XDirFragment();
+        YDirFragment yDirFragment = new YDirFragment();
 
         bothDirFragment.setArguments(bundle);
-        yDirFragment.setArguments(bundle);
         xDirFragment.setArguments(bundle);
+        yDirFragment.setArguments(bundle);
 
         // Add the desired fragments, without title to show icon
         mVPAdapter.addFragment(bothDirFragment, "");
-        mVPAdapter.addFragment(yDirFragment, "");
         mVPAdapter.addFragment(xDirFragment, "");
+        mVPAdapter.addFragment(yDirFragment, "");
 
         // Setup the adapter and viewpager
         mViewPager.setAdapter(mVPAdapter);
@@ -89,8 +110,8 @@ public class PlotsActivity extends AppCompatActivity {
 
         // Add the icons and remove elevation from the actionbar
         Objects.requireNonNull(mTabLayout.getTabAt(0)).setIcon(R.drawable.ic_directions);
-        Objects.requireNonNull(mTabLayout.getTabAt(1)).setIcon(R.drawable.ic_vertical);
-        Objects.requireNonNull(mTabLayout.getTabAt(2)).setIcon(R.drawable.ic_horizontal);
+        Objects.requireNonNull(mTabLayout.getTabAt(1)).setIcon(R.drawable.ic_horizontal);
+        Objects.requireNonNull(mTabLayout.getTabAt(2)).setIcon(R.drawable.ic_vertical);
         ActionBar actionBar = getSupportActionBar();
         Objects.requireNonNull(actionBar).setElevation(0);
     }

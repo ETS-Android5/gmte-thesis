@@ -1,6 +1,7 @@
 package com.thesis.mtbalance;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,11 +10,16 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
+import com.anychart.chart.common.dataentry.DataEntry;
+
 import java.util.ArrayList;
 
 public class YDirFragment extends Fragment {
 
     /* Variables */
+    // The data points of the plot.
+    private ArrayList<DataEntry> mPlotData;
+
     private View mView;
 
     public YDirFragment() {
@@ -32,11 +38,35 @@ public class YDirFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
         mView = inflater.inflate(R.layout.fragment_ydir, container, false);
-
-        // Testing data retrieval from activity
-        ArrayList<String> dataTest = requireArguments()
-                .getStringArrayList(PlotsActivity.BUNDLE_KEY);
-
         return mView;
+    }
+
+    /**
+     * Called after the view is created.
+     * The plot is populated here since views in fragments can only be accessed after creation.
+     *
+     * @param view               - the current view of the fragment.
+     * @param savedInstanceState - the saved instance of the fragment.
+     */
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+
+        // Todo: finish plot implementation
+    }
+
+    /**
+     * Called on the creation of the fragment (before onCreateView).
+     * Used for initializing data.
+     *
+     * @param savedInstanceState - the saved instance of the fragment.
+     */
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+        // Retrieve the plot data from the PlotActivity bundle
+        mPlotData = (ArrayList<DataEntry>) requireArguments()
+                .getSerializable(PlotsActivity.BUNDLE_KEY_YDIR);
     }
 }
