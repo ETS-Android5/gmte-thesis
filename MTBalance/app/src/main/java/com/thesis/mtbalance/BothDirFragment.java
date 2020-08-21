@@ -1,7 +1,6 @@
 package com.thesis.mtbalance;
 
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,7 +9,15 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
+import com.anychart.AnyChart;
+import com.anychart.AnyChartView;
 import com.anychart.chart.common.dataentry.DataEntry;
+import com.anychart.charts.Scatter;
+import com.anychart.core.annotations.Ellipse;
+import com.anychart.core.annotations.PlotController;
+import com.anychart.core.scatter.series.Marker;
+import com.anychart.enums.MarkerType;
+import com.anychart.graphics.vector.text.HAlign;
 
 import java.util.ArrayList;
 
@@ -52,7 +59,64 @@ public class BothDirFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        // Todo: finish plot implementation
+        // Find the plotView element in the fragment
+        AnyChartView plotView = view.findViewById(R.id.plot_bothdir);
+
+        // Create a scatter plot and set the x and y boundaries
+        Scatter scatter = AnyChart.scatter();
+        scatter.xScale()
+                .minimum(-100f)
+                .maximum(100f);
+        scatter.yScale()
+                .minimum(-100f)
+                .maximum(100f);
+
+        // Enable gridlines on both axes
+        scatter.xGrid(0).enabled(true);
+        scatter.yGrid(0).enabled(true);
+        scatter.xMinorGrid(0).enabled(true);
+        scatter.yMinorGrid(0).enabled(true);
+
+        // Set clearer lines for the cartesian coordinate system
+        scatter.lineMarker(0)
+                .axis(scatter.xAxis(0))
+                .value(0)
+                .stroke("2 white");
+        scatter.lineMarker(1)
+                .axis(scatter.yAxis(0))
+                .value(0)
+                .stroke("2 white");
+
+        // Set the background color
+        scatter.background().fill("#2B2B2B");
+
+        // Change the tooltip name
+        scatter.tooltip().title("Balance");
+
+        // Set the marker/tooltip and plot data to it
+        Marker marker = scatter.marker(mPlotData);
+        marker.type(MarkerType.CIRCLE)
+                .size(4f)
+                .color("#52B7F8");
+        marker.tooltip()
+                .hAlign(HAlign.CENTER)
+                .format("front/back: {%Value} cm\\nleft/right: {%X} cm");
+
+        // Create an annotation showing the optimal balance zone
+        PlotController plotController = scatter.annotations();
+        Ellipse balanceThreshold = plotController.ellipse("");
+        balanceThreshold
+                .xAnchor("-50")
+                .secondXAnchor("50")
+                .valueAnchor("-50")
+                .secondValueAnchor("50")
+                .fill("green", 0.5f)
+                .stroke("2 green");
+
+        // Todo - check github - ticks interval + allowedit ellips = false
+
+        // Show the plot
+        plotView.setChart(scatter);
     }
 
     /**
