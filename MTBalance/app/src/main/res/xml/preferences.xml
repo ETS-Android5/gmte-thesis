@@ -17,7 +17,12 @@
 
     </PreferenceCategory>
 
-    <PreferenceCategory app:title="Threshold">
+    <PreferenceCategory app:title="Thresholds">
+
+        <EditTextPreference
+            app:key="plot_resolution"
+            app:title="Plot resolution"
+            app:useSimpleSummaryProvider="true" />
 
         <ListPreference
             app:entries="@array/threshold_leniency_entries"

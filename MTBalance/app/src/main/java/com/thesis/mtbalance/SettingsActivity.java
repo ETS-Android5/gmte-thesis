@@ -15,9 +15,13 @@ public class SettingsActivity extends AppCompatActivity {
     /* Keys */
     public static final String KEY_PARTICIPANT_NUMBER = "participant_number";
     public static final String KEY_PREFERRED_FEEDBACK = "preferred_feedback";
+
+    public static final String KEY_PLOT_RESOLUTION = "plot_resolution";
     public static final String KEY_THRESHOLD_LENIENCY = "threshold_leniency";
+
     public static final String KEY_LOWER_LEG_LENGTH = "lower_leg_length";
     public static final String KEY_UPPER_LEG_LENGTH = "upper_leg_length";
+
     public static final String KEY_OFFSET_DIMENSION = "offset_dimension";
     public static final String KEY_HIP_DIMENSION = "hip_dimension";
 
@@ -50,6 +54,8 @@ public class SettingsActivity extends AppCompatActivity {
 
             // Set the keyboard for dimension settings to numerical only
             setNumericalKeyboard(KEY_PARTICIPANT_NUMBER);
+
+            setNumericalKeyboard(KEY_PLOT_RESOLUTION);
 
             setNumericalKeyboard(KEY_LOWER_LEG_LENGTH);
             setNumericalKeyboard(KEY_UPPER_LEG_LENGTH);

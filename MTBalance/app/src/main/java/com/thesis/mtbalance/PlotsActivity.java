@@ -1,17 +1,18 @@
 package com.thesis.mtbalance;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.preference.PreferenceManager;
 import androidx.viewpager.widget.ViewPager;
 
 import com.anychart.chart.common.dataentry.DataEntry;
 import com.anychart.chart.common.dataentry.ValueDataEntry;
 import com.google.android.material.tabs.TabLayout;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Objects;
 
@@ -56,6 +57,13 @@ public class PlotsActivity extends AppCompatActivity {
      * Gets the data for the plots.
      */
     private void getPlotData() {
+        // Create a shared preferences object and get the plot resolution
+        SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(this);
+        int plotResolution = Integer.parseInt(Objects.requireNonNull
+                (sharedPref.getString(SettingsActivity.KEY_PLOT_RESOLUTION, "60")));
+        if (plotResolution <= 0)
+            plotResolution = 1;
+
         // Get the intent data from the card view click
         Intent intent = getIntent();
         String fileDir = intent.getStringExtra(RecyclerViewAdapter.EXTRA_FILEDIR);
@@ -67,7 +75,14 @@ public class PlotsActivity extends AppCompatActivity {
         ArrayList<String> rideData = fileHelper.loadArrayData(fileDir, this);
 
         // Loop over all the strings in the rideData and turn them into data entry elements
+        int i = -1;
         for (String ride : rideData) {
+            // Add data depending on the resolution set in the preferences
+            i++;
+            if (i % plotResolution != 0)
+                continue;
+
+            // Parse the data and add it to the data entries
             float[] data = fileHelper.stringToFloatArray(ride);
             mBothDirData.add(new ValueDataEntry(data[1], data[2]));     // X and Y
             mXDirData.add(new ValueDataEntry(data[0], data[1]));        // Time and X
