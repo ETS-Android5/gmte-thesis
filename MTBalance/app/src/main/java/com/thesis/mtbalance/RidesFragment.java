@@ -96,6 +96,9 @@ public class RidesFragment extends Fragment {
      * @param dataArray - the data to parse as a rides item.
      */
     private void addRidesItem(String[] dataArray) {
+        // The starTime is already correct
+        String startTime = dataArray[0];
+
         // Get the name for the feedback method out of the string array
         String feedbackMethod = getResources().getStringArray
                 (R.array.feedback_method_entries)[Integer.parseInt(dataArray[2])];
@@ -109,7 +112,7 @@ public class RidesFragment extends Fragment {
                         new String[]{"%", "cm", "ms", "sec"});
 
         // Add the data to the list of ride items
-        mRidesData.add(new RidesItem(rideDVS[3], dateTime, feedbackMethod,
+        mRidesData.add(new RidesItem(startTime, rideDVS[3], dateTime, feedbackMethod,
                 rideDVS[0], rideDVS[1], rideDVS[2]));
     }
 }

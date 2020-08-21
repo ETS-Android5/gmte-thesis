@@ -1,10 +1,11 @@
 package com.thesis.mtbalance;
 
+import android.content.Intent;
+import android.os.Bundle;
+
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.viewpager.widget.ViewPager;
-
-import android.os.Bundle;
 
 import com.google.android.material.tabs.TabLayout;
 
@@ -29,6 +30,10 @@ public class PlotsActivity extends AppCompatActivity {
 
         // Set the tablayout
         setTabLayout();
+
+        // Get the intent data from the card view click
+        Intent intent = getIntent();
+        String fileDir = intent.getStringExtra(RecyclerViewAdapter.EXTRA_FILEDIR);
     }
 
     /**

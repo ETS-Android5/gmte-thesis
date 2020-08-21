@@ -6,6 +6,9 @@ package com.thesis.mtbalance;
 public class RidesItem {
 
     /* Variables */
+    // Not used in the view, but for the intent to the plot activity
+    private String mStartTime;
+
     private String mCompletionTime;
     private String mDateTime;
 
@@ -17,6 +20,7 @@ public class RidesItem {
     /**
      * Constructor to set all data.
      *
+     * @param startTime          - the start time of the ride.
      * @param completionTime     - the time it took to complete the ride (min).
      * @param dateTime           - the date + time of the ride.
      * @param feedbackMethod     - the feedback method used during the ride.
@@ -24,8 +28,9 @@ public class RidesItem {
      * @param balanceDeviation   - the average balance deviation during the ride (cm)
      * @param responseTime       - the average response time during the ride (ms).
      */
-    public RidesItem(String completionTime, String dateTime, String feedbackMethod,
+    public RidesItem(String startTime, String completionTime, String dateTime, String feedbackMethod,
                      String balancePerformance, String balanceDeviation, String responseTime) {
+        mStartTime = startTime;
         mCompletionTime = completionTime;
         mDateTime = dateTime;
         mFeedbackMethod = feedbackMethod;
@@ -35,6 +40,10 @@ public class RidesItem {
     }
 
     // region Getters
+    public String getStartTime() {
+        return mStartTime;
+    }
+
     public String getCompletionTime() {
         return mCompletionTime;
     }

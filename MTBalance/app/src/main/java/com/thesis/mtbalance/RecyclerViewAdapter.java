@@ -1,12 +1,14 @@
 package com.thesis.mtbalance;
 
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
@@ -14,12 +16,16 @@ import java.util.ArrayList;
 public class RecyclerViewAdapter extends
         RecyclerView.Adapter<RecyclerViewAdapter.RidesViewHolder> {
 
+    // Used to pass the startTime as an intent to the PlotsActivity
+    public static final String EXTRA_FILEDIR =
+            "com.thesis.mtbalance.recyclerviewadapter.extra.FILEDIR";
+
     /* Variables */
     private Context mContext;
     ArrayList<RidesItem> mRidesData;
 
     /**
-     * Constructer for the view adapter, used by the recyclerview to link data.
+     * Constructor for the view adapter, used by the recyclerview to link data.
      *
      * @param context   - the application context.
      * @param ridesData - the data to connect to the recyclerview.
@@ -34,13 +40,29 @@ public class RecyclerViewAdapter extends
      *
      * @param parent   - the parent of the viewholder (recyclerview).
      * @param viewType - what type of view we are dealing with.
-     * @return retuns the viewholder.
+     * @return returns the viewholder.
      */
     @NonNull
     @Override
     public RidesViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        return new RidesViewHolder(LayoutInflater.from(mContext)
+        // Create a new RidesViewHolder object
+        final RidesViewHolder rvh = new RidesViewHolder(LayoutInflater.from(mContext)
                 .inflate(R.layout.item_rides, parent, false));
+
+        // Sets an onClickListener for each element in the recycler view
+        rvh.mCardView.setOnClickListener(new View.OnClickListener() {
+
+            // Start the PlotsActivity on a click, passing the current startTime as data
+            @Override
+            public void onClick(View view) {
+                String startTime = mRidesData.get(rvh.getAdapterPosition()).getStartTime();
+                Intent intent = new Intent(mContext, PlotsActivity.class);
+                intent.putExtra(EXTRA_FILEDIR, startTime);
+                mContext.startActivity(intent);
+            }
+        });
+
+        return rvh;
     }
 
     /**
@@ -76,7 +98,9 @@ public class RecyclerViewAdapter extends
      */
     public static class RidesViewHolder extends RecyclerView.ViewHolder {
 
-        /* Views */
+        /* Variables */
+        private CardView mCardView;
+
         private TextView mCompTimeTextView;
         private TextView mDateTimeTextView;
 
@@ -92,6 +116,8 @@ public class RecyclerViewAdapter extends
          */
         public RidesViewHolder(@NonNull View itemView) {
             super(itemView);
+
+            mCardView = itemView.findViewById(R.id.rides_cardview);
 
             mCompTimeTextView = itemView.findViewById(R.id.comptime_textview);
             mDateTimeTextView = itemView.findViewById(R.id.datetime_textview);
