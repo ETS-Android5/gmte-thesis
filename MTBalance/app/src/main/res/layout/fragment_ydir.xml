@@ -5,4 +5,9 @@
     android:background="@color/colorFragment"
     android:orientation="vertical">
 
+    <com.anychart.AnyChartView
+        android:id="@+id/plot_ydir"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
 </LinearLayout>

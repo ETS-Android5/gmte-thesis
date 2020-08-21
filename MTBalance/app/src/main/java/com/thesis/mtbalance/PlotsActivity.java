@@ -42,6 +42,9 @@ public class PlotsActivity extends AppCompatActivity {
         setTabLayout();
     }
 
+    /**
+     * Gets the data for the plots.
+     */
     private void getPlotData() {
         // Get the intent data from the card view click
         Intent intent = getIntent();
