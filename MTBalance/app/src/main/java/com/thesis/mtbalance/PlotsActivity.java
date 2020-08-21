@@ -9,11 +9,18 @@ import androidx.viewpager.widget.ViewPager;
 
 import com.google.android.material.tabs.TabLayout;
 
+import java.util.ArrayList;
 import java.util.Objects;
 
 public class PlotsActivity extends AppCompatActivity {
 
+    // Public key used by fragments to get access to the plots data
+    public static final String BUNDLE_KEY =
+            "com.thesis.mtbalance.plotsactivity.bundle.KEY";
+
     /* Variables */
+    private ArrayList<String> mPlotData;
+
     private TabLayout mTabLayout;
     private ViewPager mViewPager;
     private ViewPagerAdapter mVPAdapter;
@@ -28,12 +35,22 @@ public class PlotsActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_plots);
 
+        // Get the plot data from the passed intent
+        getPlotData();
+
         // Set the tablayout
         setTabLayout();
+    }
 
+    private void getPlotData() {
         // Get the intent data from the card view click
         Intent intent = getIntent();
         String fileDir = intent.getStringExtra(RecyclerViewAdapter.EXTRA_FILEDIR);
+
+        // Retrieve the plot data from the file directory
+        mPlotData = new FileHelper().loadArrayData(fileDir, this);
+
+        // todo: make mPlotdata arraylist of floats instead and do processing beforehand
     }
 
     /**
@@ -45,10 +62,23 @@ public class PlotsActivity extends AppCompatActivity {
         mViewPager = findViewById(R.id.viewpager_plots);
         mVPAdapter = new ViewPagerAdapter(getSupportFragmentManager());
 
+        // Create a bundle holding the plot data
+        Bundle bundle = new Bundle();
+        bundle.putStringArrayList(BUNDLE_KEY, mPlotData);
+
+        // Create the fragments and add the bundle data
+        BothDirFragment bothDirFragment = new BothDirFragment();
+        YDirFragment yDirFragment = new YDirFragment();
+        XDirFragment xDirFragment = new XDirFragment();
+
+        bothDirFragment.setArguments(bundle);
+        yDirFragment.setArguments(bundle);
+        xDirFragment.setArguments(bundle);
+
         // Add the desired fragments, without title to show icon
-        mVPAdapter.addFragment(new BothDirFragment(), "");
-        mVPAdapter.addFragment(new YDirFragment(), "");
-        mVPAdapter.addFragment(new XDirFragment(), "");
+        mVPAdapter.addFragment(bothDirFragment, "");
+        mVPAdapter.addFragment(yDirFragment, "");
+        mVPAdapter.addFragment(xDirFragment, "");
 
         // Setup the adapter and viewpager
         mViewPager.setAdapter(mVPAdapter);

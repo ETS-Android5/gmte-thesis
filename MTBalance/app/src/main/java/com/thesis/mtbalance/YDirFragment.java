@@ -9,6 +9,8 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
+import java.util.ArrayList;
+
 public class YDirFragment extends Fragment {
 
     /* Variables */
@@ -30,6 +32,11 @@ public class YDirFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
         mView = inflater.inflate(R.layout.fragment_ydir, container, false);
+
+        // Testing data retrieval from activity
+        ArrayList<String> dataTest = requireArguments()
+                .getStringArrayList(PlotsActivity.BUNDLE_KEY);
+
         return mView;
     }
 }
