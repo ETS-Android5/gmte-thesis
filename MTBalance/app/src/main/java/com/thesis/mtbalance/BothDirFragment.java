@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ProgressBar;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -66,9 +67,10 @@ public class BothDirFragment extends Fragment {
         // Find the plotView element in the fragment
         AnyChartView plotView = view.findViewById(R.id.plot_bothdir);
 
-        // Set the plotView background during loading
+        // Set the plotView background during loading + loading bar
         plotView.setBackgroundColor(backgroundColor);
-        // Todo: set up a loading bar to notify the app is loading
+        ProgressBar progressBar = view.findViewById(R.id.progress_bothdir);
+        plotView.setProgressBar(progressBar);
 
         // Create a scatter plot and set the background color
         Scatter scatter = AnyChart.scatter();
