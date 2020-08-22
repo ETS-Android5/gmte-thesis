@@ -85,7 +85,7 @@ public class PlotsActivity extends AppCompatActivity {
             // Parse the data and add it to the data entries
             float[] data = fileHelper.stringToFloatArray(ride);
             mBothDirData.add(new ValueDataEntry(data[1], data[2]));     // X and Y
-            mXDirData.add(new ValueDataEntry(data[0], data[1]));        // Time and X
+            mXDirData.add(new ValueDataEntry(data[1], data[0]));        // X and Time
             mYDirData.add(new ValueDataEntry(data[0], data[2]));        // Time and Y
         }
     }
