@@ -1,7 +1,6 @@
 package com.thesis.mtbalance;
 
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,8 +14,6 @@ import com.anychart.AnyChart;
 import com.anychart.AnyChartView;
 import com.anychart.chart.common.dataentry.DataEntry;
 import com.anychart.charts.Scatter;
-import com.anychart.core.annotations.Ellipse;
-import com.anychart.core.annotations.PlotController;
 import com.anychart.core.scatter.series.Marker;
 import com.anychart.enums.MarkerType;
 import com.anychart.graphics.vector.text.HAlign;
