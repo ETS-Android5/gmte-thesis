@@ -59,11 +59,22 @@ public class BothDirFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        // Set the color for the background and markers
+        String backgroundColor = "#2B2B2B";
+        String markerColor = "#52B7F8";
+
         // Find the plotView element in the fragment
         AnyChartView plotView = view.findViewById(R.id.plot_bothdir);
 
-        // Create a scatter plot and set the x and y boundaries
+        // Set the plotView background during loading
+        plotView.setBackgroundColor(backgroundColor);
+        // Todo: set up a loading bar to notify the app is loading
+
+        // Create a scatter plot and set the background color
         Scatter scatter = AnyChart.scatter();
+        scatter.background().fill(backgroundColor);
+
+        // Set the min + max values for the scales of the plot
         scatter.xScale()
                 .minimum(-100f)
                 .maximum(100f);
@@ -87,9 +98,6 @@ public class BothDirFragment extends Fragment {
                 .value(0)
                 .stroke("2 white");
 
-        // Set the background color
-        scatter.background().fill("#2B2B2B");
-
         // Change the tooltip name
         scatter.tooltip().title("Balance");
 
@@ -97,7 +105,7 @@ public class BothDirFragment extends Fragment {
         Marker marker = scatter.marker(mPlotData);
         marker.type(MarkerType.CIRCLE)
                 .size(4f)
-                .color("#52B7F8");
+                .color(markerColor);
         marker.tooltip()
                 .hAlign(HAlign.CENTER)
                 .format("front/back: {%Value} cm\\nleft/right: {%X} cm");
