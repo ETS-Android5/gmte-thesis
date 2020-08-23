@@ -23,7 +23,6 @@ import com.anychart.enums.HoverMode;
 import com.anychart.enums.MarkerType;
 import com.anychart.enums.SelectionMode;
 import com.anychart.graphics.vector.SolidFill;
-import com.anychart.graphics.vector.text.HAlign;
 
 import java.util.ArrayList;
 
@@ -133,7 +132,7 @@ public class BothDirFragment extends Fragment {
         marker.hovered()
                 .size(8f)
                 .fill(new SolidFill("gold", 0.5f))
-                .stroke("gold 0.5");
+                .stroke("gold 0.5f");
         marker.selected()
                 .size(8f)
                 .fill(new SolidFill("gold", 1f))
@@ -150,7 +149,7 @@ public class BothDirFragment extends Fragment {
                 .valueAnchor("-" + threshold)
                 .secondValueAnchor(threshold)
                 .fill("green", 0.5f)
-                .stroke("2 green");
+                .stroke("2 green 0.5f");
 
         // Show the plot
         plotView.setChart(scatter);
