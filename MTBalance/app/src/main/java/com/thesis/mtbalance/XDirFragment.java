@@ -1,21 +1,36 @@
 package com.thesis.mtbalance;
 
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ProgressBar;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.preference.PreferenceManager;
 
+import com.anychart.AnyChart;
+import com.anychart.AnyChartView;
 import com.anychart.chart.common.dataentry.DataEntry;
+import com.anychart.charts.Scatter;
+import com.anychart.core.axismarkers.Range;
+import com.anychart.core.scatter.series.Marker;
+import com.anychart.enums.HoverMode;
+import com.anychart.enums.MarkerType;
+import com.anychart.enums.SelectionMode;
+import com.anychart.graphics.vector.SolidFill;
 
 import java.util.ArrayList;
 
 public class XDirFragment extends Fragment {
 
     /* Variables */
+    // The set threshold leniency
+    private String threshold;
+
     // The data points of the plot
     private ArrayList<DataEntry> mPlotData;
 
@@ -51,6 +66,85 @@ public class XDirFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        // Set the color for the background and markers
+        String backgroundColor = "#2B2B2B";
+        String markerColor = "#52B7F8";
+        String textColor = "#FFFFFF";
+
+        // Find the plotView element in the fragment
+        AnyChartView plotView = view.findViewById(R.id.plot_xdir);
+
+        // Set the plotView background during loading + loading icon
+        plotView.setBackgroundColor(backgroundColor);
+        ProgressBar progressBar = view.findViewById(R.id.progress_xdir);
+        plotView.setProgressBar(progressBar);
+
+        // Create a scatter plot and set the background color
+        Scatter scatter = AnyChart.scatter();
+        scatter.background().fill(backgroundColor);
+
+        // Set the axis titles for the plot
+        scatter.xAxis(0).title("Balance deviation leaning left/right (cm)");
+        scatter.xAxis(0).title().fontColor(textColor);
+        scatter.yAxis(0).title("Ride time (sec)");
+        scatter.yAxis(0).title().fontColor(textColor);
+
+        // Set the min + max values for the scales of the plot (1 meter deviation)
+        scatter.xScale()
+                .minimum(-100f)
+                .maximum(100f);
+        scatter.yScale()
+                .minimum(0f);
+
+        // Enable gridlines on both axes
+        scatter.xGrid(0).enabled(true);
+        scatter.yGrid(0).enabled(true);
+        scatter.xMinorGrid(0).enabled(true);
+        scatter.yMinorGrid(0).enabled(true);
+
+        // Set clearer lines for the cartesian coordinate system
+        scatter.lineMarker(0)
+                .axis(scatter.xAxis(0))
+                .value(0)
+                .stroke("3 " + textColor);
+
+        // Set the interactivity mode of the plot
+        scatter.interactivity()
+                .hoverMode(HoverMode.BY_SPOT)
+                .spotRadius(10f);
+        scatter.interactivity()
+                .selectionMode(SelectionMode.SINGLE_SELECT);
+
+        // Change the tooltip name
+        scatter.tooltip().title("Balance");
+
+        // Set the marker/tooltip and plot data to it
+        Marker marker = scatter.marker(mPlotData);
+        marker.type(MarkerType.CIRCLE)
+                .size(4f)
+                .color(markerColor);
+        marker.hovered()
+                .size(8f)
+                .fill(new SolidFill("gold", 0.5f))
+                .stroke("gold 0.5f");
+        marker.selected()
+                .size(8f)
+                .fill(new SolidFill("gold", 1f))
+                .stroke("gold");
+        marker.tooltip()
+                .format("time: {%Value} sec\\nleft/right: {%X} cm");
+
+        // Create a rangeMarker showing the optimal balance zone
+        Range range = scatter.rangeMarker(0)
+                .from(Integer.valueOf("-" + threshold))
+                .to(Integer.valueOf(threshold))
+                .fill("green", 0.5f);
+        range.axis(scatter.xAxis(0));
+
+        // Show the plot
+        plotView.setChart(scatter);
+
+        // Todo - check github - ticks interval
     }
 
     /**
@@ -62,6 +156,11 @@ public class XDirFragment extends Fragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        // Create a shared preferences object and get the threshold leniency
+        SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences
+                (requireContext());
+        threshold = sharedPref.getString(SettingsActivity.KEY_THRESHOLD_LENIENCY, "0");
 
         // Retrieve the plot data from the PlotActivity bundle
         mPlotData = (ArrayList<DataEntry>) requireArguments()
