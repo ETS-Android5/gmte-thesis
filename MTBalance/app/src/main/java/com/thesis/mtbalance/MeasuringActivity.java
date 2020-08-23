@@ -241,16 +241,23 @@ public class MeasuringActivity extends AppCompatActivity
                 dot.disconnect();
             }
 
-            // Finalize the DVs and format to a string, then save it to the rides file
-            String dataDVS = finalizeDVS();
-            mFileHelper.appendToFile("rides", dataDVS, this);
+            // Only save when testing mode is not activated
+            if (!mParticipantNumber.equals("0")) {
+                // Finalize the DVs and format to a string, then save it to the rides file
+                String dataDVS = finalizeDVS();
+                mFileHelper.appendToFile("rides", dataDVS, this);
 
-            // Save balance data to an unique file for post-hoc application
-            mFileHelper.saveArrayData(mStartTime.toString(), mBalanceData, this);
+                // Save balance data to an unique file for post-hoc application
+                mFileHelper.saveArrayData(mStartTime.toString(), mBalanceData, this);
 
-            // Notify user
-            Snackbar.make(mMeasuringLayout, "Stopped measuring and saved data.",
-                    Snackbar.LENGTH_LONG).show();
+                // Notify user
+                Snackbar.make(mMeasuringLayout, "Stopped measuring and saved data.",
+                        Snackbar.LENGTH_LONG).show();
+            } else {
+                // Notify user
+                Snackbar.make(mMeasuringLayout, "Stopped testing mode.",
+                        Snackbar.LENGTH_LONG).show();
+            }
 
             // Return to MainActivity after waiting for 3 seconds
             new Handler().postDelayed(new Runnable() {
