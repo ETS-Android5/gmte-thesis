@@ -117,10 +117,10 @@ public class BothDirFragment extends Fragment {
 
         // Set the interactivity mode of the plot
         scatter.interactivity()
-                .selectionMode(SelectionMode.SINGLE_SELECT);
-        scatter.interactivity()
                 .hoverMode(HoverMode.BY_SPOT)
                 .spotRadius(10f);
+        scatter.interactivity()
+                .selectionMode(SelectionMode.SINGLE_SELECT);
 
         // Change the tooltip name
         scatter.tooltip().title("Balance");
@@ -130,6 +130,10 @@ public class BothDirFragment extends Fragment {
         marker.type(MarkerType.CIRCLE)
                 .size(4f)
                 .color(markerColor);
+        marker.hovered()
+                .size(8f)
+                .fill(new SolidFill("gold", 0.5f))
+                .stroke("gold 0.5");
         marker.selected()
                 .size(8f)
                 .fill(new SolidFill("gold", 1f))
