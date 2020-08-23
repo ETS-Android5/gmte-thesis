@@ -1,5 +1,6 @@
 package com.thesis.mtbalance;
 
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -9,6 +10,7 @@ import android.widget.ProgressBar;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.preference.PreferenceManager;
 
 import com.anychart.AnyChart;
 import com.anychart.AnyChartView;
@@ -17,7 +19,10 @@ import com.anychart.charts.Scatter;
 import com.anychart.core.annotations.Ellipse;
 import com.anychart.core.annotations.PlotController;
 import com.anychart.core.scatter.series.Marker;
+import com.anychart.enums.HoverMode;
 import com.anychart.enums.MarkerType;
+import com.anychart.enums.SelectionMode;
+import com.anychart.graphics.vector.SolidFill;
 import com.anychart.graphics.vector.text.HAlign;
 
 import java.util.ArrayList;
@@ -25,7 +30,10 @@ import java.util.ArrayList;
 public class BothDirFragment extends Fragment {
 
     /* Variables */
-    // The data points of the plot.
+    // The set threshold leniency
+    private String threshold;
+
+    // The data points of the plot
     private ArrayList<DataEntry> mPlotData;
 
     private View mView;
@@ -63,11 +71,12 @@ public class BothDirFragment extends Fragment {
         // Set the color for the background and markers
         String backgroundColor = "#2B2B2B";
         String markerColor = "#52B7F8";
+        String textColor = "#FFFFFF";
 
         // Find the plotView element in the fragment
         AnyChartView plotView = view.findViewById(R.id.plot_bothdir);
 
-        // Set the plotView background during loading + loading bar
+        // Set the plotView background during loading + loading icon
         plotView.setBackgroundColor(backgroundColor);
         ProgressBar progressBar = view.findViewById(R.id.progress_bothdir);
         plotView.setProgressBar(progressBar);
@@ -76,7 +85,13 @@ public class BothDirFragment extends Fragment {
         Scatter scatter = AnyChart.scatter();
         scatter.background().fill(backgroundColor);
 
-        // Set the min + max values for the scales of the plot
+        // Set the axis titles for the plot
+        scatter.xAxis(0).title("Balance deviation leaning left/right (cm)");
+        scatter.xAxis(0).title().fontColor(textColor);
+        scatter.yAxis(0).title("Balance deviation leaning back/front (cm)");
+        scatter.yAxis(0).title().fontColor(textColor);
+
+        // Set the min + max values for the scales of the plot (1 meter deviation)
         scatter.xScale()
                 .minimum(-100f)
                 .maximum(100f);
@@ -94,11 +109,18 @@ public class BothDirFragment extends Fragment {
         scatter.lineMarker(0)
                 .axis(scatter.xAxis(0))
                 .value(0)
-                .stroke("2 white");
+                .stroke("3 " + textColor);
         scatter.lineMarker(1)
                 .axis(scatter.yAxis(0))
                 .value(0)
-                .stroke("2 white");
+                .stroke("3 " + textColor);
+
+        // Set the interactivity mode of the plot
+        scatter.interactivity()
+                .selectionMode(SelectionMode.SINGLE_SELECT);
+        scatter.interactivity()
+                .hoverMode(HoverMode.BY_SPOT)
+                .spotRadius(10f);
 
         // Change the tooltip name
         scatter.tooltip().title("Balance");
@@ -108,25 +130,29 @@ public class BothDirFragment extends Fragment {
         marker.type(MarkerType.CIRCLE)
                 .size(4f)
                 .color(markerColor);
+        marker.selected()
+                .size(8f)
+                .fill(new SolidFill("gold", 1f))
+                .stroke("gold");
         marker.tooltip()
                 .hAlign(HAlign.CENTER)
-                .format("front/back: {%Value} cm\\nleft/right: {%X} cm");
+                .format("left/right: {%X} cm\\nback/front: {%Value} cm");
 
         // Create an annotation showing the optimal balance zone
         PlotController plotController = scatter.annotations();
         Ellipse balanceThreshold = plotController.ellipse("");
         balanceThreshold
-                .xAnchor("-50")
-                .secondXAnchor("50")
-                .valueAnchor("-50")
-                .secondValueAnchor("50")
+                .xAnchor("-" + threshold)
+                .secondXAnchor(threshold)
+                .valueAnchor("-" + threshold)
+                .secondValueAnchor(threshold)
                 .fill("green", 0.5f)
                 .stroke("2 green");
 
-        // Todo - check github - ticks interval + allowedit ellips = false
-
         // Show the plot
         plotView.setChart(scatter);
+
+        // Todo - check github - ticks interval + allowEdit ellipse = false
     }
 
     /**
@@ -138,6 +164,11 @@ public class BothDirFragment extends Fragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        // Create a shared preferences object and get the threshold leniency
+        SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences
+                (requireContext());
+        threshold = sharedPref.getString(SettingsActivity.KEY_THRESHOLD_LENIENCY, "0");
 
         // Retrieve the plot data from the PlotActivity bundle
         mPlotData = (ArrayList<DataEntry>) requireArguments()
