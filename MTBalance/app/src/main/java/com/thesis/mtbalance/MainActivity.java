@@ -84,14 +84,14 @@ public class MainActivity extends AppCompatActivity {
      */
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.settings: // Start settings activity
-                Intent intent = new Intent(this, SettingsActivity.class);
-                startActivity(intent);
-                return true;
-            default:
-                return super.onOptionsItemSelected(item);
+        // Start settings activity
+        if (item.getItemId() == R.id.settings) {
+            Intent intent = new Intent(this, SettingsActivity.class);
+            startActivity(intent);
+            return true;
         }
+
+        return super.onOptionsItemSelected(item);
     }
 
     /**
@@ -102,8 +102,5 @@ public class MainActivity extends AppCompatActivity {
     public void startRide(View view) {
         Intent intent = new Intent(this, MeasuringActivity.class);
         startActivity(intent);
-
-        // Destroy the activity to prevent data leakage
-        finish();
     }
 }

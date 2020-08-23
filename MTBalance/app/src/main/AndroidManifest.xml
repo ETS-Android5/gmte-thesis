@@ -32,7 +32,8 @@
             android:parentActivityName=".MainActivity" />
         <activity
             android:name=".MeasuringActivity"
-            android:label="Measuring" />
+            android:label="Measuring"
+            android:parentActivityName=".MainActivity" />
         <activity
             android:name=".PlotsActivity"
             android:label="Plots"

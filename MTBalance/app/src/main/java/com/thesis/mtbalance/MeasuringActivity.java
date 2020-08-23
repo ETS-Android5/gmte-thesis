@@ -7,11 +7,13 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.SystemClock;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Chronometer;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.preference.PreferenceManager;
 
@@ -142,6 +144,33 @@ public class MeasuringActivity extends AppCompatActivity
     }
 
     /**
+     * Called when a menu button is pressed.
+     *
+     * @param item - the item that is pressed.
+     * @return the state of the method execution.
+     */
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        // Check if the up button is pressed
+        if (item.getItemId() == android.R.id.home) {
+            // Stop the scan
+            mDotScanner.stopScan();
+
+            // Stop measuring and disconnect all DOTs
+            for (int i = 0; i < mDotList.size(); i++) {
+                mDotList.get(i).stopMeasuring();
+                mDotList.get(i).disconnect();
+            }
+            mDotList.clear();
+
+            // Destroy the activity to prevent data leakage
+            finish();
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
+
+    /**
      * Callback function which triggers when a DOT is scanned.
      *
      * @param bluetoothDevice - the currently scanned DOT.
@@ -240,6 +269,7 @@ public class MeasuringActivity extends AppCompatActivity
                 dot.stopMeasuring();
                 dot.disconnect();
             }
+            mDotList.clear();
 
             // Only save when testing mode is not activated
             if (!mParticipantNumber.equals("0")) {

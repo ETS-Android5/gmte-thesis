@@ -3,7 +3,9 @@ package com.thesis.mtbalance;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.view.MenuItem;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.preference.PreferenceManager;
@@ -129,5 +131,20 @@ public class PlotsActivity extends AppCompatActivity {
         Objects.requireNonNull(mTabLayout.getTabAt(2)).setIcon(R.drawable.ic_vertical);
         ActionBar actionBar = getSupportActionBar();
         Objects.requireNonNull(actionBar).setElevation(0);
+    }
+
+    /**
+     * Called when a menu button is pressed.
+     *
+     * @param item - the item that is pressed.
+     * @return the state of the method execution.
+     */
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        // Finish the activity to prevent data leakage
+        if (item.getItemId() == android.R.id.home)
+            finish();
+
+        return super.onOptionsItemSelected(item);
     }
 }
