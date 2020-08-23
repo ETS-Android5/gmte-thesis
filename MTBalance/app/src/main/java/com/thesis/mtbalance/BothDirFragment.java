@@ -135,7 +135,6 @@ public class BothDirFragment extends Fragment {
                 .fill(new SolidFill("gold", 1f))
                 .stroke("gold");
         marker.tooltip()
-                .hAlign(HAlign.CENTER)
                 .format("left/right: {%X} cm\\nback/front: {%Value} cm");
 
         // Create an annotation showing the optimal balance zone
