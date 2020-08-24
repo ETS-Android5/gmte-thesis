@@ -151,7 +151,6 @@ public class VecHelper {
     }
 
     // region Elemental
-
     /**
      * Subtracts vector q from vector p.
      *

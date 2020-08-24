@@ -405,7 +405,7 @@ public class MeasuringActivity extends AppCompatActivity
     private void calculateBalance() {
         // Calculate the bike vector and mirror it to get the optimal balance direction
         float[] bikeVector = mVecHelper.quatRotation
-                (Objects.requireNonNull(mTagQuatMap.get("Bike DOT")), 100f);
+                (Objects.requireNonNull(mTagQuatMap.get("Bike DOT")), 1000f);
         bikeVector = mVecHelper.mirrorVector(bikeVector, false, 0f);
 
         // Calculate the ankle vector and knee vector
@@ -426,17 +426,27 @@ public class MeasuringActivity extends AppCompatActivity
         // Get the distance between the intersection and end effector
         float distance = mVecHelper.getDistance(endEffector, intersection);
 
-        // Update the DVs
-        updateDVS(distance);
-
         // Update the real-time feedback
         updateFeedback(distance, balanceDifference);
+
+        // Update the DVs
+        updateDVS(distance);
 
         // Update the balance data for the post-hoc application
         updateBalanceData(balanceDifference);
 
         // Update the iteration
         mIteration++;
+    }
+
+    /**
+     * Updates the real-time feedback given the current distance and balance difference.
+     *
+     * @param distance          - the current distance from the current to the optimal balance point.
+     * @param balanceDifference - the difference in balance, calibrated to origin and in 2d.
+     */
+    private void updateFeedback(float distance, float[] balanceDifference) {
+        // Todo: implement method - use mFeedbackMethod
     }
 
     /**
@@ -488,16 +498,6 @@ public class MeasuringActivity extends AppCompatActivity
         // Calculates the cumulative moving average - https://en.wikipedia.org/wiki/Moving_average
         float numerator = mIteration * currAverage + val;
         return numerator / (mIteration + 1);
-    }
-
-    /**
-     * Updates the real-time feedback given the current distance and balance difference.
-     *
-     * @param distance          - the current distance from the current to the optimal balance point.
-     * @param balanceDifference - the difference in balance, calibrated to origin and in 2d.
-     */
-    private void updateFeedback(float distance, float[] balanceDifference) {
-        // Todo: implement method - use mFeedbackMethod
     }
 
     /**
