@@ -118,7 +118,7 @@ public class MeasuringActivity extends AppCompatActivity
 
         // Get the preferred threshold leniency
         mThresholdLeniency = Float.parseFloat(Objects.requireNonNull(sharedPref.getString
-                (SettingsActivity.KEY_THRESHOLD_LENIENCY, "50")));
+                (SettingsActivity.KEY_THRESHOLD_LENIENCY, "0")));
 
         // Get the leg lengths
         mAnkleLength = Float.parseFloat(Objects.requireNonNull(sharedPref.getString
@@ -286,6 +286,12 @@ public class MeasuringActivity extends AppCompatActivity
             mEndTime = Instant.now();
             mChronometer.stop();
 
+            // Get the instant of stop/start balance depending on last balance state
+            if (!mBalanced)
+                mStartBalanceTime = Instant.now();
+            if (mBalanced)
+                mEndBalanceTime = Instant.now();
+
             // Stop the measuring for every DOT and disconnect it
             for (XsensDotDevice dot : mDotList) {
                 dot.stopMeasuring();
@@ -352,6 +358,18 @@ public class MeasuringActivity extends AppCompatActivity
 
         // Calculate the completion time
         float completionTime = Duration.between(mStartTime, mEndTime).toMillis();
+
+        // Update DVs depending on final balance state
+        if (!mBalanced) {
+            float currResponseTime = Duration.between
+                    (mEndBalanceTime, mStartBalanceTime).toMillis();
+            mResponseTime = getCMA(mResponseTime, currResponseTime);
+        }
+        if (mBalanced) {
+            float currBalanceTime = Duration.between
+                    (mStartBalanceTime, mEndBalanceTime).toMillis();
+            mBalancePerformance += currBalanceTime;
+        }
 
         // Turn the balance performance into a percentage and completion time to seconds
         mBalancePerformance = mBalancePerformance / completionTime * 100f;
@@ -484,8 +502,6 @@ public class MeasuringActivity extends AppCompatActivity
             float currBalanceTime = Duration.between
                     (mStartBalanceTime, mEndBalanceTime).toMillis();
             mBalancePerformance += currBalanceTime;
-
-            // Todo: balance performance need to make up for last time it keeps in balance.
         }
     }
 
