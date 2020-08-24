@@ -159,10 +159,10 @@ public class MeasuringActivity extends AppCompatActivity
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         // Check if the up button is pressed
         if (item.getItemId() == android.R.id.home) {
-            // Stop the scan
+            // Stop the scan if one is running
             mDotScanner.stopScan();
 
-            // Stop measuring and disconnect all DOTs
+            // Stop measuring and disconnect all DOTs if they are
             for (int i = 0; i < mDotList.size(); i++) {
                 mDotList.get(i).stopMeasuring();
                 mDotList.get(i).disconnect();
@@ -268,11 +268,11 @@ public class MeasuringActivity extends AppCompatActivity
             for (XsensDotDevice dot : mDotList) {
                 dot.setMeasurementMode(XsPayload.PAYLOAD_TYPE_ORIENTATION_QUATERNION);
                 dot.startMeasuring();
-                dot.resetHeading();
             }
+            startCalibration(view);
 
             // Notify user
-            Snackbar.make(mMeasuringLayout, "Started measuring.",
+            Snackbar.make(mMeasuringLayout, "Finished calibration and started measuring.",
                     Snackbar.LENGTH_LONG).show();
         }
 
