@@ -31,10 +31,6 @@
         can be found here.</string>
 
     <string name="attachment_string">
-        <b>Note:</b> for first time usage it is recommended to initialize the settings for the
-        application as preferred. The settings are explained in more detail in the <b>application
-        options section.</b>
-        \n\n
         <i><b>insert gif of short overview of attachment here</b></i>
         \n\n
         To start measuring balance performance, the user attaches multiple DOT IMU sensors to their
@@ -42,7 +38,11 @@
         of the bike as possible. Two more sensors are attached to the ankle and knee on the left leg
         of the user. The sensors are to be orientated to the left side of the bike in an upright
         position. Finally, the user chooses one of the 4 applicable feedback options and attaches
-        said feedback if applicable.</string>
+        said feedback if applicable.
+        \n\n
+        <b>Note:</b> for first time usage it is recommended to initialize the settings for the
+        application as preferred. The settings are explained in more detail in the <b>application
+        options section.</b></string>
 
     <string name="measuring_string">
         <i><b>gif of short overview of measuring process here</b></i>
