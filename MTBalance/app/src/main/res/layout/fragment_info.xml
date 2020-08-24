@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/colorFragment"
@@ -11,6 +12,342 @@
         android:layout_height="wrap_content"
         android:layout_margin="16dp"
         android:orientation="vertical">
+
+        <!-- Overview. -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:padding="4dp"
+            android:text="@string/overview_title"
+            android:textAlignment="center"
+            android:textColor="@color/colorAccent"
+            android:textSize="18sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:justificationMode="inter_word"
+            android:text="@string/overview_string"
+            android:textAlignment="center"
+            android:textColor="@color/colorText" />
+
+        <!-- Attachment. -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:padding="4dp"
+            android:text="@string/attachment_title"
+            android:textColor="@color/colorAccent"
+            android:textSize="16sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:justificationMode="inter_word"
+            android:text="@string/attachment_string"
+            android:textColor="@color/colorText" />
+
+        <!-- Measuring. -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:padding="4dp"
+            android:text="@string/measuring_title"
+            android:textColor="@color/colorAccent"
+            android:textSize="16sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:justificationMode="inter_word"
+            android:text="@string/measuring_string"
+            android:textColor="@color/colorText" />
+
+        <!-- Post-Hoc Feedback. -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:padding="4dp"
+            android:text="@string/post_hoc_feedback_title"
+            android:textColor="@color/colorAccent"
+            android:textSize="16sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:justificationMode="inter_word"
+            android:text="@string/posthoc_pre_string"
+            android:textColor="@color/colorText" />
+
+        <!-- Card Details. -->
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="16dp">
+
+            <ImageView
+                android:id="@+id/comptime_icon"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:layout_marginStart="16dp"
+                android:contentDescription="@string/comptime_icon"
+                android:src="@drawable/ic_clock"
+                app:tint="@color/colorText" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="2dp"
+                android:layout_marginTop="2dp"
+                android:layout_toEndOf="@id/comptime_icon"
+                android:text="@string/posthoc_comptime_string"
+                android:textColor="@color/colorText" />
+
+            <ImageView
+                android:id="@+id/feedback_icon"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:layout_below="@+id/comptime_icon"
+                android:layout_marginStart="16dp"
+                android:contentDescription="@string/feedback_icon"
+                android:src="@drawable/ic_feedback"
+                app:tint="@color/colorText" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/comptime_icon"
+                android:layout_marginStart="2dp"
+                android:layout_marginTop="2dp"
+                android:layout_toEndOf="@id/feedback_icon"
+                android:text="@string/posthoc_feedback_string"
+                android:textColor="@color/colorText" />
+
+            <ImageView
+                android:id="@+id/balperf_icon"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:layout_below="@+id/feedback_icon"
+                android:layout_marginStart="16dp"
+                android:contentDescription="@string/balperf_icon"
+                android:src="@drawable/ic_adjust"
+                app:tint="@color/colorText" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/feedback_icon"
+                android:layout_marginStart="2dp"
+                android:layout_marginTop="2dp"
+                android:layout_toEndOf="@id/balperf_icon"
+                android:text="@string/posthoc_balperf_string"
+                android:textColor="@color/colorText" />
+
+            <ImageView
+                android:id="@+id/baldev_icon"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:layout_below="@+id/balperf_icon"
+                android:layout_marginStart="16dp"
+                android:contentDescription="@string/baldev_icon"
+                android:src="@drawable/ic_deviation"
+                app:tint="@color/colorText" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/balperf_icon"
+                android:layout_marginStart="2dp"
+                android:layout_marginTop="2dp"
+                android:layout_toEndOf="@id/baldev_icon"
+                android:text="@string/posthoc_baldev_string"
+                android:textColor="@color/colorText" />
+
+            <ImageView
+                android:id="@+id/resptime_icon"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:layout_below="@+id/baldev_icon"
+                android:layout_marginStart="16dp"
+                android:contentDescription="@string/resptime_icon"
+                android:src="@drawable/ic_timer"
+                app:tint="@color/colorText" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/baldev_icon"
+                android:layout_marginStart="2dp"
+                android:layout_marginTop="2dp"
+                android:layout_toEndOf="@id/resptime_icon"
+                android:text="@string/posthoc_resptime_string"
+                android:textColor="@color/colorText" />
+
+        </RelativeLayout>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:justificationMode="inter_word"
+            android:text="@string/posthoc_mid_string"
+            android:textColor="@color/colorText" />
+
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="16dp">
+
+            <ImageView
+                android:id="@+id/bothdir_icon"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:layout_marginStart="16dp"
+                android:contentDescription="@string/bothdir_icon"
+                android:src="@drawable/ic_directions"
+                app:tint="@color/colorText" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="2dp"
+                android:layout_marginTop="2dp"
+                android:layout_toEndOf="@id/bothdir_icon"
+                android:text="@string/posthoc_bothdir_string"
+                android:textColor="@color/colorText" />
+
+            <ImageView
+                android:id="@+id/xdir_icon"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:layout_below="@+id/bothdir_icon"
+                android:layout_marginStart="16dp"
+                android:contentDescription="@string/xdir_icon"
+                android:src="@drawable/ic_horizontal"
+                app:tint="@color/colorText" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/bothdir_icon"
+                android:layout_marginStart="2dp"
+                android:layout_marginTop="2dp"
+                android:layout_toEndOf="@id/xdir_icon"
+                android:text="@string/posthoc_xdir_string"
+                android:textColor="@color/colorText" />
+
+            <ImageView
+                android:id="@+id/ydir_icon"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:layout_below="@+id/xdir_icon"
+                android:layout_marginStart="16dp"
+                android:contentDescription="@string/ydir_icon"
+                android:src="@drawable/ic_vertical"
+                app:tint="@color/colorText" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/xdir_icon"
+                android:layout_marginStart="2dp"
+                android:layout_marginTop="2dp"
+                android:layout_toEndOf="@id/ydir_icon"
+                android:text="@string/posthoc_ydir_string"
+                android:textColor="@color/colorText" />
+
+        </RelativeLayout>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:justificationMode="inter_word"
+            android:text="@string/posthoc_end_string"
+            android:textColor="@color/colorText" />
+
+        <!-- Application Options. -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:padding="4dp"
+            android:text="@string/application_title"
+            android:textColor="@color/colorAccent"
+            android:textSize="16sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:padding="4dp"
+            android:text="@string/general_title"
+            android:textColor="@color/colorAccent"
+            android:textStyle="bold" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:justificationMode="inter_word"
+            android:text="@string/general_string"
+            android:textColor="@color/colorText" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:padding="4dp"
+            android:text="@string/thresholds_title"
+            android:textColor="@color/colorAccent"
+            android:textStyle="bold" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:justificationMode="inter_word"
+            android:text="@string/thresholds_string"
+            android:textColor="@color/colorText" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:padding="4dp"
+            android:text="@string/lengths_title"
+            android:textColor="@color/colorAccent"
+            android:textStyle="bold" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:justificationMode="inter_word"
+            android:text="@string/lengths_string"
+            android:textColor="@color/colorText" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:padding="4dp"
+            android:text="@string/dimensions_title"
+            android:textColor="@color/colorAccent"
+            android:textStyle="bold" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="32dp"
+            android:justificationMode="inter_word"
+            android:text="@string/dimensions_string"
+            android:textColor="@color/colorText" />
 
     </LinearLayout>
 

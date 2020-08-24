@@ -5,13 +5,123 @@
     <!-- MeasurementActivity. -->
     <string name="measuring_button">Measuring Button</string>
     <string name="calibrate_button">Calibrate Button</string>
+
+    <!-- Rides Item. -->
     <string name="comptime_icon">Comptime Icon</string>
     <string name="feedback_icon">Feedback Icon</string>
     <string name="balperf_icon">Balperf Icon</string>
     <string name="baldev_icon">Baldev Icon</string>
     <string name="resptime_icon">Resptime Icon</string>
 
-    <!-- Rides item. -->
+    <!-- Info Fragment. -->
+    <string name="overview_title">Overview</string>
+    <string name="attachment_title">Attachment</string>
+    <string name="measuring_title">Measuring</string>
+    <string name="post_hoc_feedback_title">Post-Hoc Feedback</string>
+    <string name="application_title">Application Options</string>
+    <string name="general_title">General</string>
+    <string name="thresholds_title">Thresholds</string>
+    <string name="lengths_title">Lengths</string>
+    <string name="dimensions_title">Dimensions</string>
 
+    <string name="overview_string">
+        MTBBalance allows users to track their balance during rides in order to get feedback on
+        their posture and technique, both for real-time and post-hoc. Information about <b>sensor
+        attachment</b>, <b>measuring</b>, <b>post-hoc feedback</b> and <b>application options</b>
+        can be found here.</string>
+
+    <string name="attachment_string">
+        <b>Note:</b> for first time usage it is recommended to initialize the settings for the
+        application as preferred. The settings are explained in more detail in the <b>application
+        options section.</b>
+        \n\n
+        <i><b>insert gif of short overview of attachment here</b></i>
+        \n\n
+        To start measuring balance performance, the user attaches multiple DOT IMU sensors to their
+        bike and body respectively. The bike sensor should be placed as close to the center of mass
+        of the bike as possible. Two more sensors are attached to the ankle and knee on the left leg
+        of the user. The sensors are to be orientated to the left side of the bike in an upright
+        position. Finally, the user chooses one of the 4 applicable feedback options and attaches
+        said feedback if applicable.</string>
+
+    <string name="measuring_string">
+        <i><b>gif of short overview of measuring process here</b></i>
+        \n\n
+        The user can press the <b>start ride</b> button to begin a new ride. Once the sensors are
+        connected, the ride is started by pressing the <b>play</b> button, after which the sensors
+        are calibrated by having the bike and user stand in an upright position. The sensors
+        calculate the optimal balance zone and the current balance continuously. If the current
+        balance deviates too much from the current balance, real-time feedback is applied depending
+        on the feedback option chosen. The feedback attempts to steer the user back towards the
+        optimal balance zone.
+        \n\n
+        During the ride the <b>calibration</b> button can be pressed at any time to re-calibrate the
+        sensors.</string>
+
+    <string name="posthoc_pre_string">
+        After the ride, the user is able to analyse the ride in more detail.
+        A card is generated in the <b>rides</b> tab of the application. This card gives a quick overview of
+        the ride, including the following data:</string>
+
+    <string name="posthoc_comptime_string">- The ride time, in seconds and ride date.</string>
+    <string name="posthoc_feedback_string">- The feedback option present during the ride.</string>
+    <string name="posthoc_balperf_string">- The balance performance, as a <b>percentage</b>.</string>
+    <string name="posthoc_baldev_string">- The average balance threshold deviation, in <b>cm</b>.</string>
+    <string name="posthoc_resptime_string">- The average balance response time, in <b>ms</b>.</string>
+
+    <string name="posthoc_mid_string">
+        Once a card is clicked, the user can investigate the ride in higher detail by the use of
+        plots. The plots show the user balance during the ride with different filters. The following
+        filters are available:</string>
+
+    <string name="bothdir_icon">Bothdir Icon</string>
+    <string name="xdir_icon">Xdir Icon</string>
+    <string name="ydir_icon">Ydir Icon</string>
+
+    <string name="posthoc_bothdir_string">- Shows two-directional user movement.</string>
+    <string name="posthoc_xdir_string">- Shows sideways balance fluctuation over time.</string>
+    <string name="posthoc_ydir_string">- Shows overt balance fluctuation over time.</string>
+
+    <string name="posthoc_end_string">
+        The <b>green zones</b> in the plots illustrate the optimal zone for the user balance to be in. As
+        such, any point outside of these zones is a critical point at which the user would have
+        received correctional feedback.
+        \n\n
+        Any point in the plot can be tapped to show precise information about its values,
+        highlighting it in yellow. Points that share similar results are clustered together when
+        tapped.</string>
+
+    <string name="general_string">
+        <b>Participant number:</b> the participant number of the user. The list of rides is filtered
+        perparticipant, so only the rides of the current participant are visible. Selecting
+        participant 0 enters test mode, allowing for trying out the application without saving ride
+        data.
+        \n\n
+        <b>Feedback method:</b> the feedback method used during a ride.</string>
+
+    <string name="thresholds_string">
+        <b>Plot resolution:</b> allows users to tweak the detail in the post-hoc feedback plots.
+        Resolution is inversely proportional to the given value, with a resolution of 1 showing all
+        collected data points.
+        \n\n
+        <b>Threshold leniency:</b> sets the threshold leniency during rides. A higher leniency
+        allows for more mistakes while riding and vice versa. The chosen leniency is reflected in
+        the green zones of plots.</string>
+
+    <string name="lengths_string">
+        <b>Lower leg length:</b> the length of the user’s lower leg, from the ankle joint to the
+        knee joint in centimeters. Floating point precision is allowed.
+        \n\n
+        <b>Upper leg length:</b> the length of the user’s upper leg, from the ankle joint to the hip
+        joint in centimeters. Floating point precision is allowed.</string>
+
+    <string name="dimensions_string">
+        <b>Offset dimension:</b> denotes the offset between the bike sensor and the center of the
+        bike crank, in centimeters. Floating point precision is allowed. The following format is
+        accepted: <i>“x,y,z”</i>.
+        \n\n
+        <b>Hip dimension:</b> denotes the offset between the hip joint and the center of mass of the
+        user, in centimeters. Floating point precision is allowed. The following format is accepted:
+        <i>“x,y,z”.</i></string>
 
 </resources>
