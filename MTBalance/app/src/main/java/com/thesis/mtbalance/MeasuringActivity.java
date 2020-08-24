@@ -291,7 +291,9 @@ public class MeasuringActivity extends AppCompatActivity
                 dot.stopMeasuring();
                 dot.disconnect();
             }
+            // Clear the DOT list and set the connection state to false
             mDotList.clear();
+            mAllConnected = false;
 
             // Only save when testing mode is not activated
             if (!mParticipantNumber.equals("0")) {
