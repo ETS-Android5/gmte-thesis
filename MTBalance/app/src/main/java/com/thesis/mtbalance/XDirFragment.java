@@ -143,8 +143,6 @@ public class XDirFragment extends Fragment {
 
         // Show the plot
         plotView.setChart(scatter);
-
-        // Todo - check github - ticks interval
     }
 
     /**

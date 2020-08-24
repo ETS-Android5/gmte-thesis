@@ -1,6 +1,7 @@
 package com.thesis.mtbalance;
 
 import android.bluetooth.BluetoothDevice;
+import android.bluetooth.BluetoothGatt;
 import android.bluetooth.le.ScanSettings;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -43,7 +44,7 @@ public class MeasuringActivity extends AppCompatActivity
     // Finals
     private final int ALL_DOTS = 3;
 
-    // Numericals / Strings
+    // Numerical / Strings
     private String mParticipantNumber;
     private int mIteration = 0;
     private int mFeedbackMethod;
@@ -56,6 +57,7 @@ public class MeasuringActivity extends AppCompatActivity
     private float mResponseTime = 0f;
 
     // Booleans
+    private boolean mAllConnected = false;
     private boolean mMeasuring = false;
     private boolean mBalanced = true;
 
@@ -141,6 +143,10 @@ public class MeasuringActivity extends AppCompatActivity
         mDotScanner = new XsensDotScanner(getApplicationContext(), this);
         mDotScanner.setScanMode(ScanSettings.SCAN_MODE_BALANCED);
         mDotScanner.startScan();
+
+        // Notify user
+        Snackbar.make(mMeasuringLayout, "Connecting DOTs...",
+                Snackbar.LENGTH_INDEFINITE).show();
     }
 
     /**
@@ -177,9 +183,9 @@ public class MeasuringActivity extends AppCompatActivity
      */
     @Override
     public void onXsensDotScanned(BluetoothDevice bluetoothDevice) {
-        // Get the address, return if the device is already initialized
+        // Get the address, return if all or the current device is already initialized
         String address = bluetoothDevice.getAddress();
-        if (mAddressTagMap.containsKey(address))
+        if (mAddressTagMap.size() == ALL_DOTS || mAddressTagMap.containsKey(address))
             return;
 
         // Add the current address to the address-tag hashmap, depending on MAC-address
@@ -205,10 +211,26 @@ public class MeasuringActivity extends AppCompatActivity
                 bluetoothDevice, this);
         dot.connect();
         mDotList.add(dot);
+    }
 
-        // Stop the scan if all the DOTs are initialized
-        if (mDotList.size() == ALL_DOTS) {
+    /**
+     * Callback function which is triggered after the device is connected.
+     *
+     * @param address - the address of the current device.
+     * @param status  - the connection status.
+     */
+    @Override
+    public void onXsensDotServicesDiscovered(String address, int status) {
+        // Check if the status is equal to a successful connection
+        if (status == BluetoothGatt.GATT_SUCCESS)
+            mIteration++;
+
+        // Stop the scan if all dots are initialized successfully set the flag to true
+        if (mIteration == ALL_DOTS) {
+            mIteration = 0;
             mDotScanner.stopScan();
+
+            mAllConnected = true;
 
             // Notify user
             Snackbar.make(mMeasuringLayout, "Connected all DOTs.",
@@ -223,7 +245,7 @@ public class MeasuringActivity extends AppCompatActivity
      */
     public void toggleMeasuring(View view) {
         // Return if not all the DOTs are initialized.
-        if (mDotList.size() != ALL_DOTS)
+        if (!mAllConnected)
             return;
 
         // If not measuring, start measuring
@@ -348,7 +370,7 @@ public class MeasuringActivity extends AppCompatActivity
      */
     public void startCalibration(View view) {
         // Return if not all the DOTs are initialized or not currently measuring.
-        if (mDotList.size() != ALL_DOTS || !mMeasuring)
+        if (!mAllConnected || !mMeasuring)
             return;
 
         // Calibrate all DOTs
@@ -450,6 +472,8 @@ public class MeasuringActivity extends AppCompatActivity
             float currBalanceTime = Duration.between
                     (mStartBalanceTime, mEndBalanceTime).toMillis();
             mBalancePerformance += currBalanceTime;
+
+            // Todo: balance performance need to make up for last time it keeps in balance.
         }
     }
 
@@ -495,10 +519,6 @@ public class MeasuringActivity extends AppCompatActivity
     // region Unused
     @Override
     public void onXsensDotConnectionChanged(String s, int i) {
-    }
-
-    @Override
-    public void onXsensDotServicesDiscovered(String s, int i) {
     }
 
     @Override

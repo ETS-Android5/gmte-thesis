@@ -153,8 +153,6 @@ public class BothDirFragment extends Fragment {
 
         // Show the plot
         plotView.setChart(scatter);
-
-        // Todo - check github - ticks interval + allowEdit ellipse = false
     }
 
     /**
