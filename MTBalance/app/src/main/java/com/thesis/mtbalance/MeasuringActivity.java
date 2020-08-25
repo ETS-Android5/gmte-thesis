@@ -466,7 +466,28 @@ public class MeasuringActivity extends AppCompatActivity
      * @param balanceDifference - the difference in balance, calibrated to origin and in 2d.
      */
     private void updateFeedback(float distance, float[] balanceDifference) {
-        // Todo: implement method - use mFeedbackMethod
+        if (distance <= mThresholdLeniency) {
+            // Todo: pass (feedback type, direction, 0) to the arduino
+            return;
+        }
+
+        // Calculate the angle between the balance vector and a vertical reference vector
+        // If x is negative, flip the sign of the angle + add 180 to set reference downwards
+        float[] dirVec = {balanceDifference[0], balanceDifference[1], 0f};
+        float angle = mVecHelper.getAngle(new float[]{0f, 1f, 0f}, dirVec);
+        if (dirVec[0] < 0)
+            angle = -angle;
+        angle += 180f;
+
+        // get the direction vector based on the angle
+        // starting down, clockward rotation
+        int direction = Math.round(angle / 45f);
+
+        // Direction 8 is equal to direction 0 (full circle)
+        if (direction == 8)
+            direction = 0;
+
+        // Todo: pass (feedback type, direction, 1) to the arduino
     }
 
     /**

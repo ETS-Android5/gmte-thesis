@@ -66,10 +66,8 @@ public class RidesFragment extends Fragment {
                 ("rides", requireContext());
 
         // Check if there is data in the first place
-        if (rideStringData.size() == 0) {
-            // Todo: set a textview in the activity to show there are no items
+        if (rideStringData.size() == 0)
             return;
-        }
 
         // Create a shared preferences object and get the current participant number
         SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences

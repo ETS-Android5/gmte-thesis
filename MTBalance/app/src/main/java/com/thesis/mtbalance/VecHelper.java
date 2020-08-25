@@ -150,7 +150,23 @@ public class VecHelper {
         return (float) Math.sqrt(d[0] * d[0] + d[1] * d[1] + d[2] * d[2]);
     }
 
+    /**
+     * Returns the angle between two vectors.
+     *
+     * @param p - the first vector.
+     * @param q - the second vector.
+     * @return the angle between the vectors in degrees.
+     */
+    public float getAngle(float[] p, float[] q) {
+        float dot = dot(p, q);
+        float length = length(p) * length(q);
+
+        float radians = (float) Math.acos(dot / length);
+        return radians * 180f / (float) Math.PI;
+    }
+
     // region Elemental
+
     /**
      * Subtracts vector q from vector p.
      *
@@ -192,6 +208,16 @@ public class VecHelper {
      */
     private float norm(float[] p) {
         return p[0] * p[0] + p[1] * p[1] + p[2] * p[2];
+    }
+
+    /**
+     * Returns the length of a vector.
+     *
+     * @param p - the vector.
+     * @return the length of the vector.
+     */
+    private float length(float[] p) {
+        return (float) Math.sqrt(norm(p));
     }
     // endregion
 }
