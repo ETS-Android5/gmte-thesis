@@ -18,11 +18,6 @@ import java.util.Objects;
 
 public class MainActivity extends AppCompatActivity {
 
-    /* Variables */
-    private TabLayout mTabLayout;
-    private ViewPager mViewPager;
-    private ViewPagerAdapter mVPAdapter;
-
     /**
      * Called on activity creation.
      *
@@ -45,21 +40,21 @@ public class MainActivity extends AppCompatActivity {
      */
     private void setTabLayout() {
         // Find the elements needed for setup
-        mTabLayout = findViewById(R.id.tablayout_main);
-        mViewPager = findViewById(R.id.viewpager_main);
-        mVPAdapter = new ViewPagerAdapter(getSupportFragmentManager());
+        TabLayout tabLayout = findViewById(R.id.tablayout_main);
+        ViewPager viewPager = findViewById(R.id.viewpager_main);
+        ViewPagerAdapter VPAdapter = new ViewPagerAdapter(getSupportFragmentManager());
 
         // Add the desired fragments, without title to show icon
-        mVPAdapter.addFragment(new RidesFragment(), "");
-        mVPAdapter.addFragment(new InfoFragment(), "");
+        VPAdapter.addFragment(new RidesFragment(), "");
+        VPAdapter.addFragment(new InfoFragment(), "");
 
         // Setup the adapter and viewpager
-        mViewPager.setAdapter(mVPAdapter);
-        mTabLayout.setupWithViewPager(mViewPager);
+        viewPager.setAdapter(VPAdapter);
+        tabLayout.setupWithViewPager(viewPager);
 
         // Add the icons and remove elevation from the actionbar
-        Objects.requireNonNull(mTabLayout.getTabAt(0)).setIcon(R.drawable.ic_chart);
-        Objects.requireNonNull(mTabLayout.getTabAt(1)).setIcon(R.drawable.ic_help);
+        Objects.requireNonNull(tabLayout.getTabAt(0)).setIcon(R.drawable.ic_chart);
+        Objects.requireNonNull(tabLayout.getTabAt(1)).setIcon(R.drawable.ic_help);
         ActionBar actionBar = getSupportActionBar();
         Objects.requireNonNull(actionBar).setElevation(0);
     }

@@ -30,12 +30,10 @@ public class BothDirFragment extends Fragment {
 
     /* Variables */
     // The set threshold leniency
-    private String threshold;
+    private String mThreshold;
 
     // The data points of the plot
     private ArrayList<DataEntry> mPlotData;
-
-    private View mView;
 
     public BothDirFragment() {
     }
@@ -52,8 +50,7 @@ public class BothDirFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
-        mView = inflater.inflate(R.layout.fragment_bothdir, container, false);
-        return mView;
+        return inflater.inflate(R.layout.fragment_bothdir, container, false);
     }
 
     /**
@@ -144,10 +141,10 @@ public class BothDirFragment extends Fragment {
         PlotController plotController = scatter.annotations();
         Ellipse balanceThreshold = plotController.ellipse("");
         balanceThreshold
-                .xAnchor("-" + threshold)
-                .secondXAnchor(threshold)
-                .valueAnchor("-" + threshold)
-                .secondValueAnchor(threshold)
+                .xAnchor("-" + mThreshold)
+                .secondXAnchor(mThreshold)
+                .valueAnchor("-" + mThreshold)
+                .secondValueAnchor(mThreshold)
                 .fill("green", 0.5f)
                 .stroke("2 green 0.5f");
 
@@ -168,7 +165,7 @@ public class BothDirFragment extends Fragment {
         // Create a shared preferences object and get the threshold leniency
         SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences
                 (requireContext());
-        threshold = sharedPref.getString(SettingsActivity.KEY_THRESHOLD_LENIENCY, "0");
+        mThreshold = sharedPref.getString(SettingsActivity.KEY_THRESHOLD_LENIENCY, "0");
 
         // Retrieve the plot data from the PlotActivity bundle
         mPlotData = (ArrayList<DataEntry>) requireArguments()

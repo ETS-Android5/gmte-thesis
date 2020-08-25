@@ -24,6 +24,7 @@
         android:layout_width="128dp"
         android:layout_height="16dp"
         android:background="@color/colorFragment"
+        android:contentDescription="@string/xdir_hider"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintRight_toRightOf="parent" />
 

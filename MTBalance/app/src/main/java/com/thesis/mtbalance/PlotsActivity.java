@@ -34,10 +34,6 @@ public class PlotsActivity extends AppCompatActivity {
     private ArrayList<DataEntry> mXDirData = new ArrayList<>();
     private ArrayList<DataEntry> mYDirData = new ArrayList<>();
 
-    private TabLayout mTabLayout;
-    private ViewPager mViewPager;
-    private ViewPagerAdapter mVPAdapter;
-
     /**
      * Called on activity creation.
      *
@@ -97,9 +93,9 @@ public class PlotsActivity extends AppCompatActivity {
      */
     private void setTabLayout() {
         // Find the elements needed for setup
-        mTabLayout = findViewById(R.id.tablayout_plots);
-        mViewPager = findViewById(R.id.viewpager_plots);
-        mVPAdapter = new ViewPagerAdapter(getSupportFragmentManager());
+        TabLayout tabLayout = findViewById(R.id.tablayout_plots);
+        ViewPager viewPager = findViewById(R.id.viewpager_plots);
+        ViewPagerAdapter VPAdapter = new ViewPagerAdapter(getSupportFragmentManager());
 
         // Create a bundle holding the plot data
         Bundle bundle = new Bundle();
@@ -117,18 +113,18 @@ public class PlotsActivity extends AppCompatActivity {
         yDirFragment.setArguments(bundle);
 
         // Add the desired fragments, without title to show icon
-        mVPAdapter.addFragment(bothDirFragment, "");
-        mVPAdapter.addFragment(xDirFragment, "");
-        mVPAdapter.addFragment(yDirFragment, "");
+        VPAdapter.addFragment(bothDirFragment, "");
+        VPAdapter.addFragment(xDirFragment, "");
+        VPAdapter.addFragment(yDirFragment, "");
 
         // Setup the adapter and viewpager
-        mViewPager.setAdapter(mVPAdapter);
-        mTabLayout.setupWithViewPager(mViewPager);
+        viewPager.setAdapter(VPAdapter);
+        tabLayout.setupWithViewPager(viewPager);
 
         // Add the icons and remove elevation from the actionbar
-        Objects.requireNonNull(mTabLayout.getTabAt(0)).setIcon(R.drawable.ic_directions);
-        Objects.requireNonNull(mTabLayout.getTabAt(1)).setIcon(R.drawable.ic_horizontal);
-        Objects.requireNonNull(mTabLayout.getTabAt(2)).setIcon(R.drawable.ic_vertical);
+        Objects.requireNonNull(tabLayout.getTabAt(0)).setIcon(R.drawable.ic_directions);
+        Objects.requireNonNull(tabLayout.getTabAt(1)).setIcon(R.drawable.ic_horizontal);
+        Objects.requireNonNull(tabLayout.getTabAt(2)).setIcon(R.drawable.ic_vertical);
         ActionBar actionBar = getSupportActionBar();
         Objects.requireNonNull(actionBar).setElevation(0);
     }

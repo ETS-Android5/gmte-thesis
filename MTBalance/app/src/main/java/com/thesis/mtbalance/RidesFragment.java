@@ -19,10 +19,6 @@ public class RidesFragment extends Fragment {
 
     /* Variables */
     private FileHelper fileHelper;
-    private View mView;
-
-    private RecyclerView mRecyclerView;
-    private RecyclerViewAdapter mRVAdapter;
 
     private ArrayList<RidesItem> mRidesData = new ArrayList<>();
 
@@ -42,20 +38,25 @@ public class RidesFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
         // Create a view from the layout
-        mView = inflater.inflate(R.layout.fragment_rides, container, false);
+        View view = inflater.inflate(R.layout.fragment_rides, container, false);
 
         // Setup the recyclerview
-        mRecyclerView = mView.findViewById(R.id.recyclerview_rides);
-        mRecyclerView.setHasFixedSize(true);
-        mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+        RecyclerView recyclerView = view.findViewById(R.id.recyclerview_rides);
+        recyclerView.setHasFixedSize(true);
+        recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
 
         // Setup the adapter and link it to the recyclerview
-        mRVAdapter = new RecyclerViewAdapter(getContext(), mRidesData);
-        mRecyclerView.setAdapter(mRVAdapter);
+        RecyclerViewAdapter RVAdapter = new RecyclerViewAdapter(getContext(), mRidesData);
+        recyclerView.setAdapter(RVAdapter);
 
-        return mView;
+        return view;
     }
 
+    /**
+     * Fetches and sets up the data for the recyclerView.
+     *
+     * @param savedInstanceState - the saved instance of the method.
+     */
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

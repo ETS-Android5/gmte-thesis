@@ -124,4 +124,9 @@
         user, in centimeters. Floating point precision is allowed. The following format is accepted:
         <i>“x,y,z”.</i></string>
 
+    <!-- Plot Hiders. -->
+    <string name="bothdir_hider">bothdir_hider</string>
+    <string name="xdir_hider">xdir_hider</string>
+    <string name="ydir_hider">ydir_hider</string>
+
 </resources>

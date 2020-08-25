@@ -34,8 +34,6 @@ public class XDirFragment extends Fragment {
     // The data points of the plot
     private ArrayList<DataEntry> mPlotData;
 
-    private View mView;
-
     public XDirFragment() {
     }
 
@@ -51,8 +49,7 @@ public class XDirFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
-        mView = inflater.inflate(R.layout.fragment_xdir, container, false);
-        return mView;
+        return inflater.inflate(R.layout.fragment_xdir, container, false);
     }
 
     /**

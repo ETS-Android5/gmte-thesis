@@ -11,9 +11,6 @@ import androidx.fragment.app.Fragment;
 
 public class InfoFragment extends Fragment {
 
-    /* Variables */
-    private View mView;
-
     public InfoFragment() {
     }
 
@@ -29,7 +26,6 @@ public class InfoFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
-        mView = inflater.inflate(R.layout.fragment_info, container, false);
-        return mView;
+        return inflater.inflate(R.layout.fragment_info, container, false);
     }
 }
