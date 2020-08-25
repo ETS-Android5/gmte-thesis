@@ -13,6 +13,7 @@ import android.view.View;
 import android.widget.Chronometer;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -138,6 +139,10 @@ public class MeasuringActivity extends AppCompatActivity
         // Initialize views
         mMeasuringLayout = findViewById(R.id.measuring_layout);
         mChronometer = findViewById(R.id.chronometer);
+
+        // Show user if testing mode is activated (participantNumber = 0)
+        if (mParticipantNumber.equals("0"))
+            findViewById(R.id.testing_textview).setVisibility(View.VISIBLE);
 
         // Initialize scanner object and start scan
         mDotScanner = new XsensDotScanner(getApplicationContext(), this);

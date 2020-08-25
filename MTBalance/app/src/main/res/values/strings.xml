@@ -3,6 +3,7 @@
     <string name="settings_title">Settings</string>
 
     <!-- MeasurementActivity. -->
+    <string name="testing_string">TESTING MODE</string>
     <string name="measuring_button">Measuring Button</string>
     <string name="calibrate_button">Calibrate Button</string>
 
