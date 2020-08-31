@@ -13,7 +13,6 @@ import android.view.View;
 import android.widget.Chronometer;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
-import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -22,10 +21,10 @@ import androidx.preference.PreferenceManager;
 import com.google.android.material.snackbar.Snackbar;
 import com.xsens.dot.android.sdk.XsensDotSdk;
 import com.xsens.dot.android.sdk.events.XsensDotData;
-import com.xsens.dot.android.sdk.interfaces.XsensDotDeviceCb;
-import com.xsens.dot.android.sdk.interfaces.XsensDotScannerCb;
-import com.xsens.dot.android.sdk.models.XsPayload;
+import com.xsens.dot.android.sdk.interfaces.XsensDotDeviceCallback;
+import com.xsens.dot.android.sdk.interfaces.XsensDotScannerCallback;
 import com.xsens.dot.android.sdk.models.XsensDotDevice;
+import com.xsens.dot.android.sdk.models.XsensDotPayload;
 import com.xsens.dot.android.sdk.utils.XsensDotScanner;
 
 import java.time.Duration;
@@ -39,7 +38,7 @@ import java.util.Locale;
 import java.util.Objects;
 
 public class MeasuringActivity extends AppCompatActivity
-        implements XsensDotDeviceCb, XsensDotScannerCb {
+        implements XsensDotDeviceCallback, XsensDotScannerCallback {
 
     // region Variables
     // Finals
@@ -271,7 +270,7 @@ public class MeasuringActivity extends AppCompatActivity
             // Initialize every dot with the quaternion measurement mode
             // Start measuring and calibrate the sensors
             for (XsensDotDevice dot : mDotList) {
-                dot.setMeasurementMode(XsPayload.PAYLOAD_TYPE_ORIENTATION_QUATERNION);
+                dot.setMeasurementMode(XsensDotPayload.PAYLOAD_TYPE_ORIENTATION_QUATERNION);
                 dot.startMeasuring();
             }
             startCalibration(view);
@@ -578,35 +577,11 @@ public class MeasuringActivity extends AppCompatActivity
     }
 
     @Override
-    public void onXsensDotCalibrationResult(String s, int i, int i1, int i2) {
+    public void onXsensDotInitDone(String s) {
     }
 
     @Override
-    public void onXsensDotOtaChecked(String s, boolean b, String s1, String s2) {
-    }
-
-    @Override
-    public void onXsensDotOtaRollback(String s, boolean b, String s1, String s2) {
-    }
-
-    @Override
-    public void onXsensDotOtaFileMismatch(String s) {
-    }
-
-    @Override
-    public void onXsensDotOtaDownloaded(String s, int i) {
-    }
-
-    @Override
-    public void onXsensDotOtaUpdated(String s, int i, int i1, int i2, int i3, int i4) {
-    }
-
-    @Override
-    public void onXsensDotNewFirmwareVersion(String s, boolean b, String s1, String s2) {
-    }
-
-    @Override
-    public void onXsensDotOtaDischarge(String s) {
+    public void onXsensDotPowerSavingTriggered(String s) {
     }
     // endregion
 }
