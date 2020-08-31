@@ -79,6 +79,10 @@ public class MainActivity extends AppCompatActivity {
      */
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        // Disable button when a card is clicked
+        if (RecyclerViewAdapter.ITEM_CLICKED)
+            return false;
+
         // Start settings activity
         if (item.getItemId() == R.id.settings) {
             Intent intent = new Intent(this, SettingsActivity.class);
@@ -95,6 +99,10 @@ public class MainActivity extends AppCompatActivity {
      * @param view - the clicked fab.
      */
     public void startRide(View view) {
+        // Disable button when a card is clicked
+        if (RecyclerViewAdapter.ITEM_CLICKED)
+            return;
+
         Intent intent = new Intent(this, MeasuringActivity.class);
         startActivity(intent);
     }

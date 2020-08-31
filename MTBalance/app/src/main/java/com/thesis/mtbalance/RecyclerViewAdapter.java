@@ -20,8 +20,9 @@ public class RecyclerViewAdapter extends
     public static final String EXTRA_FILEDIR =
             "com.thesis.mtbalance.recyclerviewadapter.extra.FILEDIR";
 
+    public static boolean ITEM_CLICKED;
+
     /* Variables */
-    private boolean itemClicked = false;
     private Context mContext;
     private ArrayList<RidesItem> mRidesData;
 
@@ -50,15 +51,18 @@ public class RecyclerViewAdapter extends
         final RidesViewHolder rvh = new RidesViewHolder(LayoutInflater.from(mContext)
                 .inflate(R.layout.item_rides, parent, false));
 
+        // Set the initial click state to false
+        ITEM_CLICKED = false;
+
         // Sets an onClickListener for each element in the recycler view
         rvh.mCardView.setOnClickListener(new View.OnClickListener() {
 
             @Override
             public void onClick(View view) {
                 // Make sure an item is only clicked once
-                if (itemClicked)
+                if (ITEM_CLICKED)
                     return;
-                itemClicked = true;
+                ITEM_CLICKED = true;
 
                 // Start the PlotsActivity on a click, passing the current startTime as data
                 String startTime = mRidesData.get(rvh.getAdapterPosition()).getStartTime();
