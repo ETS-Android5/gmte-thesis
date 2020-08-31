@@ -264,16 +264,14 @@ public class MeasuringActivity extends AppCompatActivity
             // Add an initial point to the measurement data
             mBalanceData.add("0,0,0");
 
-            // Initialize every dot with the quaternion measurement mode
-            // Start measuring and calibrate the sensors
+            // Initialize every dot with the quaternion measurement mode and start measuring
             for (XsensDotDevice dot : mDotList) {
                 dot.setMeasurementMode(XsensDotPayload.PAYLOAD_TYPE_ORIENTATION_QUATERNION);
                 dot.startMeasuring();
             }
-            startCalibration(view);
 
             // Notify user
-            Snackbar.make(mMeasuringLayout, "Finished calibration and started measuring.",
+            Snackbar.make(mMeasuringLayout, "Started measuring.",
                     Snackbar.LENGTH_LONG).show();
         }
 
