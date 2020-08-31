@@ -1,7 +1,6 @@
 package com.thesis.mtbalance;
 
 import android.bluetooth.BluetoothDevice;
-import android.bluetooth.BluetoothGatt;
 import android.bluetooth.le.ScanSettings;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -218,16 +217,14 @@ public class MeasuringActivity extends AppCompatActivity
     }
 
     /**
-     * Callback function which is triggered after the device is connected.
+     * Callback function which is triggered after the device is successfully connected.
      *
      * @param address - the address of the current device.
-     * @param status  - the connection status.
      */
     @Override
-    public void onXsensDotServicesDiscovered(String address, int status) {
-        // Check if the status is equal to a successful connection
-        if (status == BluetoothGatt.GATT_SUCCESS)
-            mIteration++;
+    public void onXsensDotInitDone(String address) {
+        // Up the iteration after a successful connection
+        mIteration++;
 
         // Stop the scan if all dots are initialized successfully set the flag to true
         if (mIteration == ALL_DOTS) {
@@ -565,6 +562,10 @@ public class MeasuringActivity extends AppCompatActivity
     }
 
     @Override
+    public void onXsensDotServicesDiscovered(String s, int i) {
+    }
+
+    @Override
     public void onXsensDotFirmwareVersionRead(String s, String s1) {
     }
 
@@ -574,10 +575,6 @@ public class MeasuringActivity extends AppCompatActivity
 
     @Override
     public void onXsensDotBatteryChanged(String s, int i, int i1) {
-    }
-
-    @Override
-    public void onXsensDotInitDone(String s) {
     }
 
     @Override
