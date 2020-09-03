@@ -162,7 +162,7 @@ public class VecHelper {
         float length = length(p) * length(q);
 
         float radians = (float) Math.acos(dot / length);
-        return radians * 180f / (float) Math.PI;
+        return (float) Math.toDegrees(radians);
     }
 
     // region Elemental
