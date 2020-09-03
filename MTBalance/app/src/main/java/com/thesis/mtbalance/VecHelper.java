@@ -33,19 +33,47 @@ public class VecHelper {
     }
 
     /**
+     * Calculates the yaw correction matrix.
+     * The matrix gives all the sensors the same local frame by correcting for changing yaw.
+     *
+     * @param quat - the quaternion carrying the yaw correction value.
+     * @return the yaw correction matrix used for rotation correction.
+     */
+    public float[][] yawCorrectionMatrix(float[] quat) {
+        // Calculate the yaw of the quaternion (in radians)
+        // https://en.wikipedia.org/wiki/Conversion_between_quaternions_and_Euler_angles
+        double yaw = -Math.atan2(2d * (quat[0] * quat[3] + quat[1] * quat[2]),
+                1d - 2d * (quat[2] * quat[2] + quat[3] * quat[3]));
+
+        // Pre calculate the cosine and sine of the yaw
+        float cYaw = (float) Math.cos(yaw);
+        float sYaw = (float) Math.sin(yaw);
+
+        // Calculate each row of the matrix
+        float[] xRot = {cYaw, -sYaw, 0f};
+        float[] yRot = {sYaw, cYaw, 0f};
+        float[] zRot = {0f, 0f, 1f};
+
+        // Return the rotation matrix
+        return new float[][]{xRot, yRot, zRot};
+    }
+
+    /**
      * Rotates a 3D vector given a quaternion.
      *
      * @param quat      - the quaternion to rotate with.
      * @param dimension - the length of the vector to rotate (rotation around point).
      */
-    public float[] quatRotation(float[] quat, float dimension) {
+    public float[] quatRotation(float[][] yawCorrMatrix, float[] quat, float dimension) {
         // Make a 4-dimensional point and the conjugate needed for rotation
         float[] point = {0f, dimension, 0f, 0f};
         float[] conj = {quat[0], -quat[1], -quat[2], -quat[3]};
 
-        // Calculate the result and copy it to the output vector
+        // Calculate the result
         float[] result = hamiltonProduct(hamiltonProduct(quat, point), conj);
-        return new float[]{result[1], result[2], result[3]};
+
+        // Return the xyz result after correction by the yaw matrix
+        return yawCorrection(yawCorrMatrix, new float[]{result[1], result[2], result[3]});
     }
 
     /**
@@ -62,6 +90,22 @@ public class VecHelper {
                         p[0] * q[1] + p[1] * q[0] + p[2] * q[3] - p[3] * q[2],  // i
                         p[0] * q[2] - p[1] * q[3] + p[2] * q[0] + p[3] * q[1],  // j
                         p[0] * q[3] + p[1] * q[2] - p[2] * q[1] + p[3] * q[0]}; // k
+    }
+
+    /**
+     * Corrects the vector according to the yaw correction matrix.
+     * Ensures that all sensors are in the same local frame, avoiding axes flipping due to yaw.
+     *
+     * @param yawCorrMatrix - the matrix to correct the vector by.
+     * @param vec           - the vector to correct.
+     * @return a corrected vector.
+     */
+    private float[] yawCorrection(float[][] yawCorrMatrix, float[] vec) {
+        return new float[]{
+                dot(yawCorrMatrix[0], vec),
+                dot(yawCorrMatrix[1], vec),
+                dot(yawCorrMatrix[2], vec)
+        };
     }
 
     /**

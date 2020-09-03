@@ -41,7 +41,7 @@ public class MeasuringActivity extends AppCompatActivity
 
     // region Variables
     // Finals
-    private final int ALL_DOTS = 3;
+    private final int ALL_DOTS = 4;
 
     // Numerical / Strings
     private String mParticipantNumber;
@@ -201,6 +201,9 @@ public class MeasuringActivity extends AppCompatActivity
                 break;
             case "D4:CA:6E:F1:63:D0":   // Knee
                 mAddressTagMap.put(address, "Knee DOT");
+                break;
+            case "D4:CA:6E:F1:63:C4":   // Yaw
+                mAddressTagMap.put(address, "Yaw DOT");
                 break;
             default:
                 return;
@@ -422,16 +425,20 @@ public class MeasuringActivity extends AppCompatActivity
      * Calculates the balance given the current quaternion values.
      */
     private void calculateBalance() {
+        // Get the yaw correction matrix to correct the sensors to a shared local frame
+        float[][] yawCorrMatrix = mVecHelper.yawCorrectionMatrix(
+                (Objects.requireNonNull(mTagQuatMap.get("Yaw DOT"))));
+
         // Calculate the bike vector and mirror it to get the optimal balance direction
-        float[] bikeVector = mVecHelper.quatRotation
-                (Objects.requireNonNull(mTagQuatMap.get("Bike DOT")), 1000f);
+        float[] bikeVector = mVecHelper.quatRotation(yawCorrMatrix,
+                Objects.requireNonNull(mTagQuatMap.get("Bike DOT")), 1000f);
         bikeVector = mVecHelper.mirrorVector(bikeVector, false, 0f);
 
         // Calculate the ankle vector and knee vector
-        float[] ankleVector = mVecHelper.quatRotation
-                (Objects.requireNonNull(mTagQuatMap.get("Ankle DOT")), mAnkleLength);
-        float[] kneeVector = mVecHelper.quatRotation
-                (Objects.requireNonNull(mTagQuatMap.get("Knee DOT")), mKneeLength);
+        float[] ankleVector = mVecHelper.quatRotation(yawCorrMatrix,
+                Objects.requireNonNull(mTagQuatMap.get("Ankle DOT")), mAnkleLength);
+        float[] kneeVector = mVecHelper.quatRotation(yawCorrMatrix,
+                Objects.requireNonNull(mTagQuatMap.get("Knee DOT")), mKneeLength);
 
         // Calculate the position of the current balance (end effector)
         float[] endEffector = mVecHelper.getEndEffector(ankleVector, kneeVector);
