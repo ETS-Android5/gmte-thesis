@@ -1,6 +1,13 @@
 package com.thesis.mtbalance;
 
+import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
+import android.bluetooth.BluetoothGatt;
+import android.bluetooth.BluetoothGattCallback;
+import android.bluetooth.BluetoothGattCharacteristic;
+import android.bluetooth.BluetoothGattService;
+import android.bluetooth.BluetoothManager;
+import android.bluetooth.BluetoothProfile;
 import android.bluetooth.le.ScanSettings;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -35,6 +42,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Objects;
+import java.util.UUID;
 
 public class MeasuringActivity extends AppCompatActivity
         implements XsensDotDeviceCallback, XsensDotScannerCallback {
@@ -43,10 +51,13 @@ public class MeasuringActivity extends AppCompatActivity
     // Finals
     private final int ALL_DOTS = 4;
 
+    private final UUID SERVICE_UUID = UUID.fromString("0000FFE0-0000-1000-8000-00805F9B34FB");
+    private final UUID CHAR_UUID = UUID.fromString("0000FFE1-0000-1000-8000-00805F9B34FB");
+
     // Numerical / Strings
     private String mParticipantNumber;
+    private String mFeedbackMethod;
     private int mIteration = 0;
-    private int mFeedbackMethod;
     private float mThresholdLeniency;
     private float mAnkleLength, mKneeLength;
 
@@ -71,6 +82,41 @@ public class MeasuringActivity extends AppCompatActivity
     // Helpers
     private VecHelper mVecHelper;
     private FileHelper mFileHelper;
+
+    // Feedback
+    private BluetoothGatt mBluetoothGatt = null;
+    private BluetoothGattCharacteristic mCharacteristic = null;
+
+    /**
+     * Callback variable for BLE connections.
+     * Handles various callbacks during the connection phase.
+     */
+    private BluetoothGattCallback mGattCallback = new BluetoothGattCallback() {
+        // Handles initial connection to remote BLE device
+        @Override
+        public void onConnectionStateChange(BluetoothGatt gatt, int status, int newState) {
+            super.onConnectionStateChange(gatt, status, newState);
+
+            // Discover the services if the initial connection was successful
+            if (status == BluetoothGatt.GATT_SUCCESS &&
+                    newState == BluetoothProfile.STATE_CONNECTED)
+                gatt.discoverServices();
+        }
+
+        // Finishes up the BLE connection by locating the remote service and characteristic
+        @Override
+        public void onServicesDiscovered(BluetoothGatt gatt, int status) {
+            super.onServicesDiscovered(gatt, status);
+
+            // Get the service and characteristic to communicate with the remote BLE device
+            if (status == BluetoothGatt.GATT_SUCCESS) {
+                mBluetoothGatt = gatt;
+                BluetoothGattService service = mBluetoothGatt.getService(SERVICE_UUID);
+                mCharacteristic = service.getCharacteristic(CHAR_UUID);
+                mCharacteristic.setWriteType(BluetoothGattCharacteristic.WRITE_TYPE_NO_RESPONSE);
+            }
+        }
+    };
 
     // Xsens
     private XsensDotScanner mDotScanner;
@@ -99,6 +145,9 @@ public class MeasuringActivity extends AppCompatActivity
         // Get the shared preferences
         retrieveSharedPreferences();
 
+        // Initialize the feedback
+        initFeedback();
+
         // Initialize the SDK
         initXsensSdk();
     }
@@ -112,8 +161,7 @@ public class MeasuringActivity extends AppCompatActivity
 
         // Get the participant number and preferred feedback method
         mParticipantNumber = sharedPref.getString(SettingsActivity.KEY_PARTICIPANT_NUMBER, "0");
-        mFeedbackMethod = Integer.parseInt(Objects.requireNonNull(sharedPref.getString
-                (SettingsActivity.KEY_PREFERRED_FEEDBACK, "0")));
+        mFeedbackMethod = sharedPref.getString(SettingsActivity.KEY_PREFERRED_FEEDBACK, "0");
 
         // Get the preferred threshold leniency
         mThresholdLeniency = Float.parseFloat(Objects.requireNonNull(sharedPref.getString
@@ -124,6 +172,30 @@ public class MeasuringActivity extends AppCompatActivity
                 (SettingsActivity.KEY_LOWER_LEG_LENGTH, "0")));
         mKneeLength = Float.parseFloat(Objects.requireNonNull(sharedPref.getString
                 (SettingsActivity.KEY_UPPER_LEG_LENGTH, "0")));
+    }
+
+    /**
+     * Initializes the chosen feedback device.
+     * Connects to the BLE device, and sets up a writeable characteristic for communication.
+     */
+    private void initFeedback() {
+        // If the feedback is set to application, return
+        if (mFeedbackMethod.equals("0"))
+            return;
+
+        // Set the BLE address depending on the chosen feedback method
+        final String beltAddr = "B0:7E:11:F6:50:9C";
+        final String helmAddr = "90:E2:02:1C:4E:8B";
+        String bleAddr = mFeedbackMethod.equals("1") ? beltAddr : helmAddr;
+
+        // Setup the BLE and get the remote feedback device
+        final BluetoothManager btManager =
+                (BluetoothManager) getSystemService(BLUETOOTH_SERVICE);
+        BluetoothAdapter btAdapter = btManager.getAdapter();
+        BluetoothDevice feedbackDevice = btAdapter.getRemoteDevice(bleAddr);
+
+        // Connect to the remote feedback device via a generic attribute connection
+        feedbackDevice.connectGatt(this, true, mGattCallback);
     }
 
     /**
@@ -463,8 +535,9 @@ public class MeasuringActivity extends AppCompatActivity
         // Get the distance between the intersection and end effector
         float distance = mVecHelper.getDistance(endEffector, intersection);
 
-        // Update the real-time feedback
-        updateFeedback(distance, balanceDifference);
+        // Update the real-time feedback if it is used
+        if (!mFeedbackMethod.equals("0"))
+            updateFeedback(distance, balanceDifference);
 
         // Update the DVs
         updateDVS(distance);
@@ -483,8 +556,9 @@ public class MeasuringActivity extends AppCompatActivity
      * @param balanceDifference - the difference in balance, calibrated to origin and in 2d.
      */
     private void updateFeedback(float distance, float[] balanceDifference) {
+        // Stop providing feedback if the user is within the balance threshold
         if (distance <= mThresholdLeniency) {
-            // Todo: pass (feedback type, direction, 0) to the arduino
+            writeFeedback(mFeedbackMethod + "9" + ",");
             return;
         }
 
@@ -504,7 +578,18 @@ public class MeasuringActivity extends AppCompatActivity
         if (direction == 8)
             direction = 0;
 
-        // Todo: pass (feedback type, direction, 1) to the arduino
+        // Write the feedback to the connected BLE device
+        writeFeedback(mFeedbackMethod + direction + ",");
+    }
+
+    /**
+     * Writes the output string to the connected BLE device.
+     *
+     * @param output - the output to pass to the BLE, as a string.
+     */
+    private void writeFeedback(String output) {
+        mCharacteristic.setValue(output);
+        mBluetoothGatt.writeCharacteristic(mCharacteristic);
     }
 
     /**
