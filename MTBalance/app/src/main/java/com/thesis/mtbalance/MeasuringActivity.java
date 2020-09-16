@@ -162,15 +162,8 @@ public class MeasuringActivity extends AppCompatActivity
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         // Check if the up button is pressed
         if (item.getItemId() == android.R.id.home) {
-            // Stop the scan if one is running
-            mDotScanner.stopScan();
-
-            // Stop measuring and disconnect all DOTs if they are
-            for (int i = 0; i < mDotList.size(); i++) {
-                mDotList.get(i).stopMeasuring();
-                mDotList.get(i).disconnect();
-            }
-            mDotList.clear();
+            // Cleanup the BLE sensors
+            cleanupBLE();
 
             // Destroy the activity to prevent data leakage
             finish();
@@ -294,14 +287,8 @@ public class MeasuringActivity extends AppCompatActivity
             if (mBalanced)
                 mEndBalanceTime = Instant.now();
 
-            // Stop the measuring for every DOT and disconnect it
-            for (XsensDotDevice dot : mDotList) {
-                dot.stopMeasuring();
-                dot.disconnect();
-            }
-            // Clear the DOT list and set the connection state to false
-            mDotList.clear();
-            mAllConnected = false;
+            // Cleanup the BLE sensors
+            cleanupBLE();
 
             // Only save when testing mode is not activated
             if (!mParticipantNumber.equals("0")) {
@@ -333,6 +320,30 @@ public class MeasuringActivity extends AppCompatActivity
                 }
             }, 3000);
         }
+    }
+
+    /**
+     * Cleans up all the BLE sensors upon activity destruction.
+     */
+    private void cleanupBLE() {
+        // Cleanup the BLE instance if one exists
+        if (mBluetoothGatt != null) {
+            mBluetoothGatt.close();
+            mBluetoothGatt = null;
+        }
+
+        // Stop the scan if one is running
+        mDotScanner.stopScan();
+
+        // Stop the measuring for every DOT and disconnect it
+        for (XsensDotDevice dot : mDotList) {
+            dot.stopMeasuring();
+            dot.disconnect();
+        }
+
+        // Clear the DOT list and set the connection state to false
+        mDotList.clear();
+        mAllConnected = false;
     }
 
     /**
