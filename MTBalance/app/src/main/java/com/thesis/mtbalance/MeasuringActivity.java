@@ -139,18 +139,11 @@ public class MeasuringActivity extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_measuring);
 
-        // Initialize views and show user if testing mode is activated (participantNumber = 0)
-        mMeasuringLayout = findViewById(R.id.measuring_layout);
-        mChronometer = findViewById(R.id.chronometer);
-        if (mParticipantNumber.equals("0"))
-            findViewById(R.id.testing_textview).setVisibility(View.VISIBLE);
-
-        // Initialize helpers
-        mVecHelper = new VecHelper(this);
-        mFileHelper = new FileHelper();
-
         // Get the shared preferences
         retrieveSharedPreferences();
+
+        // Initialize the views and helpers
+        initViewHelpers();
 
         // Initialize the feedback
         initFeedback();
@@ -179,6 +172,21 @@ public class MeasuringActivity extends AppCompatActivity
                 (SettingsActivity.KEY_LOWER_LEG_LENGTH, "0")));
         mKneeLength = Float.parseFloat(Objects.requireNonNull(sharedPref.getString
                 (SettingsActivity.KEY_UPPER_LEG_LENGTH, "0")));
+    }
+
+    /**
+     * Initializes the view and the helper classes.
+     */
+    private void initViewHelpers() {
+        // Initialize helpers
+        mVecHelper = new VecHelper(this);
+        mFileHelper = new FileHelper();
+
+        // Initialize views and show user if testing mode is activated (participantNumber = 0)
+        mMeasuringLayout = findViewById(R.id.measuring_layout);
+        mChronometer = findViewById(R.id.chronometer);
+        if (mParticipantNumber.equals("0"))
+            findViewById(R.id.testing_textview).setVisibility(View.VISIBLE);
     }
 
     /**
