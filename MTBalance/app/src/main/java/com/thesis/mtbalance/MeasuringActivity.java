@@ -57,6 +57,7 @@ public class MeasuringActivity extends AppCompatActivity
     // Numerical / Strings
     private String mParticipantNumber;
     private String mFeedbackMethod;
+
     private int mIteration = 0;
     private float mThresholdLeniency;
     private float mAnkleLength, mKneeLength;
@@ -138,6 +139,12 @@ public class MeasuringActivity extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_measuring);
 
+        // Initialize views and show user if testing mode is activated (participantNumber = 0)
+        mMeasuringLayout = findViewById(R.id.measuring_layout);
+        mChronometer = findViewById(R.id.chronometer);
+        if (mParticipantNumber.equals("0"))
+            findViewById(R.id.testing_textview).setVisibility(View.VISIBLE);
+
         // Initialize helpers
         mVecHelper = new VecHelper(this);
         mFileHelper = new FileHelper();
@@ -205,14 +212,6 @@ public class MeasuringActivity extends AppCompatActivity
         // Set global SDK options
         XsensDotSdk.setDebugEnabled(true);  // Todo: remove debugger when application is finished.
         XsensDotSdk.setReconnectEnabled(true);
-
-        // Initialize views
-        mMeasuringLayout = findViewById(R.id.measuring_layout);
-        mChronometer = findViewById(R.id.chronometer);
-
-        // Show user if testing mode is activated (participantNumber = 0)
-        if (mParticipantNumber.equals("0"))
-            findViewById(R.id.testing_textview).setVisibility(View.VISIBLE);
 
         // Initialize scanner object and start scan
         mDotScanner = new XsensDotScanner(getApplicationContext(), this);
@@ -529,11 +528,11 @@ public class MeasuringActivity extends AppCompatActivity
         // Get the intersection between current and optimal balance
         float[] intersection = mVecHelper.getIntersection(bikeVector, endEffector);
 
-        // Get the flattened balance difference between the current and optimal balance
-        float[] balanceDifference = mVecHelper.getBalanceDifference(endEffector, intersection);
-
         // Get the distance between the intersection and end effector
         float distance = mVecHelper.getDistance(endEffector, intersection);
+
+        // Get the flattened balance difference between the current and optimal balance
+        float[] balanceDifference = mVecHelper.getBalanceDifference(endEffector, intersection);
 
         // Update the real-time feedback if it is used
         if (!mFeedbackMethod.equals("0"))
