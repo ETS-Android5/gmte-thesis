@@ -83,6 +83,15 @@ public class MeasuringActivity extends AppCompatActivity
     private VecHelper mVecHelper;
     private FileHelper mFileHelper;
 
+    // Containers
+    private HashMap<String, String> mAddressTagMap = new HashMap<>();
+    private HashMap<String, float[]> mTagQuatMap = new HashMap<>();
+    private ArrayList<String> mBalanceData = new ArrayList<>();
+
+    // Xsens
+    private XsensDotScanner mDotScanner;
+    private ArrayList<XsensDotDevice> mDotList = new ArrayList<>();
+
     // Feedback
     private BluetoothGatt mBluetoothGatt = null;
     private BluetoothGattCharacteristic mCharacteristic = null;
@@ -117,15 +126,6 @@ public class MeasuringActivity extends AppCompatActivity
             }
         }
     };
-
-    // Xsens
-    private XsensDotScanner mDotScanner;
-    private ArrayList<XsensDotDevice> mDotList = new ArrayList<>();
-
-    // Containers
-    private HashMap<String, String> mAddressTagMap = new HashMap<>();
-    private HashMap<String, float[]> mTagQuatMap = new HashMap<>();
-    private ArrayList<String> mBalanceData = new ArrayList<>();
     // endregion
 
     /**
