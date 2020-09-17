@@ -205,7 +205,7 @@ public class VecHelper {
         float dot = dot(p, q);
         float length = length(p) * length(q);
 
-        float radians = (float) Math.acos(dot / length);
+        double radians = Math.acos(dot / length);
         return (float) Math.toDegrees(radians);
     }
 
