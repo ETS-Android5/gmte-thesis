@@ -57,6 +57,7 @@ public class MeasuringActivity extends AppCompatActivity
     // Numerical / Strings
     private String mParticipantNumber;
     private String mFeedbackMethod;
+    private String mFeedbackString;
 
     private int mIteration = 0;
     private float mThresholdLeniency;
@@ -159,9 +160,10 @@ public class MeasuringActivity extends AppCompatActivity
         // Create a shared preferences object
         SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(this);
 
-        // Get the participant number and preferred feedback method
+        // Get the participant number, preferred feedback method and initialize feedback string
         mParticipantNumber = sharedPref.getString(SettingsActivity.KEY_PARTICIPANT_NUMBER, "0");
         mFeedbackMethod = sharedPref.getString(SettingsActivity.KEY_PREFERRED_FEEDBACK, "0");
+        mFeedbackString = "";
 
         // Get the preferred threshold leniency
         mThresholdLeniency = Float.parseFloat(Objects.requireNonNull(sharedPref.getString
@@ -565,7 +567,7 @@ public class MeasuringActivity extends AppCompatActivity
     private void updateFeedback(float distance, float[] balanceDifference) {
         // Stop providing feedback if the user is within the balance threshold
         if (distance <= mThresholdLeniency) {
-            writeFeedback(mFeedbackMethod + "9" + ",");
+            writeFeedback(mFeedbackMethod + "x" + ",");
             return;
         }
 
@@ -595,8 +597,12 @@ public class MeasuringActivity extends AppCompatActivity
      * @param output - the output to pass to the BLE, as a string.
      */
     private void writeFeedback(String output) {
-        mCharacteristic.setValue(output);
-        mBluetoothGatt.writeCharacteristic(mCharacteristic);
+        // Only send the data if it updates the current feedback direction
+        if (!mFeedbackString.equals(output)) {
+            mFeedbackString = output;
+            mCharacteristic.setValue(mFeedbackString);
+            mBluetoothGatt.writeCharacteristic(mCharacteristic);
+        }
     }
 
     /**
