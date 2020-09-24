@@ -1,35 +1,11 @@
 package com.thesis.mtbalance;
 
-import android.content.Context;
-import android.content.SharedPreferences;
-
-import androidx.preference.PreferenceManager;
-
-import java.util.Objects;
-
 /**
  * Helper class for 3D vector math.
  */
 public class VecHelper {
 
-    /* Variables */
-    private float[] mSensorOffset, mHipOffset;
-
-    /**
-     * Creates helper and retrieves the used shared preferences.
-     *
-     * @param context - the current application context.
-     */
-    public VecHelper(Context context) {
-        // Create a fileHelper object for helper methods
-        FileHelper fileHelper = new FileHelper();
-
-        // Create a shared preferences object and get the offsets
-        SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(context);
-        mSensorOffset = fileHelper.stringToFloatArray(Objects.requireNonNull
-                (sharedPref.getString(SettingsActivity.KEY_OFFSET_DIMENSION, "0,0,0")));
-        mHipOffset = fileHelper.stringToFloatArray(Objects.requireNonNull
-                (sharedPref.getString(SettingsActivity.KEY_HIP_DIMENSION, "0,0,0")));
+    public VecHelper() {
     }
 
     /**
@@ -137,11 +113,11 @@ public class VecHelper {
      * @param kneeVec  - the current knee vector.
      * @return the position of the end effector, which is the current balance.
      */
-    public float[] getEndEffector(float[] ankleVec, float[] kneeVec) {
+    public float[] getEndEffector(float[] sensorOffset, float[] ankleVec, float[] kneeVec, float[] hipOffset) {
         // Create a new float array and pairwise add all the other vectors
         float[] endEffector = new float[3];
         for (int i = 0; i < 3; i++)
-            endEffector[i] = mSensorOffset[i] + ankleVec[i] + kneeVec[i] + mHipOffset[i];
+            endEffector[i] = sensorOffset[i] + ankleVec[i] + kneeVec[i] + hipOffset[i];
 
         return endEffector;
     }

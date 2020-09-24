@@ -62,6 +62,7 @@ public class MeasuringActivity extends AppCompatActivity
     private int mIteration = 0;
     private float mThresholdLeniency;
     private float mAnkleLength, mKneeLength;
+    private float[] mSensorOffset, mHipOffset;
 
     // DVs
     private float mBalancePerformance = 0f;
@@ -140,11 +141,11 @@ public class MeasuringActivity extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_measuring);
 
-        // Get the shared preferences
-        retrieveSharedPreferences();
-
         // Initialize the views and helpers
         initViewHelpers();
+
+        // Get the shared preferences
+        retrieveSharedPreferences();
 
         // Initialize the feedback
         initFeedback();
@@ -165,6 +166,10 @@ public class MeasuringActivity extends AppCompatActivity
         mFeedbackMethod = sharedPref.getString(SettingsActivity.KEY_PREFERRED_FEEDBACK, "0");
         mFeedbackString = "";
 
+        // Show the testing label if the application is in testing mode
+        if (mParticipantNumber.equals("0"))
+            findViewById(R.id.testing_textview).setVisibility(View.VISIBLE);
+
         // Get the preferred threshold leniency
         mThresholdLeniency = Float.parseFloat(Objects.requireNonNull(sharedPref.getString
                 (SettingsActivity.KEY_THRESHOLD_LENIENCY, "0")));
@@ -174,6 +179,12 @@ public class MeasuringActivity extends AppCompatActivity
                 (SettingsActivity.KEY_LOWER_LEG_LENGTH, "0")));
         mKneeLength = Float.parseFloat(Objects.requireNonNull(sharedPref.getString
                 (SettingsActivity.KEY_UPPER_LEG_LENGTH, "0")));
+
+        // Get the offsets
+        mSensorOffset = mFileHelper.stringToFloatArray(Objects.requireNonNull
+                (sharedPref.getString(SettingsActivity.KEY_OFFSET_DIMENSION, "0,0,0")));
+        mHipOffset = mFileHelper.stringToFloatArray(Objects.requireNonNull
+                (sharedPref.getString(SettingsActivity.KEY_HIP_DIMENSION, "0,0,0")));
     }
 
     /**
@@ -181,14 +192,12 @@ public class MeasuringActivity extends AppCompatActivity
      */
     private void initViewHelpers() {
         // Initialize helpers
-        mVecHelper = new VecHelper(this);
+        mVecHelper = new VecHelper();
         mFileHelper = new FileHelper();
 
-        // Initialize views and show user if testing mode is activated (participantNumber = 0)
+        // Initialize views
         mMeasuringLayout = findViewById(R.id.measuring_layout);
         mChronometer = findViewById(R.id.chronometer);
-        if (mParticipantNumber.equals("0"))
-            findViewById(R.id.testing_textview).setVisibility(View.VISIBLE);
     }
 
     /**
@@ -533,7 +542,8 @@ public class MeasuringActivity extends AppCompatActivity
                 Objects.requireNonNull(mTagQuatMap.get("Knee DOT")), mKneeLength);
 
         // Calculate the position of the current balance (end effector)
-        float[] endEffector = mVecHelper.getEndEffector(ankleVector, kneeVector);
+        float[] endEffector = mVecHelper.getEndEffector(
+                mSensorOffset, ankleVector, kneeVector, mHipOffset);
 
         // Get the intersection between current and optimal balance
         float[] intersection = mVecHelper.getIntersection(bikeVector, endEffector);
