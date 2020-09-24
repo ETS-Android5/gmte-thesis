@@ -85,6 +85,22 @@ public class VecHelper {
         };
     }
 
+    public float[] getPedalPosition(float[] quat, float[] sensorOffset) {
+        // Calculate the sine pitch of the quaternion (in radians)
+        // https://en.wikipedia.org/wiki/Conversion_between_quaternions_and_Euler_angles
+        double sPitch = 2d * (quat[0] * quat[2] - quat[3] * quat[1]);
+
+        // Avoid gimbal lock when pitch approaches ~90 degrees and calculate the cosine pitch
+        double pitch = (Math.abs(sPitch) >= 1) ?
+                Math.copySign(Math.PI / 2d, sPitch) : Math.asin(sPitch);
+        double cPitch = Math.cos(pitch);
+
+        // Calculate the new x and y positions of the initial offset and return it.
+        double offsetY = sensorOffset[1] * cPitch - sensorOffset[2] * sPitch;
+        double offsetZ = sensorOffset[1] * sPitch + sensorOffset[2] * cPitch;
+        return new float[]{0f, (float) offsetY, (float) offsetZ};
+    }
+
     /**
      * Mirrors a vector in the z-axis, optionally correcting the slope.
      *
@@ -108,19 +124,19 @@ public class VecHelper {
     }
 
     /**
-     * Returns the current balance (end effector) given the ankle and knee vector.
+     * Returns the current balance (end effector) given supplied vectors.
      *
-     * @param sensorOffset - the offset to the crank from the bike sensor.
-     * @param ankleVec     - the current ankle vector.
-     * @param kneeVec      - the current knee vector.
      * @param hipOffset    - the offset from the hip to the middle of the pelvis.
-     * @return the position of the end effector, which is the current balance.
+     * @param pedalVec  - the current pedal vector.
+     * @param ankleVec  - the current ankle vector.
+     * @param kneeVec   - the current knee vector.
+     * @return the end effector built from the other vectors.
      */
-    public float[] getEndEffector(float[] sensorOffset, float[] ankleVec, float[] kneeVec, float[] hipOffset) {
+    public float[] getEndEffector(float[] pedalVec, float[] ankleVec, float[] kneeVec, float[] hipOffset) {
         // Create a new float array and pairwise add all the other vectors
         float[] endEffector = new float[3];
         for (int i = 0; i < 3; i++)
-            endEffector[i] = sensorOffset[i] + ankleVec[i] + kneeVec[i] + hipOffset[i];
+            endEffector[i] = pedalVec[i] + ankleVec[i] + kneeVec[i] + hipOffset[i];
 
         return endEffector;
     }
