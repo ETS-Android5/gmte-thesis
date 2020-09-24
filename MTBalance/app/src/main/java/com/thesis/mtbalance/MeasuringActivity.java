@@ -518,8 +518,8 @@ public class MeasuringActivity extends AppCompatActivity
      */
     private void calculateBalance() {
         // Get the yaw correction matrix to correct the sensors to a shared local frame
-        float[][] yawCorrMatrix = mVecHelper.yawCorrectionMatrix(
-                (Objects.requireNonNull(mTagQuatMap.get("Yaw DOT"))));
+        float[][] yawCorrMatrix = mVecHelper.yawCorrectionMatrix
+                (Objects.requireNonNull(mTagQuatMap.get("Yaw DOT")));
 
         // Calculate the bike vector and mirror it to get the optimal balance direction
         float[] bikeVector = mVecHelper.quatRotation(yawCorrMatrix,
