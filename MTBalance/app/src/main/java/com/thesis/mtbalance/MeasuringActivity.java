@@ -535,8 +535,8 @@ public class MeasuringActivity extends AppCompatActivity
                 Objects.requireNonNull(mTagQuatMap.get("Bike DOT")), 1000f);
         bikeVector = mVecHelper.mirrorVector(bikeVector, false, 0f);
 
-        // Get the current position of the pedal
-        float[] pedalVector = mVecHelper.getPedalPosition(
+        // Get the current position of the crank
+        float[] pedalVector = mVecHelper.getCrankPosition(
                 Objects.requireNonNull(mTagQuatMap.get("Pos DOT")), mSensorOffset);
 
         // Calculate the ankle vector and knee vector
