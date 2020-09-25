@@ -133,17 +133,19 @@ public class VecHelper {
     /**
      * Returns the current balance (end effector) given supplied vectors.
      *
+     * @param offsetVec - the offset between the bike sensor and crank.
      * @param pedalVec  - the current pedal vector.
      * @param ankleVec  - the current ankle vector.
      * @param kneeVec   - the current knee vector.
      * @param hipOffset - the offset from the hip to the middle of the pelvis.
      * @return the end effector built from the other vectors.
      */
-    public float[] getEndEffector(float[] pedalVec, float[] ankleVec, float[] kneeVec, float[] hipOffset) {
+    public float[] getEndEffector(float[] offsetVec, float[] pedalVec,
+                                  float[] ankleVec, float[] kneeVec, float[] hipOffset) {
         // Create a new float array and pairwise add all the other vectors
         float[] endEffector = new float[3];
         for (int i = 0; i < 3; i++)
-            endEffector[i] = pedalVec[i] + ankleVec[i] + kneeVec[i] + hipOffset[i];
+            endEffector[i] = offsetVec[i] + pedalVec[i] + ankleVec[i] + kneeVec[i] + hipOffset[i];
 
         return endEffector;
     }

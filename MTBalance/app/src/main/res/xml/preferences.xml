@@ -36,6 +36,11 @@
     <PreferenceCategory app:title="Lengths">
 
         <EditTextPreference
+            app:key="crank_length"
+            app:title="Crank length"
+            app:useSimpleSummaryProvider="true" />
+
+        <EditTextPreference
             app:key="lower_leg_length"
             app:title="Lower leg length"
             app:useSimpleSummaryProvider="true" />

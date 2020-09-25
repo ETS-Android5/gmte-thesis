@@ -19,6 +19,7 @@ public class SettingsActivity extends AppCompatActivity {
     public static final String KEY_PLOT_RESOLUTION = "plot_resolution";
     public static final String KEY_THRESHOLD_LENIENCY = "threshold_leniency";
 
+    public static final String KEY_CRANK_LENGTH = "crank_length";
     public static final String KEY_LOWER_LEG_LENGTH = "lower_leg_length";
     public static final String KEY_UPPER_LEG_LENGTH = "upper_leg_length";
 
@@ -57,6 +58,7 @@ public class SettingsActivity extends AppCompatActivity {
 
             setNumericalKeyboard(KEY_PLOT_RESOLUTION);
 
+            setNumericalKeyboard(KEY_CRANK_LENGTH);
             setNumericalKeyboard(KEY_LOWER_LEG_LENGTH);
             setNumericalKeyboard(KEY_UPPER_LEG_LENGTH);
 
