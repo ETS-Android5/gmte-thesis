@@ -126,10 +126,10 @@ public class VecHelper {
     /**
      * Returns the current balance (end effector) given supplied vectors.
      *
-     * @param hipOffset    - the offset from the hip to the middle of the pelvis.
      * @param pedalVec  - the current pedal vector.
      * @param ankleVec  - the current ankle vector.
      * @param kneeVec   - the current knee vector.
+     * @param hipOffset - the offset from the hip to the middle of the pelvis.
      * @return the end effector built from the other vectors.
      */
     public float[] getEndEffector(float[] pedalVec, float[] ankleVec, float[] kneeVec, float[] hipOffset) {
