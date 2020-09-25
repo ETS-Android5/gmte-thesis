@@ -86,13 +86,13 @@ public class VecHelper {
     }
 
     /**
-     * Gets the position of the crank depending on the current bike pitch.
+     * Gets the offset of the crank depending on the current bike pitch.
      *
      * @param quat         - the quat containing the pitch information.
      * @param sensorOffset - the sensor offset in a base position.
      * @return a position manipulated by the pitch for more precise readings.
      */
-    public float[] getCrankPosition(float[] quat, float[] sensorOffset) {
+    public float[] getOffsetPosition(float[] quat, float[] sensorOffset) {
         // Calculate the sine pitch of the quaternion (in radians)
         // https://en.wikipedia.org/wiki/Conversion_between_quaternions_and_Euler_angles
         double sPitch = 2d * (quat[0] * quat[2] - quat[3] * quat[1]);
