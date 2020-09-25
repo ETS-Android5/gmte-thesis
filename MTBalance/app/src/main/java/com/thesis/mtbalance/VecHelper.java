@@ -37,8 +37,9 @@ public class VecHelper {
     /**
      * Rotates a 3D vector given a quaternion.
      *
-     * @param quat      - the quaternion to rotate with.
-     * @param dimension - the length of the vector to rotate (rotation around point).
+     * @param yawCorrMatrix - matrix used to correct the rotation to the current frame.
+     * @param quat          - the quaternion to rotate with.
+     * @param dimension     - the length of the vector to rotate (rotation around point).
      */
     public float[] quatRotation(float[][] yawCorrMatrix, float[] quat, float dimension) {
         // Make a 4-dimensional point and the conjugate needed for rotation
@@ -109,8 +110,10 @@ public class VecHelper {
     /**
      * Returns the current balance (end effector) given the ankle and knee vector.
      *
-     * @param ankleVec - the current ankle vector.
-     * @param kneeVec  - the current knee vector.
+     * @param sensorOffset - the offset to the crank from the bike sensor.
+     * @param ankleVec     - the current ankle vector.
+     * @param kneeVec      - the current knee vector.
+     * @param hipOffset    - the offset from the hip to the middle of the pelvis.
      * @return the position of the end effector, which is the current balance.
      */
     public float[] getEndEffector(float[] sensorOffset, float[] ankleVec, float[] kneeVec, float[] hipOffset) {

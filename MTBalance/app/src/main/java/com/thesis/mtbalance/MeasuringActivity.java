@@ -285,8 +285,8 @@ public class MeasuringActivity extends AppCompatActivity
             case "D4:CA:6E:F1:63:D0":   // Knee
                 mAddressTagMap.put(address, "Knee DOT");
                 break;
-            case "D4:CA:6E:F1:63:C4":   // Yaw
-                mAddressTagMap.put(address, "Yaw DOT");
+            case "D4:CA:6E:F1:63:C4":   // Position
+                mAddressTagMap.put(address, "Pos DOT");
                 break;
             default:
                 return;
@@ -528,7 +528,7 @@ public class MeasuringActivity extends AppCompatActivity
     private void calculateBalance() {
         // Get the yaw correction matrix to correct the sensors to a shared local frame
         float[][] yawCorrMatrix = mVecHelper.yawCorrectionMatrix(
-                Objects.requireNonNull(mTagQuatMap.get("Yaw DOT")));
+                Objects.requireNonNull(mTagQuatMap.get("Pos DOT")));
 
         // Calculate the bike vector and mirror it to get the optimal balance direction
         float[] bikeVector = mVecHelper.quatRotation(yawCorrMatrix,
