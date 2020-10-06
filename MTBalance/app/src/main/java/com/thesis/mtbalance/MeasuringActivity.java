@@ -49,7 +49,7 @@ public class MeasuringActivity extends AppCompatActivity
 
     // region Variables
     // Finals
-    private final int ALL_DOTS = 4;
+    private final int ALL_DOTS = 5;
 
     private final UUID SERVICE_UUID = UUID.fromString("0000FFE0-0000-1000-8000-00805F9B34FB");
     private final UUID CHAR_UUID = UUID.fromString("0000FFE1-0000-1000-8000-00805F9B34FB");
@@ -61,7 +61,7 @@ public class MeasuringActivity extends AppCompatActivity
 
     private int mIteration = 0;
     private float mThresholdLeniency;
-    private float mAnkleLength, mKneeLength;
+    private float mCrankLength, mAnkleLength, mKneeLength;
     private float[] mSensorOffset, mHipOffset;
 
     // DVs
@@ -174,7 +174,9 @@ public class MeasuringActivity extends AppCompatActivity
         mThresholdLeniency = Float.parseFloat(Objects.requireNonNull(sharedPref.getString
                 (SettingsActivity.KEY_THRESHOLD_LENIENCY, "0")));
 
-        // Get the leg lengths
+        // Get the lengths
+        mCrankLength = Float.parseFloat(Objects.requireNonNull(sharedPref.getString
+                (SettingsActivity.KEY_CRANK_LENGTH, "0")));
         mAnkleLength = Float.parseFloat(Objects.requireNonNull(sharedPref.getString
                 (SettingsActivity.KEY_LOWER_LEG_LENGTH, "0")));
         mKneeLength = Float.parseFloat(Objects.requireNonNull(sharedPref.getString
@@ -276,17 +278,20 @@ public class MeasuringActivity extends AppCompatActivity
 
         // Add the current address to the address-tag hashmap, depending on MAC-address
         switch (address) {
+            case "D4:CA:6E:F1:63:C4":   // Position
+                mAddressTagMap.put(address, "Pos DOT");
+                break;
             case "D4:CA:6E:F1:7D:D9":   // Bike
                 mAddressTagMap.put(address, "Bike DOT");
+                break;
+            case "D4:CA:6E:F1:66:B7":   // Crank
+                mAddressTagMap.put(address, "Crank DOT");
                 break;
             case "D4:CA:6E:F1:66:AA":   // Ankle
                 mAddressTagMap.put(address, "Ankle DOT");
                 break;
             case "D4:CA:6E:F1:63:D0":   // Knee
                 mAddressTagMap.put(address, "Knee DOT");
-                break;
-            case "D4:CA:6E:F1:63:C4":   // Position
-                mAddressTagMap.put(address, "Pos DOT");
                 break;
             default:
                 return;
@@ -535,6 +540,12 @@ public class MeasuringActivity extends AppCompatActivity
                 Objects.requireNonNull(mTagQuatMap.get("Bike DOT")), 1000f);
         bikeVector = mVecHelper.mirrorVector(bikeVector, false, 0f);
 
+        // Get the current position of the crank offset and the pedal vector
+        float[] offsetVector = mVecHelper.getOffsetPosition(
+                Objects.requireNonNull(mTagQuatMap.get("Pos DOT")), mSensorOffset);
+        float[] pedalVector = mVecHelper.quatRotation(yawCorrMatrix,
+                Objects.requireNonNull(mTagQuatMap.get("Crank DOT")), mCrankLength);
+
         // Calculate the ankle vector and knee vector
         float[] ankleVector = mVecHelper.quatRotation(yawCorrMatrix,
                 Objects.requireNonNull(mTagQuatMap.get("Ankle DOT")), mAnkleLength);
@@ -543,7 +554,7 @@ public class MeasuringActivity extends AppCompatActivity
 
         // Calculate the position of the current balance (end effector)
         float[] endEffector = mVecHelper.getEndEffector(
-                mSensorOffset, ankleVector, kneeVector, mHipOffset);
+                offsetVector, pedalVector, ankleVector, kneeVector, mHipOffset);
 
         // Get the intersection between current and optimal balance
         float[] intersection = mVecHelper.getIntersection(bikeVector, endEffector);
