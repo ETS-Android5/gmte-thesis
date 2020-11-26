@@ -6,7 +6,7 @@
 #define RxD 2
 #define TxD 3
 #define FPIN 4
-#define LPIN 12
+#define LPIN 11
 #define LEDS 16
 
 /* Globals */
