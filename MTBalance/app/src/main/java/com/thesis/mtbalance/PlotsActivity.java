@@ -28,11 +28,10 @@ public class PlotsActivity extends AppCompatActivity {
     public static final String BUNDLE_KEY_YDIR =
             "com.thesis.mtbalance.plotsactivity.bundle.KEY.YDIR";
 
-    /* Variables */
     // ArrayLists of data entry objects for the plots
-    private ArrayList<DataEntry> mBothDirData = new ArrayList<>();
-    private ArrayList<DataEntry> mXDirData = new ArrayList<>();
-    private ArrayList<DataEntry> mYDirData = new ArrayList<>();
+    private final ArrayList<DataEntry> BOTH_DIR_DATA = new ArrayList<>();
+    private final ArrayList<DataEntry> X_DIR_DATA = new ArrayList<>();
+    private final ArrayList<DataEntry> Y_DIR_DATA = new ArrayList<>();
 
     /**
      * Called on activity creation.
@@ -82,9 +81,9 @@ public class PlotsActivity extends AppCompatActivity {
 
             // Parse the data and add it to the data entries
             float[] data = fileHelper.stringToFloatArray(ride);
-            mBothDirData.add(new ValueDataEntry(data[1], data[2]));     // X and Y
-            mXDirData.add(new ValueDataEntry(data[1], data[0]));        // X and Time
-            mYDirData.add(new ValueDataEntry(data[0], data[2]));        // Time and Y
+            BOTH_DIR_DATA.add(new ValueDataEntry(data[1], data[2]));     // X and Y
+            X_DIR_DATA.add(new ValueDataEntry(data[1], data[0]));        // X and Time
+            Y_DIR_DATA.add(new ValueDataEntry(data[0], data[2]));        // Time and Y
         }
     }
 
@@ -99,9 +98,9 @@ public class PlotsActivity extends AppCompatActivity {
 
         // Create a bundle holding the plot data
         Bundle bundle = new Bundle();
-        bundle.putSerializable(BUNDLE_KEY_BOTHDIR, mBothDirData);
-        bundle.putSerializable(BUNDLE_KEY_XDIR, mXDirData);
-        bundle.putSerializable(BUNDLE_KEY_YDIR, mYDirData);
+        bundle.putSerializable(BUNDLE_KEY_BOTHDIR, BOTH_DIR_DATA);
+        bundle.putSerializable(BUNDLE_KEY_XDIR, X_DIR_DATA);
+        bundle.putSerializable(BUNDLE_KEY_YDIR, Y_DIR_DATA);
 
         // Create the fragments and add the bundle data
         BothDirFragment bothDirFragment = new BothDirFragment();

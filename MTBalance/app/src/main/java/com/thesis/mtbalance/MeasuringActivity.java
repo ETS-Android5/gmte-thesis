@@ -86,14 +86,14 @@ public class MeasuringActivity extends AppCompatActivity
     private VecHelper mVecHelper;
     private FileHelper mFileHelper;
 
-    // Containers
-    private HashMap<String, String> mAddressTagMap = new HashMap<>();
-    private HashMap<String, float[]> mTagQuatMap = new HashMap<>();
-    private ArrayList<String> mBalanceData = new ArrayList<>();
+    // Containers (Finals)
+    private final HashMap<String, String> ADDRESS_TAG_MAP = new HashMap<>();
+    private final HashMap<String, float[]> TAG_QUAT_MAP = new HashMap<>();
+    private final ArrayList<String> BALANCE_DATA = new ArrayList<>();
 
     // Xsens
     private XsensDotScanner mDotScanner;
-    private ArrayList<XsensDotDevice> mDotList = new ArrayList<>();
+    private final ArrayList<XsensDotDevice> DOT_LIST = new ArrayList<>();
 
     // Feedback
     private BluetoothGatt mBluetoothGatt = null;
@@ -103,7 +103,7 @@ public class MeasuringActivity extends AppCompatActivity
      * Callback variable for BLE connections.
      * Handles various callbacks during the connection phase.
      */
-    private BluetoothGattCallback mGattCallback = new BluetoothGattCallback() {
+    private final BluetoothGattCallback GATT_CALLBACK = new BluetoothGattCallback() {
         // Handles initial connection to remote BLE device
         @Override
         public void onConnectionStateChange(BluetoothGatt gatt, int status, int newState) {
@@ -223,7 +223,7 @@ public class MeasuringActivity extends AppCompatActivity
         BluetoothDevice feedbackDevice = btAdapter.getRemoteDevice(bleAddr);
 
         // Connect to the remote feedback device via a generic attribute connection
-        feedbackDevice.connectGatt(this, true, mGattCallback);
+        feedbackDevice.connectGatt(this, true, GATT_CALLBACK);
     }
 
     /**
@@ -272,38 +272,38 @@ public class MeasuringActivity extends AppCompatActivity
     public void onXsensDotScanned(BluetoothDevice bluetoothDevice) {
         // Get the address, return if all or the current device is already initialized
         String address = bluetoothDevice.getAddress();
-        if (mAddressTagMap.size() == ALL_DOTS || mAddressTagMap.containsKey(address))
+        if (ADDRESS_TAG_MAP.size() == ALL_DOTS || ADDRESS_TAG_MAP.containsKey(address))
             return;
 
         // Add the current address to the address-tag hashmap, depending on MAC-address
         switch (address) {
             case "D4:CA:6E:F1:63:C4":   // Position
-                mAddressTagMap.put(address, "Pos DOT");
+                ADDRESS_TAG_MAP.put(address, "Pos DOT");
                 break;
             case "D4:CA:6E:F1:7D:D9":   // Bike
-                mAddressTagMap.put(address, "Bike DOT");
+                ADDRESS_TAG_MAP.put(address, "Bike DOT");
                 break;
             case "D4:CA:6E:F1:66:B7":   // Crank
-                mAddressTagMap.put(address, "Crank DOT");
+                ADDRESS_TAG_MAP.put(address, "Crank DOT");
                 break;
             case "D4:CA:6E:F1:66:AA":   // Ankle
-                mAddressTagMap.put(address, "Ankle DOT");
+                ADDRESS_TAG_MAP.put(address, "Ankle DOT");
                 break;
             case "D4:CA:6E:F1:63:D0":   // Knee
-                mAddressTagMap.put(address, "Knee DOT");
+                ADDRESS_TAG_MAP.put(address, "Knee DOT");
                 break;
             default:
                 return;
         }
 
         // Initialize address with a base quaternion
-        mTagQuatMap.put(mAddressTagMap.get(address), new float[]{1f, 0f, 0f, 0f});
+        TAG_QUAT_MAP.put(ADDRESS_TAG_MAP.get(address), new float[]{1f, 0f, 0f, 0f});
 
         // Create a new DOT object and add it to the list of DOT objects
         XsensDotDevice dot = new XsensDotDevice(getApplicationContext(),
                 bluetoothDevice, this);
         dot.connect();
-        mDotList.add(dot);
+        DOT_LIST.add(dot);
     }
 
     /**
@@ -352,10 +352,10 @@ public class MeasuringActivity extends AppCompatActivity
             mChronometer.start();
 
             // Add an initial point to the measurement data
-            mBalanceData.add("0,0,0");
+            BALANCE_DATA.add("0,0,0");
 
             // Initialize every dot with the quaternion measurement mode and start measuring
-            for (XsensDotDevice dot : mDotList) {
+            for (XsensDotDevice dot : DOT_LIST) {
                 dot.setMeasurementMode(XsensDotPayload.PAYLOAD_TYPE_ORIENTATION_QUATERNION);
                 dot.startMeasuring();
             }
@@ -391,7 +391,7 @@ public class MeasuringActivity extends AppCompatActivity
                 mFileHelper.appendToFile("rides", dataDVS, this);
 
                 // Save balance data to an unique file for post-hoc application
-                mFileHelper.saveArrayData(mStartTime.toString(), mBalanceData, this);
+                mFileHelper.saveArrayData(mStartTime.toString(), BALANCE_DATA, this);
 
                 // Notify user
                 Snackbar.make(mMeasuringLayout, "Stopped measuring and saved data.",
@@ -430,13 +430,13 @@ public class MeasuringActivity extends AppCompatActivity
         mDotScanner.stopScan();
 
         // Stop the measuring for every DOT and disconnect it
-        for (XsensDotDevice dot : mDotList) {
+        for (XsensDotDevice dot : DOT_LIST) {
             dot.stopMeasuring();
             dot.disconnect();
         }
 
         // Clear the DOT list and set the connection state to false
-        mDotList.clear();
+        DOT_LIST.clear();
         mAllConnected = false;
     }
 
@@ -501,7 +501,7 @@ public class MeasuringActivity extends AppCompatActivity
             return;
 
         // Calibrate all DOTs
-        for (XsensDotDevice dot : mDotList)
+        for (XsensDotDevice dot : DOT_LIST)
             dot.resetHeading();
 
         // Notify user
@@ -518,8 +518,8 @@ public class MeasuringActivity extends AppCompatActivity
     @Override
     public void onXsensDotDataChanged(String address, XsensDotData xsensDotData) {
         // Get the current tag and map the current quaternion to it
-        String currTag = mAddressTagMap.get(address);
-        mTagQuatMap.put(currTag, xsensDotData.getQuat());
+        String currTag = ADDRESS_TAG_MAP.get(address);
+        TAG_QUAT_MAP.put(currTag, xsensDotData.getQuat());
 
         // If the current tag is the Bike DOT, calculate the balance
         if (currTag != null && currTag.equals("Bike DOT"))
@@ -532,24 +532,24 @@ public class MeasuringActivity extends AppCompatActivity
     private void calculateBalance() {
         // Get the yaw correction matrix to correct the sensors to a shared local frame
         float[][] yawCorrMatrix = mVecHelper.yawCorrectionMatrix(
-                Objects.requireNonNull(mTagQuatMap.get("Pos DOT")));
+                Objects.requireNonNull(TAG_QUAT_MAP.get("Pos DOT")));
 
         // Calculate the bike vector and mirror it to get the optimal balance direction
         float[] bikeVector = mVecHelper.quatRotation(yawCorrMatrix,
-                Objects.requireNonNull(mTagQuatMap.get("Bike DOT")), 1000f);
+                Objects.requireNonNull(TAG_QUAT_MAP.get("Bike DOT")), 1000f);
         bikeVector = mVecHelper.mirrorVector(bikeVector, false, 0f);
 
         // Get the current position of the crank offset and the pedal vector
         float[] offsetVector = mVecHelper.getOffsetPosition(
-                Objects.requireNonNull(mTagQuatMap.get("Pos DOT")), mSensorOffset);
+                Objects.requireNonNull(TAG_QUAT_MAP.get("Pos DOT")), mSensorOffset);
         float[] pedalVector = mVecHelper.quatRotation(yawCorrMatrix,
-                Objects.requireNonNull(mTagQuatMap.get("Crank DOT")), mCrankLength);
+                Objects.requireNonNull(TAG_QUAT_MAP.get("Crank DOT")), mCrankLength);
 
         // Calculate the ankle vector and knee vector
         float[] ankleVector = mVecHelper.quatRotation(yawCorrMatrix,
-                Objects.requireNonNull(mTagQuatMap.get("Ankle DOT")), mAnkleLength);
+                Objects.requireNonNull(TAG_QUAT_MAP.get("Ankle DOT")), mAnkleLength);
         float[] kneeVector = mVecHelper.quatRotation(yawCorrMatrix,
-                Objects.requireNonNull(mTagQuatMap.get("Knee DOT")), mKneeLength);
+                Objects.requireNonNull(TAG_QUAT_MAP.get("Knee DOT")), mKneeLength);
 
         // Calculate the position of the current balance (end effector)
         float[] endEffector = mVecHelper.getEndEffector(
@@ -686,7 +686,7 @@ public class MeasuringActivity extends AppCompatActivity
 
         // Add the current elapsedTime and balanceDifference to the list
         float elapsedTimeSeconds = elapsedTime * 0.001f;
-        mBalanceData.add(String.format("%s,%s,%s", elapsedTimeSeconds,
+        BALANCE_DATA.add(String.format("%s,%s,%s", elapsedTimeSeconds,
                 balanceDifference[0], balanceDifference[1]));
     }
 

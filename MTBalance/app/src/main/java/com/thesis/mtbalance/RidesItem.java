@@ -5,17 +5,17 @@ package com.thesis.mtbalance;
  */
 public class RidesItem {
 
-    /* Variables */
+    /* Finals */
     // Not used in the view, but for the intent to the plot activity
-    private String mStartTime;
+    private final String START_TIME;
 
-    private String mCompletionTime;
-    private String mDateTime;
+    private final String COMPLETION_TIME;
+    private final String DATE_TIME;
 
-    private String mFeedbackMethod;
-    private String mBalancePerformance;
-    private String mBalanceDeviation;
-    private String mResponseTime;
+    private final String FEEDBACK_METHOD;
+    private final String BALANCE_PERFORMANCE;
+    private final String BALANCE_DEVIATION;
+    private final String RESPONSE_TIME;
 
     /**
      * Constructor to set all data.
@@ -30,42 +30,42 @@ public class RidesItem {
      */
     public RidesItem(String startTime, String completionTime, String dateTime, String feedbackMethod,
                      String balancePerformance, String balanceDeviation, String responseTime) {
-        mStartTime = startTime;
-        mCompletionTime = completionTime;
-        mDateTime = dateTime;
-        mFeedbackMethod = feedbackMethod;
-        mBalancePerformance = balancePerformance;
-        mBalanceDeviation = balanceDeviation;
-        mResponseTime = responseTime;
+        START_TIME = startTime;
+        COMPLETION_TIME = completionTime;
+        DATE_TIME = dateTime;
+        FEEDBACK_METHOD = feedbackMethod;
+        BALANCE_PERFORMANCE = balancePerformance;
+        BALANCE_DEVIATION = balanceDeviation;
+        RESPONSE_TIME = responseTime;
     }
 
     // region Getters
     public String getStartTime() {
-        return mStartTime;
+        return START_TIME;
     }
 
     public String getCompletionTime() {
-        return mCompletionTime;
+        return COMPLETION_TIME;
     }
 
     public String getDateTime() {
-        return mDateTime;
+        return DATE_TIME;
     }
 
     public String getFeedbackMethod() {
-        return mFeedbackMethod;
+        return FEEDBACK_METHOD;
     }
 
     public String getBalancePerformance() {
-        return mBalancePerformance;
+        return BALANCE_PERFORMANCE;
     }
 
     public String getBalanceDeviation() {
-        return mBalanceDeviation;
+        return BALANCE_DEVIATION;
     }
 
     public String getResponseTime() {
-        return mResponseTime;
+        return RESPONSE_TIME;
     }
     // endregion
 }

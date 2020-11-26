@@ -22,9 +22,9 @@ public class RecyclerViewAdapter extends
 
     public static boolean ITEM_CLICKED;
 
-    /* Variables */
-    private Context mContext;
-    private ArrayList<RidesItem> mRidesData;
+    /* Finals */
+    private final Context CONTEXT;
+    private final ArrayList<RidesItem> RIDES_DATA;
 
     /**
      * Constructor for the view adapter, used by the recyclerview to link data.
@@ -33,8 +33,8 @@ public class RecyclerViewAdapter extends
      * @param ridesData - the data to connect to the recyclerview.
      */
     public RecyclerViewAdapter(Context context, ArrayList<RidesItem> ridesData) {
-        mContext = context;
-        mRidesData = ridesData;
+        CONTEXT = context;
+        RIDES_DATA = ridesData;
     }
 
     /**
@@ -48,14 +48,14 @@ public class RecyclerViewAdapter extends
     @Override
     public RidesViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         // Create a new RidesViewHolder object
-        final RidesViewHolder rvh = new RidesViewHolder(LayoutInflater.from(mContext)
+        final RidesViewHolder rvh = new RidesViewHolder(LayoutInflater.from(CONTEXT)
                 .inflate(R.layout.item_rides, parent, false));
 
         // Set the initial click state to false
         ITEM_CLICKED = false;
 
         // Sets an onClickListener for each element in the recycler view
-        rvh.mCardView.setOnClickListener(new View.OnClickListener() {
+        rvh.CARD_VIEW.setOnClickListener(new View.OnClickListener() {
 
             @Override
             public void onClick(View view) {
@@ -65,10 +65,10 @@ public class RecyclerViewAdapter extends
                 ITEM_CLICKED = true;
 
                 // Start the PlotsActivity on a click, passing the current startTime as data
-                String startTime = mRidesData.get(rvh.getAdapterPosition()).getStartTime();
-                Intent intent = new Intent(mContext, PlotsActivity.class);
+                String startTime = RIDES_DATA.get(rvh.getAdapterPosition()).getStartTime();
+                Intent intent = new Intent(CONTEXT, PlotsActivity.class);
                 intent.putExtra(EXTRA_FILEDIR, startTime);
-                mContext.startActivity(intent);
+                CONTEXT.startActivity(intent);
             }
         });
 
@@ -84,13 +84,13 @@ public class RecyclerViewAdapter extends
     @Override
     public void onBindViewHolder(@NonNull RidesViewHolder holder, int position) {
 
-        holder.mCompTimeTextView.setText(mRidesData.get(position).getCompletionTime());
-        holder.mDateTimeTextView.setText(mRidesData.get(position).getDateTime());
+        holder.COMP_TIME_TV.setText(RIDES_DATA.get(position).getCompletionTime());
+        holder.DATE_TIME_TV.setText(RIDES_DATA.get(position).getDateTime());
 
-        holder.mFeedbackTextView.setText(mRidesData.get(position).getFeedbackMethod());
-        holder.mBalPerfTextView.setText(mRidesData.get(position).getBalancePerformance());
-        holder.mBalDevTextView.setText(mRidesData.get(position).getBalanceDeviation());
-        holder.mRespTimeTextView.setText(mRidesData.get(position).getResponseTime());
+        holder.FEEDBACK_TV.setText(RIDES_DATA.get(position).getFeedbackMethod());
+        holder.BAL_PERF_TV.setText(RIDES_DATA.get(position).getBalancePerformance());
+        holder.BAL_DEV_TV.setText(RIDES_DATA.get(position).getBalanceDeviation());
+        holder.RESP_TIME_TV.setText(RIDES_DATA.get(position).getResponseTime());
     }
 
     /**
@@ -100,7 +100,7 @@ public class RecyclerViewAdapter extends
      */
     @Override
     public int getItemCount() {
-        return mRidesData.size();
+        return RIDES_DATA.size();
     }
 
     /**
@@ -108,16 +108,16 @@ public class RecyclerViewAdapter extends
      */
     public static class RidesViewHolder extends RecyclerView.ViewHolder {
 
-        /* Variables */
-        private CardView mCardView;
+        /* Finals */
+        private final CardView CARD_VIEW;
 
-        private TextView mCompTimeTextView;
-        private TextView mDateTimeTextView;
+        private final TextView COMP_TIME_TV;
+        private final TextView DATE_TIME_TV;
 
-        private TextView mFeedbackTextView;
-        private TextView mBalPerfTextView;
-        private TextView mBalDevTextView;
-        private TextView mRespTimeTextView;
+        private final TextView FEEDBACK_TV;
+        private final TextView BAL_PERF_TV;
+        private final TextView BAL_DEV_TV;
+        private final TextView RESP_TIME_TV;
 
         /**
          * Setup the textview elements for the viewholder.
@@ -127,15 +127,15 @@ public class RecyclerViewAdapter extends
         public RidesViewHolder(@NonNull View itemView) {
             super(itemView);
 
-            mCardView = itemView.findViewById(R.id.rides_cardview);
+            CARD_VIEW = itemView.findViewById(R.id.rides_cardview);
 
-            mCompTimeTextView = itemView.findViewById(R.id.comptime_textview);
-            mDateTimeTextView = itemView.findViewById(R.id.datetime_textview);
+            COMP_TIME_TV = itemView.findViewById(R.id.comptime_textview);
+            DATE_TIME_TV = itemView.findViewById(R.id.datetime_textview);
 
-            mFeedbackTextView = itemView.findViewById(R.id.feedback_textview);
-            mBalPerfTextView = itemView.findViewById(R.id.balperf_textview);
-            mBalDevTextView = itemView.findViewById(R.id.baldev_textview);
-            mRespTimeTextView = itemView.findViewById(R.id.resptime_textview);
+            FEEDBACK_TV = itemView.findViewById(R.id.feedback_textview);
+            BAL_PERF_TV = itemView.findViewById(R.id.balperf_textview);
+            BAL_DEV_TV = itemView.findViewById(R.id.baldev_textview);
+            RESP_TIME_TV = itemView.findViewById(R.id.resptime_textview);
         }
     }
 }

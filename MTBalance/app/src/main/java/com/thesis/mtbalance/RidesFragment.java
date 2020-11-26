@@ -20,7 +20,7 @@ public class RidesFragment extends Fragment {
     /* Variables */
     private FileHelper fileHelper;
 
-    private ArrayList<RidesItem> mRidesData = new ArrayList<>();
+    private final ArrayList<RidesItem> RIDES_DATA = new ArrayList<>();
 
     public RidesFragment() {
     }
@@ -46,7 +46,7 @@ public class RidesFragment extends Fragment {
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
 
         // Setup the adapter and link it to the recyclerview
-        RecyclerViewAdapter RVAdapter = new RecyclerViewAdapter(getContext(), mRidesData);
+        RecyclerViewAdapter RVAdapter = new RecyclerViewAdapter(getContext(), RIDES_DATA);
         recyclerView.setAdapter(RVAdapter);
 
         return view;
@@ -111,7 +111,7 @@ public class RidesFragment extends Fragment {
                         new String[]{"%", "cm", "ms", "sec"});
 
         // Add the data to the list of ride items
-        mRidesData.add(new RidesItem(startTime, rideDVS[3], dateTime, feedbackMethod,
+        RIDES_DATA.add(new RidesItem(startTime, rideDVS[3], dateTime, feedbackMethod,
                 rideDVS[0], rideDVS[1], rideDVS[2]));
     }
 }
