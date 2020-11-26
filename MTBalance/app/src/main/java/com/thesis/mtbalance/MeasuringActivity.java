@@ -420,6 +420,10 @@ public class MeasuringActivity extends AppCompatActivity
      * Cleans up all the BLE sensors upon activity destruction.
      */
     private void cleanupBLE() {
+        // "Shut down" the real-time feedback by sending a neutral command if needed
+        if (!mFeedbackMethod.equals("0"))
+            writeFeedback(mFeedbackMethod + "x" + ",");
+
         // Cleanup the BLE instance if one exists
         if (mBluetoothGatt != null) {
             mBluetoothGatt.close();
