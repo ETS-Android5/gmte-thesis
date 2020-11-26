@@ -32,6 +32,7 @@
             android:layout_gravity="bottom|end"
             android:layout_margin="24dp"
             android:background="@color/colorAccent"
+            android:contentDescription="@string/fab_rides"
             android:onClick="startRide"
             android:src="@drawable/ic_bike" />
 

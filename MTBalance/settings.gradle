@@ -1,4 +1,3 @@
 include ':XsensDotSdk'
-include ':XsensDotSdk'
 include ':app'
 rootProject.name = "MTBalance"
