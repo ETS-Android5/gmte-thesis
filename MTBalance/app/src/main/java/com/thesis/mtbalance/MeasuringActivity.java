@@ -230,8 +230,7 @@ public class MeasuringActivity extends AppCompatActivity
      * Initializes the DOT SDK and starts a scan.
      */
     private void initXsensSdk() {
-        // Set global SDK options
-        XsensDotSdk.setDebugEnabled(true);  // Todo: remove debugger when application is finished.
+        // Reconnect the DOTs when connection is lost
         XsensDotSdk.setReconnectEnabled(true);
 
         // Initialize scanner object and start scan
