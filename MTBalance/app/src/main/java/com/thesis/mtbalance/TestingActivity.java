@@ -107,11 +107,10 @@ public class TestingActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         // Check if the up button is pressed
         if (item.getItemId() == android.R.id.home) {
-            // "Shut down" the real-time feedback by sending a neutral command if needed
-            writeFeedback("x");
-
-            // Cleanup the BLE instance if one exists
+            // "Shut down" the real-time feedback by sending a neutral command and cleanup BLE
             if (mBluetoothGatt != null) {
+                writeFeedback("x");
+
                 mBluetoothGatt.close();
                 mBluetoothGatt = null;
             }

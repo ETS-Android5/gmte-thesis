@@ -409,12 +409,11 @@ public class MeasuringActivity extends AppCompatActivity
      * Cleans up all the BLE sensors upon activity destruction.
      */
     private void cleanupBLE() {
-        // "Shut down" the real-time feedback by sending a neutral command if needed
-        if (!mFeedbackMethod.equals("0"))
-            writeFeedback("x");
-
-        // Cleanup the BLE instance if one exists
+        // "Shut down" the real-time feedback by sending a neutral command and cleanup BLE
         if (mBluetoothGatt != null) {
+            if (!mFeedbackMethod.equals("0"))
+                writeFeedback("x");
+
             mBluetoothGatt.close();
             mBluetoothGatt = null;
         }
@@ -557,8 +556,8 @@ public class MeasuringActivity extends AppCompatActivity
         // Get the flattened balance difference between the current and optimal balance
         float[] balanceDifference = mVecHelper.getBalanceDifference(endEffector, intersection);
 
-        // Update the real-time feedback if it is used
-        if (!mFeedbackMethod.equals("0"))
+        // Update the real-time feedback if it is active and used
+        if (mBluetoothGatt != null && !mFeedbackMethod.equals("0"))
             updateFeedback(distance, balanceDifference);
 
         // Update the DVs
