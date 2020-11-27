@@ -110,7 +110,6 @@ public class TestingActivity extends AppCompatActivity {
             // "Shut down" the real-time feedback by sending a neutral command and cleanup BLE
             if (mBluetoothGatt != null) {
                 writeFeedback("x");
-
                 mBluetoothGatt.close();
                 mBluetoothGatt = null;
             }
