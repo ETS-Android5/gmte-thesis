@@ -529,7 +529,8 @@ public class MeasuringActivity extends AppCompatActivity
         // Calculate the bike vector and mirror it to get the optimal balance direction
         float[] bikeVector = mVecHelper.quatRotation(yawCorrMatrix,
                 Objects.requireNonNull(TAG_QUAT_MAP.get("Bike DOT")), 1000f);
-        bikeVector = mVecHelper.mirrorVector(bikeVector, false, 0f);
+        // Add a small correction in the magnitude to make CoM shifts less extreme
+        bikeVector = mVecHelper.mirrorVector(bikeVector, true, 0.8f);
 
         // Get the current position of the crank offset and the pedal vector
         float[] offsetVector = mVecHelper.getOffsetPosition(
