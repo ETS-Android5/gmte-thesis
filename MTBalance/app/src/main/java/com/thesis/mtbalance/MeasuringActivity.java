@@ -166,10 +166,6 @@ public class MeasuringActivity extends AppCompatActivity
         mFeedbackMethod = sharedPref.getString(SettingsActivity.KEY_PREFERRED_FEEDBACK, "0");
         mFeedbackString = "";
 
-        // Show the testing label if the application is in testing mode
-        if (mParticipantNumber.equals("0"))
-            findViewById(R.id.testing_textview).setVisibility(View.VISIBLE);
-
         // Get the preferred threshold leniency
         mThresholdLeniency = Float.parseFloat(Objects.requireNonNull(sharedPref.getString
                 (SettingsActivity.KEY_THRESHOLD_LENIENCY, "0")));
@@ -384,23 +380,16 @@ public class MeasuringActivity extends AppCompatActivity
             // Cleanup the BLE sensors
             cleanupBLE();
 
-            // Only save when testing mode is not activated
-            if (!mParticipantNumber.equals("0")) {
-                // Finalize the DVs and format to a string, then save it to the rides file
-                String dataDVS = finalizeDVS();
-                mFileHelper.appendToFile("rides", dataDVS, this);
+            // Finalize the DVs and format to a string, then save it to the rides file
+            String dataDVS = finalizeDVS();
+            mFileHelper.appendToFile("rides", dataDVS, this);
 
-                // Save balance data to an unique file for post-hoc application
-                mFileHelper.saveArrayData(mStartTime.toString(), BALANCE_DATA, this);
+            // Save balance data to an unique file for post-hoc application
+            mFileHelper.saveArrayData(mStartTime.toString(), BALANCE_DATA, this);
 
-                // Notify user
-                Snackbar.make(mMeasuringLayout, "Stopped measuring and saved data.",
-                        Snackbar.LENGTH_LONG).show();
-            } else {
-                // Notify user
-                Snackbar.make(mMeasuringLayout, "Stopped testing mode.",
-                        Snackbar.LENGTH_LONG).show();
-            }
+            // Notify user
+            Snackbar.make(mMeasuringLayout, "Stopped measuring and saved data.",
+                    Snackbar.LENGTH_LONG).show();
 
             // Return to MainActivity after waiting for 3 seconds
             new Handler().postDelayed(new Runnable() {
