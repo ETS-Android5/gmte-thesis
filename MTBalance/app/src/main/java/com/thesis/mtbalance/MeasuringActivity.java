@@ -411,7 +411,7 @@ public class MeasuringActivity extends AppCompatActivity
     private void cleanupBLE() {
         // "Shut down" the real-time feedback by sending a neutral command if needed
         if (!mFeedbackMethod.equals("0"))
-            writeFeedback(mFeedbackMethod + "x" + ",");
+            writeFeedback("x");
 
         // Cleanup the BLE instance if one exists
         if (mBluetoothGatt != null) {
@@ -580,7 +580,7 @@ public class MeasuringActivity extends AppCompatActivity
     private void updateFeedback(float distance, float[] balanceDifference) {
         // Stop providing feedback if the user is within the balance threshold
         if (distance <= mThresholdLeniency) {
-            writeFeedback(mFeedbackMethod + "x" + ",");
+            writeFeedback("x");
             return;
         }
 
@@ -601,15 +601,17 @@ public class MeasuringActivity extends AppCompatActivity
             direction = 0;
 
         // Write the feedback to the connected BLE device
-        writeFeedback(mFeedbackMethod + direction + ",");
+        writeFeedback(String.valueOf(direction));
     }
 
     /**
      * Writes the output string to the connected BLE device.
      *
-     * @param output - the output to pass to the BLE, as a string.
+     * @param direction - the feedback direction to pass to the BLE, as a string.
      */
-    private void writeFeedback(String output) {
+    private void writeFeedback(String direction) {
+        String output = mFeedbackMethod + direction + ",";
+
         // Only send the data if it updates the current feedback direction
         if (!mFeedbackString.equals(output)) {
             mFeedbackString = output;
