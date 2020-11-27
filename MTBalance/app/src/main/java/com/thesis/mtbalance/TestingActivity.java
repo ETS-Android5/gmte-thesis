@@ -135,30 +135,48 @@ public class TestingActivity extends AppCompatActivity {
 
     // region Directions
     public void feedbackCenter(View view) {
+        if (mBluetoothGatt != null)
+            writeFeedback("x");
     }
 
     public void feedbackFront(View view) {
+        if (mBluetoothGatt != null)
+            writeFeedback("0");
     }
 
     public void feedbackFrontRight(View view) {
+        if (mBluetoothGatt != null)
+            writeFeedback("1");
     }
 
     public void feedbackRight(View view) {
+        if (mBluetoothGatt != null)
+            writeFeedback("2");
     }
 
     public void feedbackBackRight(View view) {
+        if (mBluetoothGatt != null)
+            writeFeedback("3");
     }
 
     public void feedbackBack(View view) {
+        if (mBluetoothGatt != null)
+            writeFeedback("4");
     }
 
     public void feedbackBackLeft(View view) {
+        if (mBluetoothGatt != null)
+            writeFeedback("5");
     }
 
     public void feedbackLeft(View view) {
+        if (mBluetoothGatt != null)
+            writeFeedback("6");
     }
 
     public void feedbackFrontLeft(View view) {
+        if (mBluetoothGatt != null)
+            writeFeedback("7");
     }
     // endregion
 }
