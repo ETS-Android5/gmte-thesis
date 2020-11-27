@@ -15,6 +15,8 @@ import android.bluetooth.BluetoothProfile;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.TextView;
 
 import java.util.UUID;
 
@@ -75,6 +77,11 @@ public class TestingActivity extends AppCompatActivity {
         SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(this);
         mFeedbackMethod = sharedPref.getString(SettingsActivity.KEY_PREFERRED_FEEDBACK, "0");
 
+        // Set the text to reflect the current real-time feedback mode
+        TextView testingTV = findViewById(R.id.testing_textview);
+        testingTV.setText(getResources().getStringArray(R.array.feedback_method_entries)
+                [Integer.parseInt(mFeedbackMethod)]);
+
         // Set the BLE address depending on the chosen feedback method
         final String beltAddr = "B0:7E:11:F6:50:9C";
         final String helmAddr = "90:E2:02:1C:4E:8B";
@@ -126,4 +133,33 @@ public class TestingActivity extends AppCompatActivity {
         mCharacteristic.setValue(output);
         mBluetoothGatt.writeCharacteristic(mCharacteristic);
     }
+
+    // region Directions
+    public void feedbackCenter(View view) {
+    }
+
+    public void feedbackFront(View view) {
+    }
+
+    public void feedbackFrontRight(View view) {
+    }
+
+    public void feedbackRight(View view) {
+    }
+
+    public void feedbackBackRight(View view) {
+    }
+
+    public void feedbackBack(View view) {
+    }
+
+    public void feedbackBackLeft(View view) {
+    }
+
+    public void feedbackLeft(View view) {
+    }
+
+    public void feedbackFrontLeft(View view) {
+    }
+    // endregion
 }

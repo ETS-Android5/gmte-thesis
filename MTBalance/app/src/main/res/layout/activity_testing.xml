@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/testing_layout"
     android:layout_width="match_parent"
@@ -9,4 +10,153 @@
     android:orientation="vertical"
     tools:context=".TestingActivity">
 
-</LinearLayout>
+    <TextView
+        android:id="@+id/testing_textview"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="128dp"
+        android:textColor="@color/colorText"
+        android:textSize="32sp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <!-- Top Row. -->
+    <ImageButton
+        android:id="@+id/front_left_button"
+        android:layout_width="64dp"
+        android:layout_height="64dp"
+        android:layout_marginTop="32dp"
+        android:background="@color/colorAccent"
+        android:contentDescription="@string/front_left_button"
+        android:onClick="feedbackFrontLeft"
+        android:rotation="225"
+        android:scaleType="fitCenter"
+        android:src="@drawable/ic_play"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toLeftOf="@+id/front_button"
+        app:layout_constraintTop_toBottomOf="@+id/testing_textview" />
+
+    <ImageButton
+        android:id="@+id/front_button"
+        android:layout_width="64dp"
+        android:layout_height="64dp"
+        android:layout_marginTop="32dp"
+        android:background="@color/colorAccent"
+        android:contentDescription="@string/front_button"
+        android:onClick="feedbackFront"
+        android:rotation="270"
+        android:scaleType="fitCenter"
+        android:src="@drawable/ic_play"
+        app:layout_constraintLeft_toRightOf="@id/front_left_button"
+        app:layout_constraintRight_toLeftOf="@+id/front_right_button"
+        app:layout_constraintTop_toBottomOf="@+id/testing_textview" />
+
+    <ImageButton
+        android:id="@+id/front_right_button"
+        android:layout_width="64dp"
+        android:layout_height="64dp"
+        android:layout_marginTop="32dp"
+        android:background="@color/colorAccent"
+        android:contentDescription="@string/front_right_button"
+        android:onClick="feedbackFrontRight"
+        android:rotation="315"
+        android:scaleType="fitCenter"
+        android:src="@drawable/ic_play"
+        app:layout_constraintLeft_toRightOf="@id/front_button"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/testing_textview" />
+
+    <!-- Middle Row. -->
+    <ImageButton
+        android:id="@+id/left_button"
+        android:layout_width="64dp"
+        android:layout_height="64dp"
+        android:layout_marginTop="64dp"
+        android:background="@color/colorAccent"
+        android:contentDescription="@string/left_button"
+        android:onClick="feedbackLeft"
+        android:rotation="180"
+        android:scaleType="fitCenter"
+        android:src="@drawable/ic_play"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toLeftOf="@+id/center_button"
+        app:layout_constraintTop_toBottomOf="@id/front_left_button" />
+
+    <ImageButton
+        android:id="@+id/center_button"
+        android:layout_width="64dp"
+        android:layout_height="64dp"
+        android:layout_marginTop="64dp"
+        android:background="@color/colorAccent"
+        android:contentDescription="@string/center_button"
+        android:onClick="feedbackCenter"
+        android:rotation="0"
+        android:scaleType="fitCenter"
+        android:src="@drawable/ic_stop"
+        app:layout_constraintLeft_toRightOf="@id/left_button"
+        app:layout_constraintRight_toLeftOf="@+id/right_button"
+        app:layout_constraintTop_toBottomOf="@id/front_button" />
+
+    <ImageButton
+        android:id="@+id/right_button"
+        android:layout_width="64dp"
+        android:layout_height="64dp"
+        android:layout_marginTop="64dp"
+        android:background="@color/colorAccent"
+        android:contentDescription="@string/right_button"
+        android:onClick="feedbackRight"
+        android:rotation="0"
+        android:scaleType="fitCenter"
+        android:src="@drawable/ic_play"
+        app:layout_constraintLeft_toRightOf="@id/center_button"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/front_right_button" />
+
+    <!-- Bottom Row. -->
+    <ImageButton
+        android:id="@+id/back_left_button"
+        android:layout_width="64dp"
+        android:layout_height="64dp"
+        android:layout_marginTop="64dp"
+        android:background="@color/colorAccent"
+        android:contentDescription="@string/back_left_button"
+        android:onClick="feedbackBackLeft"
+        android:rotation="135"
+        android:scaleType="fitCenter"
+        android:src="@drawable/ic_play"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toLeftOf="@+id/back_button"
+        app:layout_constraintTop_toBottomOf="@id/left_button" />
+
+    <ImageButton
+        android:id="@+id/back_button"
+        android:layout_width="64dp"
+        android:layout_height="64dp"
+        android:layout_marginTop="64dp"
+        android:background="@color/colorAccent"
+        android:contentDescription="@string/back_button"
+        android:onClick="feedbackBack"
+        android:rotation="90"
+        android:scaleType="fitCenter"
+        android:src="@drawable/ic_play"
+        app:layout_constraintLeft_toRightOf="@id/back_left_button"
+        app:layout_constraintRight_toLeftOf="@+id/back_right_button"
+        app:layout_constraintTop_toBottomOf="@id/center_button" />
+
+    <ImageButton
+        android:id="@+id/back_right_button"
+        android:layout_width="64dp"
+        android:layout_height="64dp"
+        android:layout_marginTop="64dp"
+        android:background="@color/colorAccent"
+        android:contentDescription="@string/back_right_button"
+        android:onClick="feedbackBackRight"
+        android:rotation="45"
+        android:scaleType="fitCenter"
+        android:src="@drawable/ic_play"
+        app:layout_constraintLeft_toRightOf="@id/back_button"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/right_button" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
