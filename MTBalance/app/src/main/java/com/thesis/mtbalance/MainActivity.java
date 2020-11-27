@@ -1,6 +1,7 @@
 package com.thesis.mtbalance;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -12,6 +13,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.preference.PreferenceManager;
 import androidx.viewpager.widget.ViewPager;
 
+import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.tabs.TabLayout;
 
 import java.util.Objects;
@@ -88,6 +90,26 @@ public class MainActivity extends AppCompatActivity {
             Intent intent = new Intent(this, SettingsActivity.class);
             startActivity(intent);
             return true;
+        }
+
+        // Start testing activity if real-time feedback has been selected in settings
+        if (item.getItemId() == R.id.testing) {
+            String feedbackMethod = PreferenceManager.getDefaultSharedPreferences(this).
+                    getString(SettingsActivity.KEY_PREFERRED_FEEDBACK, "0");
+
+            // Go to testing activity if real-time feedback is selected
+            if (!feedbackMethod.equals("0")) {
+                Intent intent = new Intent(this, TestingActivity.class);
+                startActivity(intent);
+                return true;
+            }
+
+            // Notify the user
+            else {
+                Snackbar.make(findViewById(R.id.main_layout),
+                        "Select a real-time feedback option in settings to test first.",
+                        Snackbar.LENGTH_LONG).show();
+            }
         }
 
         return super.onOptionsItemSelected(item);

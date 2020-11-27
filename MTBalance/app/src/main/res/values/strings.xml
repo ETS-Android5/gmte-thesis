@@ -1,12 +1,22 @@
 <resources>
-    <string name="app_name">MTBalance</string>
-    <string name="settings_title">Settings</string>
-
     <!-- MainActivity. -->
+    <string name="app_name">MTBalance</string>
+    <string name="settings_option">Settings</string>
+    <string name="testing_option">Testing</string>
     <string name="fab_rides">Fab Rides</string>
 
+    <!-- TestingActivity -->
+    <string name="center_button">Center Button</string>
+    <string name="front_button">Front Button</string>
+    <string name="front_right_button">Front Right Button</string>
+    <string name="right_button">Right Button</string>
+    <string name="back_right_button">Back Right Button</string>
+    <string name="back_button">Back Button</string>
+    <string name="back_left_button">Back Left Button</string>
+    <string name="left_button">Left Button</string>
+    <string name="front_left_button">Front Left Button</string>
+
     <!-- MeasurementActivity. -->
-    <string name="testing_string">TESTING MODE</string>
     <string name="measuring_button">Measuring Button</string>
     <string name="calibrate_button">Calibrate Button</string>
 

@@ -166,10 +166,6 @@ public class MeasuringActivity extends AppCompatActivity
         mFeedbackMethod = sharedPref.getString(SettingsActivity.KEY_PREFERRED_FEEDBACK, "0");
         mFeedbackString = "";
 
-        // Show the testing label if the application is in testing mode
-        if (mParticipantNumber.equals("0"))
-            findViewById(R.id.testing_textview).setVisibility(View.VISIBLE);
-
         // Get the preferred threshold leniency
         mThresholdLeniency = Float.parseFloat(Objects.requireNonNull(sharedPref.getString
                 (SettingsActivity.KEY_THRESHOLD_LENIENCY, "0")));
@@ -384,23 +380,16 @@ public class MeasuringActivity extends AppCompatActivity
             // Cleanup the BLE sensors
             cleanupBLE();
 
-            // Only save when testing mode is not activated
-            if (!mParticipantNumber.equals("0")) {
-                // Finalize the DVs and format to a string, then save it to the rides file
-                String dataDVS = finalizeDVS();
-                mFileHelper.appendToFile("rides", dataDVS, this);
+            // Finalize the DVs and format to a string, then save it to the rides file
+            String dataDVS = finalizeDVS();
+            mFileHelper.appendToFile("rides", dataDVS, this);
 
-                // Save balance data to an unique file for post-hoc application
-                mFileHelper.saveArrayData(mStartTime.toString(), BALANCE_DATA, this);
+            // Save balance data to an unique file for post-hoc application
+            mFileHelper.saveArrayData(mStartTime.toString(), BALANCE_DATA, this);
 
-                // Notify user
-                Snackbar.make(mMeasuringLayout, "Stopped measuring and saved data.",
-                        Snackbar.LENGTH_LONG).show();
-            } else {
-                // Notify user
-                Snackbar.make(mMeasuringLayout, "Stopped testing mode.",
-                        Snackbar.LENGTH_LONG).show();
-            }
+            // Notify user
+            Snackbar.make(mMeasuringLayout, "Stopped measuring and saved data.",
+                    Snackbar.LENGTH_LONG).show();
 
             // Return to MainActivity after waiting for 3 seconds
             new Handler().postDelayed(new Runnable() {
@@ -420,12 +409,11 @@ public class MeasuringActivity extends AppCompatActivity
      * Cleans up all the BLE sensors upon activity destruction.
      */
     private void cleanupBLE() {
-        // "Shut down" the real-time feedback by sending a neutral command if needed
-        if (!mFeedbackMethod.equals("0"))
-            writeFeedback(mFeedbackMethod + "x" + ",");
-
-        // Cleanup the BLE instance if one exists
+        // "Shut down" the real-time feedback by sending a neutral command and cleanup BLE
         if (mBluetoothGatt != null) {
+            if (!mFeedbackMethod.equals("0"))
+                writeFeedback("x");
+
             mBluetoothGatt.close();
             mBluetoothGatt = null;
         }
@@ -568,8 +556,8 @@ public class MeasuringActivity extends AppCompatActivity
         // Get the flattened balance difference between the current and optimal balance
         float[] balanceDifference = mVecHelper.getBalanceDifference(endEffector, intersection);
 
-        // Update the real-time feedback if it is used
-        if (!mFeedbackMethod.equals("0"))
+        // Update the real-time feedback if it is active and used
+        if (mBluetoothGatt != null && !mFeedbackMethod.equals("0"))
             updateFeedback(distance, balanceDifference);
 
         // Update the DVs
@@ -591,7 +579,7 @@ public class MeasuringActivity extends AppCompatActivity
     private void updateFeedback(float distance, float[] balanceDifference) {
         // Stop providing feedback if the user is within the balance threshold
         if (distance <= mThresholdLeniency) {
-            writeFeedback(mFeedbackMethod + "x" + ",");
+            writeFeedback("x");
             return;
         }
 
@@ -612,15 +600,17 @@ public class MeasuringActivity extends AppCompatActivity
             direction = 0;
 
         // Write the feedback to the connected BLE device
-        writeFeedback(mFeedbackMethod + direction + ",");
+        writeFeedback(String.valueOf(direction));
     }
 
     /**
      * Writes the output string to the connected BLE device.
      *
-     * @param output - the output to pass to the BLE, as a string.
+     * @param direction - the feedback direction to pass to the BLE, as a string.
      */
-    private void writeFeedback(String output) {
+    private void writeFeedback(String direction) {
+        String output = mFeedbackMethod + direction + ",";
+
         // Only send the data if it updates the current feedback direction
         if (!mFeedbackString.equals(output)) {
             mFeedbackString = output;

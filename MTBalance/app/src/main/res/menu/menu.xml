@@ -3,9 +3,15 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <item
+        android:id="@+id/testing"
+        android:icon="@drawable/ic_directions"
+        android:title="@string/testing_option"
+        app:showAsAction="ifRoom" />
+
+    <item
         android:id="@+id/settings"
         android:icon="@drawable/ic_settings"
-        android:title="@string/settings_title"
+        android:title="@string/settings_option"
         app:showAsAction="ifRoom" />
 
 </menu>
