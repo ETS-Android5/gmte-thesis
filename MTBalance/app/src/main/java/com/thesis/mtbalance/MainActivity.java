@@ -90,6 +90,13 @@ public class MainActivity extends AppCompatActivity {
             return true;
         }
 
+        // Start testing activity
+        if (item.getItemId() == R.id.testing) {
+            Intent intent = new Intent(this, TestingActivity.class);
+            startActivity(intent);
+            return true;
+        }
+
         return super.onOptionsItemSelected(item);
     }
 

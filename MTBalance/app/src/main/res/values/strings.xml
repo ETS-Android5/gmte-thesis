@@ -1,8 +1,8 @@
 <resources>
-    <string name="app_name">MTBalance</string>
-    <string name="settings_title">Settings</string>
-
     <!-- MainActivity. -->
+    <string name="app_name">MTBalance</string>
+    <string name="settings_option">Settings</string>
+    <string name="testing_option">Testing</string>
     <string name="fab_rides">Fab Rides</string>
 
     <!-- MeasurementActivity. -->
