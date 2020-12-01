@@ -45,6 +45,11 @@
             android:textSize="16sp"
             android:textStyle="bold" />
 
+        <pl.droidsonroids.gif.GifImageView
+            android:layout_width="wrap_content"
+            android:layout_height="192dp"
+            android:src="@drawable/attachment" />
+
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -63,11 +68,28 @@
             android:textSize="16sp"
             android:textStyle="bold" />
 
+        <pl.droidsonroids.gif.GifImageView
+            android:layout_width="wrap_content"
+            android:layout_height="192dp"
+            android:src="@drawable/measurement" />
+
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:justificationMode="inter_word"
-            android:text="@string/measuring_string"
+            android:text="@string/measuring_string_p1"
+            android:textColor="@color/colorText" />
+
+        <pl.droidsonroids.gif.GifImageView
+            android:layout_width="wrap_content"
+            android:layout_height="192dp"
+            android:src="@drawable/feedback" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:justificationMode="inter_word"
+            android:text="@string/measuring_string_p2"
             android:textColor="@color/colorText" />
 
         <!-- Post-Hoc Feedback. -->

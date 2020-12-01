@@ -45,8 +45,6 @@
         options</b> can be found here.</string>
 
     <string name="attachment_string">
-        <i><b>insert gif of short overview of attachment here</b></i> \n
-
         \nTo start measuring balance performance, the user attaches multiple DOT IMU sensors to their
         bike in the following manner: \n
         - <b>Bike sensor:</b> close to the center of mass of the bike. \n
@@ -61,15 +59,14 @@
         application as preferred. The settings are explained in more detail in the <b>application
         options section.</b></string>
 
-    <string name="measuring_string">
-        <i><b>gif of short overview of measuring process here</b></i> \n
-
+    <string name="measuring_string_p1">
         \nThe user can press the <b>start ride</b> button to begin a new ride. Once the sensors are
         connected and synchronized, the ride is started by pressing the <b>play</b> button. The sensors
         should be calibrated by having the bike and user stand in an upright position, followed by
         pressing the <b>calibration</b> button. During the ride the sensors can be re-calibrated at
-        any time by pressing the button again. \n
+        any time by pressing the button again.</string>
 
+    <string name="measuring_string_p2">
         \nThe sensors calculate the optimal balance zone and the current balance continuously. If the
         current balance deviates too much from the optimal balance, real-time feedback is applied
         depending on the feedback option chosen. The feedback attempts to steer the user back towards
