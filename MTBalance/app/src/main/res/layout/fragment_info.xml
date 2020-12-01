@@ -295,6 +295,24 @@
             android:text="@string/posthoc_end_string"
             android:textColor="@color/colorText" />
 
+        <!-- Feedback Testing. -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:padding="4dp"
+            android:text="@string/feedback_title"
+            android:textColor="@color/colorAccent"
+            android:textSize="16sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:justificationMode="inter_word"
+            android:text="@string/testing_string"
+            android:textColor="@color/colorText" />
+
         <!-- Application Options. -->
         <TextView
             android:layout_width="wrap_content"
