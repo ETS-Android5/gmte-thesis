@@ -104,15 +104,23 @@ public class MeasuringActivity extends AppCompatActivity
      * Handles various callbacks during the connection phase.
      */
     private final BluetoothGattCallback GATT_CALLBACK = new BluetoothGattCallback() {
-        // Handles initial connection to remote BLE device
+        // Handles connection changes to remote BLE device
         @Override
         public void onConnectionStateChange(BluetoothGatt gatt, int status, int newState) {
             super.onConnectionStateChange(gatt, status, newState);
 
-            // Discover the services if the initial connection was successful
-            if (status == BluetoothGatt.GATT_SUCCESS &&
-                    newState == BluetoothProfile.STATE_CONNECTED)
-                gatt.discoverServices();
+            // After a successful GATT operation, switch the states if necessary
+            if (status == BluetoothGatt.GATT_SUCCESS)
+                switch (newState) {
+                    // Discover the services if the initial connection was successful
+                    case BluetoothProfile.STATE_CONNECTED:
+                        gatt.discoverServices();
+                        break;
+                    // Close the GATT service on device disconnect
+                    case BluetoothProfile.STATE_DISCONNECTED:
+                        gatt.close();
+                        break;
+                }
         }
 
         // Finishes up the BLE connection by locating the remote service and characteristic
@@ -412,7 +420,7 @@ public class MeasuringActivity extends AppCompatActivity
         // "Shut down" the real-time feedback by sending a neutral command and cleanup BLE
         if (mBluetoothGatt != null) {
             writeFeedback("x");
-            mBluetoothGatt.close();
+            mBluetoothGatt.disconnect();
             mBluetoothGatt = null;
         }
 
