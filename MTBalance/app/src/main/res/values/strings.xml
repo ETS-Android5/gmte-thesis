@@ -93,9 +93,9 @@
     <string name="xdir_icon">Xdir Icon</string>
     <string name="ydir_icon">Ydir Icon</string>
 
-    <string name="posthoc_bothdir_string">- Shows two-directional user movement.</string>
-    <string name="posthoc_xdir_string">- Shows sideways balance fluctuation over time.</string>
-    <string name="posthoc_ydir_string">- Shows overt balance fluctuation over time.</string>
+    <string name="posthoc_bothdir_string">- Two-directional user movement.</string>
+    <string name="posthoc_xdir_string">- Lateral balance fluctuation over time.</string>
+    <string name="posthoc_ydir_string">- Reciprocating balance fluctuation over time.</string>
 
     <string name="posthoc_end_string">
         \nThe <b>x-axis</b> shows the sideways balance deviation, whereas the <b>y-axis</b> denotes the
