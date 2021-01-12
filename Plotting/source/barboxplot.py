@@ -29,34 +29,39 @@ with open(path) as csvfile:
     lines = csv.reader(csvfile, quoting=csv.QUOTE_NONNUMERIC)
     for line in lines:
         data.append(line)
-labels = ["Vibrotactile", "Color Wheel", "Directional", "Application"]
+labels = ["APP", "VTF", "VDF", "VCF"]
 
-# create subplots to arrange bar and box plots
-fig, axes = plt.subplots(ncols=2, figsize=(15, 5))
-
-# --- bar plot ---
 # calculate the means and standard deviations for the bar plot
 means, stdevs = [], []
 for condition in data:
     means.append(statistics.mean(condition))
     stdevs.append(statistics.stdev(condition))
 
+# make a color list for each of the conditions
+condcolors = ["tab:brown", "tab:purple", "tab:green", "tab:gray"] # tab:cyan for VPF
+
+# create subplots to arrange bar and box plots
+fig, axes = plt.subplots(ncols=2, figsize=(15, 5))
+
+# --- bar plot ---
 # generate barplot and annotate error bars
-barplot = axes[0].bar(labels, means, yerr=stdevs, capsize=10, color='c', edgecolor='k')
+barplot = axes[0].bar(labels, means, yerr=stdevs, capsize=10, color=condcolors, edgecolor=condcolors)
 for i in range(4):
     axes[0].annotate(round(stdevs[i], 2), (labels[i], means[i] + stdevs[i]), xytext=(5, -15), textcoords="offset points")
 
 # --- box plot ---
 # generate boxplot and set colors
+i = 0
 boxplot = axes[1].boxplot(data, labels=labels, patch_artist=True)
 for patch in boxplot["boxes"]:
-    patch.set_facecolor('c')
-    patch.set_edgecolor('k')
+    patch.set_facecolor(condcolors[i])
+    patch.set_edgecolor(condcolors[i])
+    i += 1
 
 # annotate boxplot with significance lines
-annotate_significance(axes[1], 1, 2, 105, "***")  #0.0004p = ***
-annotate_significance(axes[1], 3, 4, 105, "****") #0.0001p = ****
-annotate_significance(axes[1], 2, 4, 115, "****") #0.0000p = ****
+annotate_significance(axes[1], 2, 4, 105, "***")  #0.0004p = ***
+annotate_significance(axes[1], 1, 3, 115, "****") #0.0001p = ****
+annotate_significance(axes[1], 1, 4, 125, "****") #0.0000p = ****
 
 
 # global plot settings
