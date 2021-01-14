@@ -8,7 +8,7 @@ def annotate_significance(ax, start, stop, height, significance):
         :start        - the start condition
         :stop         - the stop condition
         :height       - the height to draw the bar at
-        :significance - the significance between the conditions, in *s
+        :significance - the significance between the conditions, in *s (string)
     '''
 
     # setup the main variables
