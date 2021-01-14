@@ -37,7 +37,6 @@ condcolors = ["tab:brown", "tab:purple", "tab:green", "tab:cyan"] # tab:gray for
 # create subplots to arrange box plot
 fig, ax = plt.subplots(figsize=(7.5, 5))
 
-# --- box plot ---
 # generate boxplot and set colors
 i = 0
 boxplot = ax.boxplot(data, labels=labels, patch_artist=True)

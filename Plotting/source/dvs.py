@@ -48,10 +48,10 @@ condcolors = ["tab:brown", "tab:purple", "tab:green", "tab:cyan"] # tab:gray for
 # make plot labels
 ylabels = ["Balance Performance (%)", "Balance Deviation (cm)", "Response Time (ms)", "Completion Time (s)"]
 
-# create subplots to arrange bar and box plots
+# create subplots to arrange bar plots
 fig, axes = plt.subplots(nrows=2, ncols=2, figsize=(15, 10))
 
-# annotate boxplot with significance lines 
+# annotate barplots with significance lines 
 maxmeans = []
 for i in range(4):
     maxmeans.append(max(means[i]) + stdevs[i][np.argmax(means[i])])
