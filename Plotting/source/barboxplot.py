@@ -13,7 +13,7 @@ def annotate_significance(ax, start, stop, height, significance):
 
     # setup the main variables
     x1, x2 = start, stop
-    y, h, c = height, 2, 'k'
+    y, h, c = height, height * 0.02, 'k'
 
     # draw the line and the text
     ax.plot([x1, x1, x2, x2], [y, y + h, y + h, y], linewidth=1, color=c)
