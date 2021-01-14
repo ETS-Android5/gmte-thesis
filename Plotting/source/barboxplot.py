@@ -50,9 +50,10 @@ for i in range(4):
     axes[0].annotate(round(stdevs[i], 2), (labels[i], means[i] + stdevs[i]), xytext=(5, -15), textcoords="offset points")
 
 # annotate barplot with significance lines
-annotate_significance(axes[0], 1, 3, 105, "***")  #0.0004p = ***
-annotate_significance(axes[0], 0, 2, 115, "****") #0.0001p = ****
-annotate_significance(axes[0], 0, 3, 125, "****") #0.0000p = ****
+maxmean = max(means) + stdevs[means.index(max(means))]
+annotate_significance(axes[0], 1, 3, maxmean + 5, "***")  #0.0004p = ***
+annotate_significance(axes[0], 0, 2, maxmean + 15, "****") #0.0001p = ****
+annotate_significance(axes[0], 0, 3, maxmean + 25, "****") #0.0000p = ****
 
 # --- box plot ---
 # generate boxplot and set colors
