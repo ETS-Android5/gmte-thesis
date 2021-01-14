@@ -21,7 +21,7 @@ def annotate_significance(ax, start, stop, height, significance):
 
 # get the path to the csv file
 root = os.path.dirname(__file__)
-path = os.path.join(root, "../data/survey-UMUX.csv")
+path = os.path.join(root, "../data/UMUX.csv")
 
 # read the csv file, converting the data to an array of floats per condition
 data = []
