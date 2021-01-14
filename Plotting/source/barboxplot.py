@@ -29,7 +29,6 @@ with open(path) as csvfile:
     lines = csv.reader(csvfile, quoting=csv.QUOTE_NONNUMERIC)
     for line in lines:
         data.append(line)
-labels = ["APP", "VTF", "VDF", "VCF"]
 
 # calculate the means and standard deviations for the bar plot
 means, stdevs = [], []
@@ -37,7 +36,8 @@ for condition in data:
     means.append(statistics.mean(condition))
     stdevs.append(statistics.stdev(condition))
 
-# make a color list for each of the conditions
+# make labels and a color list for each of the conditions
+labels = ["APP", "VTF", "VDF", "VPF"]
 condcolors = ["tab:brown", "tab:purple", "tab:green", "tab:gray"] # tab:cyan for VPF
 
 # create subplots to arrange bar and box plots
