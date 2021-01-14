@@ -78,5 +78,7 @@ for ax in axes:
     ax.set_ylabel("UMUX Score", weight="bold")
     ax.set_xlabel("Feedback Solution", weight="bold")
 
-# show the plot!
+# save and show the plot!
+name = "UMUX.png"
+plt.savefig("C:/Users/Mark Berentsen/Documents/Programming/GMTE Thesis/Plotting/images/" + name, bbox_inches="tight")
 plt.show()
