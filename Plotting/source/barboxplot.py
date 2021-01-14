@@ -37,7 +37,7 @@ for condition in data:
     stdevs.append(statistics.stdev(condition))
 
 # make labels and a color list for each of the conditions
-labels = ["APP", "VTF", "VDF", "VPF"]
+labels = ["APP", "VTF", "VDF", "VCF"]
 condcolors = ["tab:brown", "tab:purple", "tab:green", "tab:gray"] # tab:cyan for VPF
 
 # create subplots to arrange bar and box plots
