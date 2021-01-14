@@ -51,9 +51,9 @@ for i in range(4):
 
 # annotate barplot with significance lines
 maxmean = max(means) + stdevs[means.index(max(means))]
-annotate_significance(axes[0], 1, 3, maxmean + 5, "***")  #0.0004p = ***
-annotate_significance(axes[0], 0, 2, maxmean + 15, "****") #0.0001p = ****
-annotate_significance(axes[0], 0, 3, maxmean + 25, "****") #0.0000p = ****
+annotate_significance(axes[0], 1, 3, maxmean + (maxmean * 0.05), "***")  #0.0004p = ***
+annotate_significance(axes[0], 0, 2, maxmean + (maxmean * 0.15), "****") #0.0001p = ****
+annotate_significance(axes[0], 0, 3, maxmean + (maxmean * 0.25), "****") #0.0000p = ****
 
 # --- box plot ---
 # generate boxplot and set colors
