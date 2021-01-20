@@ -541,7 +541,7 @@ public class MeasuringActivity extends AppCompatActivity
         // Get the current position of the crank offset and the pedal vector
         float[] offsetVector = mVecHelper.getOffsetPosition(
                 Objects.requireNonNull(TAG_QUAT_MAP.get("Pos DOT")), mSensorOffset);
-        float[] pedalVector = mVecHelper.quatRotation(yawCorrMatrix,
+        float[] crankVector = mVecHelper.quatRotation(yawCorrMatrix,
                 Objects.requireNonNull(TAG_QUAT_MAP.get("Crank DOT")), mCrankLength);
 
         // Calculate the ankle vector and knee vector
@@ -552,7 +552,7 @@ public class MeasuringActivity extends AppCompatActivity
 
         // Calculate the position of the current balance (end effector)
         float[] endEffector = mVecHelper.getEndEffector(
-                offsetVector, pedalVector, ankleVector, kneeVector, mHipOffset);
+                offsetVector, crankVector, ankleVector, kneeVector, mHipOffset);
 
         // Get the intersection between current and optimal balance
         float[] intersection = mVecHelper.getIntersection(bikeVector, endEffector);
