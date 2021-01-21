@@ -19,6 +19,9 @@ uint32_t Blue = Leds.Color(0, 0, 255);
 char BLEData[2];
 int P = 0;
 
+/**
+ * Initialization.
+*/
 void setup() {
   BLE.begin(9600);
   Leds.begin();
@@ -26,6 +29,9 @@ void setup() {
     pinMode(i, OUTPUT);
 }
 
+/**
+ * BLE Parsing.
+ */
 void loop() {
   if (BLE.available()) {
     char c = BLE.read();
@@ -39,6 +45,9 @@ void loop() {
   }
 }
 
+/**
+ * Feedback Selection.
+ */
 void selectFeedback() {
   switch (BLEData[0]) {
     case '1':
@@ -54,7 +63,7 @@ void selectFeedback() {
 }
 
 /**
-   Vibro-Tactile Feedback.
+ * Vibro-Tactile Feedback.
 */
 void feedbackVT() {
   for (int i = FPIN; i <= LPIN; i++)
@@ -89,7 +98,7 @@ void feedbackVT() {
 }
 
 /**
-   Visual-Directional Feedback.
+ * Visual-Directional Feedback.
 */
 void feedbackVD() {
   Leds.clear();
@@ -125,7 +134,7 @@ void feedbackVD() {
 }
 
 /**
-   Visual-Positional Feedback.
+ * Visual-Positional Feedback.
 */
 void feedbackVP() {
   Leds.clear();
