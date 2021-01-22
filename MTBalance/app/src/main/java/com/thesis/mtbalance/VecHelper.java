@@ -63,7 +63,7 @@ public class VecHelper {
     private float[] hamiltonProduct(float[] p, float[] q) {
         // Returns the Hamilton product - https://en.wikipedia.org/wiki/Quaternion#Hamilton_product
         return new float[]
-                {p[0] * q[0] - p[1] * q[1] - p[2] * q[2] - p[3] * q[3],
+                       {p[0] * q[0] - p[1] * q[1] - p[2] * q[2] - p[3] * q[3],
                         p[0] * q[1] + p[1] * q[0] + p[2] * q[3] - p[3] * q[2],  // i
                         p[0] * q[2] - p[1] * q[3] + p[2] * q[0] + p[3] * q[1],  // j
                         p[0] * q[3] + p[1] * q[2] - p[2] * q[1] + p[3] * q[0]}; // k
