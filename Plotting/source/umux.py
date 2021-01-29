@@ -51,9 +51,9 @@ for i in range(4):
 
 # annotate barplot with significance lines
 maxmean = max(means) + stdevs[means.index(max(means))]
-annotate_significance(axes[0], 1, 3, maxmean + (maxmean * 0.05), "***")  #0.0004p = ***
-annotate_significance(axes[0], 0, 2, maxmean + (maxmean * 0.15), "****") #0.0001p = ****
-annotate_significance(axes[0], 0, 3, maxmean + (maxmean * 0.25), "****") #0.0000p = ****
+annotate_significance(axes[0], 1, 3, maxmean + (maxmean * 0.05), "**")  
+annotate_significance(axes[0], 0, 2, maxmean + (maxmean * 0.15), "**") 
+annotate_significance(axes[0], 0, 3, maxmean + (maxmean * 0.25), "**") 
 
 # --- box plot ---
 # generate boxplot and set colors
@@ -65,9 +65,9 @@ for patch in boxplot["boxes"]:
     i += 1
 
 # annotate boxplot with significance lines
-annotate_significance(axes[1], 2, 4, 105, "***")  #0.0004p = ***
-annotate_significance(axes[1], 1, 3, 115, "****") #0.0001p = ****
-annotate_significance(axes[1], 1, 4, 125, "****") #0.0000p = ****
+annotate_significance(axes[1], 2, 4, 105, "**")  
+annotate_significance(axes[1], 1, 3, 115, "**") 
+annotate_significance(axes[1], 1, 4, 125, "**") 
 
 
 # global plot settings
@@ -75,6 +75,7 @@ for ax in axes:
     ax.yaxis.grid(True, alpha=0.5)
     ax.set_axisbelow(True)
     
+    ax.set_ylim(ymin=0)
     ax.set_yticks(range(0, 100 + 1, 10))
     ax.set_ylabel("UMUX Score", weight="bold")
     ax.set_xlabel("Feedback Solution", weight="bold")
