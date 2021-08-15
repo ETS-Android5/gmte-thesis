@@ -11,3 +11,6 @@ Code written for the real-time feedback devices used within the *MTBalance* syst
 
 #### 3. Plotting
 Simple python scripts that I wrote for the generation of figures. These have been added to the main thesis.
+
+#### Update (15/08/2021)
+This repository is scheduled for a minor overhaul to improve readability and styling of especially this ReadMe document.
