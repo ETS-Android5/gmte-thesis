@@ -23,10 +23,11 @@ Open *Android Studio IDE* and build the full MTBalance root folder. Ensure that 
 ## RTFeedback
 <img src="https://user-images.githubusercontent.com/11558887/160166068-7f718118-c647-4578-93c9-8e2c6ca07f65.png" align="right" width="15%"/>
 <img src="https://user-images.githubusercontent.com/11558887/160166081-de66212a-ef18-4fdd-b2df-6158ebe64804.png" align="right" width="15%"/>
-Code written for the real-time feedback devices used within the *MTBalance* system, in **Cpp** within the *Arduino IDE*.
+
+Code written for the real-time feedback devices used in the *MTBalance* system, utilizing **Cpp** within the *Arduino IDE*.
 
 ### Install
 Flash the `.ino` file within the root folder directly to an Arduino device using the *Arduino IDE*. Ensure that the target board matches the used Arduino controller.
 
 ## Plotting
-Simple **python** scripts that have been written for figure generation. Although these scripts are not particularly useful for the main application framework, they have been added for the sake of completeness.
+Simple **Python** scripts that have been written for figure generation. Although these scripts are not particularly useful for the main application framework, they have been added for the sake of completeness.
