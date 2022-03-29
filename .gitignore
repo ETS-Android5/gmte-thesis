@@ -1,5 +1,5 @@
-# Created by https://www.toptal.com/developers/gitignore/api/java,androidstudio,python
-# Edit at https://www.toptal.com/developers/gitignore?templates=java,androidstudio,python
+# Created by https://www.toptal.com/developers/gitignore/api/visualstudiocode,androidstudio,java,python
+# Edit at https://www.toptal.com/developers/gitignore?templates=visualstudiocode,androidstudio,java,python
 
 ### Java ###
 # Compiled class file
@@ -180,6 +180,27 @@ cython_debug/
 #  option (not recommended) you can uncomment the following to ignore the entire idea folder.
 #.idea/
 
+### VisualStudioCode ###
+.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+!.vscode/*.code-snippets
+
+# Local History for Visual Studio Code
+.history/
+
+# Built Visual Studio Code Extensions
+*.vsix
+
+### VisualStudioCode Patch ###
+# Ignore all local history of files
+.history
+.ionide
+
+# Support for Project snippet scope
+
 ### AndroidStudio ###
 # Covers files to be ignored for android development using Android Studio.
 
@@ -305,4 +326,4 @@ fabric.properties
 
 !/gradle/wrapper/gradle-wrapper.jar
 
-# End of https://www.toptal.com/developers/gitignore/api/java,androidstudio,python
+# End of https://www.toptal.com/developers/gitignore/api/visualstudiocode,androidstudio,java,python
