@@ -1,6 +1,6 @@
 <div id="header" align="center">
   <h1>GMTE-Thesis</h1>
-  <p><img src="https://user-images.githubusercontent.com/11558887/160156970-32f14636-f96d-4ff7-b826-11ea4234336a.png" width="50%"/></p>
+  <p><img src="https://user-images.githubusercontent.com/11558887/160644932-d1f0dc13-a498-42c8-b784-a712cf9bc71c.gif" width="50%"/></p>
   <p>This repository holds all the code written for my GMTE-Thesis at Utrecht University.</p>
   <p><strong>Made with &#10084; by <a href="https://github.com/Markieautarkie">Markieautarkie</a></strong></p>
   <a href="https://github.com/Markieautarkie/GMTE-Thesis/releases"><img src="https://img.shields.io/badge/release-1.0.0-success"/></a>
