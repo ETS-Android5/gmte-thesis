@@ -16,9 +16,9 @@ This is the main Android application of the thesis, which is used to construct a
 The code is written in **Java** within the *Android Studio IDE*. All code is fully documented in-line.
 
 ### Install
-The target device must support **.apk** installation from unknown sources.
+The target device must support `.apk` installation from unknown sources.
 
-Open *Android Studio IDE* and build the full MTBalance root folder. Ensure that the **.gradle** and **SDK** versions have been verified. Next, build the application directly to the target device.
+Open *Android Studio IDE* and build the full MTBalance root folder. Ensure that the `.gradle` and **SDK** versions have been verified. Next, build the application directly to the target device.
 
 ## RTFeedback
 <img src="https://user-images.githubusercontent.com/11558887/160166068-7f718118-c647-4578-93c9-8e2c6ca07f65.png" align="right" width="15%"/>
@@ -26,7 +26,7 @@ Open *Android Studio IDE* and build the full MTBalance root folder. Ensure that 
 Code written for the real-time feedback devices used within the *MTBalance* system, in **Cpp** within the *Arduino IDE*.
 
 ### Install
-Flash the *.ino* file within the root folder directly to an Arduino device using the *Arduino IDE*. Ensure that the target board matches the used Arduino controller.
+Flash the `.ino` file within the root folder directly to an Arduino device using the *Arduino IDE*. Ensure that the target board matches the used Arduino controller.
 
 ## Plotting
 Simple **python** scripts that have been written for figure generation. Although these scripts are not particularly useful for the main application framework, they have been added for the sake of completeness.
