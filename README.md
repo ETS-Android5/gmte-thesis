@@ -3,6 +3,12 @@
   <p><img src="https://user-images.githubusercontent.com/11558887/160644932-d1f0dc13-a498-42c8-b784-a712cf9bc71c.gif" width="50%"/></p>
   <p>This repository holds all the code written for my GMTE-Thesis at Utrecht University.</p>
   <p><strong>Made with &#10084; by <a href="https://github.com/Markieautarkie">Markieautarkie</a></strong></p>
+  <p>
+    <b>Article:</b> 
+    <a href="https://www.narcis.nl/publication/RecordID/oai%3Adspace.library.uu.nl%3A1874%2F413590/uquery/Mark%20Berentsen/id/1/Language/EN">Narcis</a>
+    and
+    <a href="https://dl.acm.org/doi/10.1145/3488551">DOI</a>
+  </p>
   <a href="https://github.com/Markieautarkie/GMTE-Thesis/releases"><img src="https://img.shields.io/badge/release-1.0.0-success"/></a>
 </div>
 
